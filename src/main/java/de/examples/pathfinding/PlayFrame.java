@@ -18,9 +18,6 @@ public class PlayFrame extends JFrame {
 	public static final int CANVAS_HEIGHT = 550;
 	public DrawCanvas canvas;
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public PlayFrame() {
@@ -39,6 +36,8 @@ public class PlayFrame extends JFrame {
 	}
 
 	public class DrawCanvas extends JPanel {
+
+		private static final long serialVersionUID = 1L;
 
 		public List<PathfindingAI> players;
 

@@ -18,10 +18,11 @@ public class PathGame {
 
 	/**
 	 * @param args
+	 * @throws InterruptedException
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
-		int populationSize = 1000;
+		int populationSize = 150;
 		int generations = 200;
 
 		// Initialize field
@@ -34,54 +35,75 @@ public class PathGame {
 		}
 		Population population = new Population(ais);
 
-		iniUi(ais);
+//		iniUi(ais);
+
+		Random random = new SecureRandom();
+		List<Integer> currentX = new ArrayList<>();
+		List<Integer> currentY = new ArrayList<>();
+		List<Integer> targetX = new ArrayList<>();
+		List<Integer> targetY = new ArrayList<>();
+		for (int i = 0; i < 50; ++i) {
+			currentX.add(random.nextInt(50));
+			currentY.add(random.nextInt(50));
+			targetX.add(random.nextInt(50));
+			targetY.add(random.nextInt(50));
+		}
 
 		// Run NN
 		PathfindingAI winner = null;
 		for (int i = 0; i < generations; ++i) {
 
-			frame.canvas.drawPlayers(population.artificialIntelligences);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// Draw all players
+//			frame.canvas.drawPlayers(population.artificialIntelligences);
+//			Thread.sleep(1000);
 
-			// Let each one do 150 moves in every generation
-			for (int j = 0; j < 100; ++j) {
+			for (ArtificialIntelligence ai : population.artificialIntelligences) {
 
-				for (ArtificialIntelligence ai : population.artificialIntelligences) {
+				int targetsReached = 0;
+				for (int testCases = 0; testCases < 50; ++testCases) {
 
-					PathfindingAI pathfindingAI = (PathfindingAI) ai;
+					// Set random position & target for current testCase
+					PathfindingAI pAi = (PathfindingAI) ai;
+					pAi.currentX = currentX.get(i);
+					pAi.currentY = currentY.get(i);
+					pAi.targetX = targetX.get(i);
+					pAi.targetY = targetY.get(i);
 
-					ai.setInputs(pathfindingAI.getCurrentPosition());
-					ai.think();
-					pathfindingAI.move();
+					// Let each one do 150 moves in every generation
+					for (int j = 0; j < 100; ++j) {
 
-					if (pathfindingAI.currentX == pathfindingAI.targetX && pathfindingAI.currentY == pathfindingAI.targetY) {
-						System.out.println("REACHED TARGET");
-						winner = pathfindingAI;
-						break;
+						PathfindingAI pathfindingAI = (PathfindingAI) ai;
+
+						ai.setInputs(pathfindingAI.getCurrentPosition());
+						ai.think();
+						pathfindingAI.move();
+
+						// Continue with next testcase if the target was reached
+						if (pathfindingAI.currentX == pathfindingAI.targetX && pathfindingAI.currentY == pathfindingAI.targetY) {
+//							System.out.println(
+//									"REACHED A TARGET: " + pathfindingAI.currentX + "#" + pathfindingAI.targetX + " ::: " + pathfindingAI.currentY + "#" + pathfindingAI.targetY);
+							++targetsReached;
+							break;
+						}
+
 					}
 
+					pAi.saveDatasets();
+
+					// Update players on UI
+//				for (ArtificialIntelligence ai : population.artificialIntelligences) {
+//					frame.canvas.update((PathfindingAI) ai);
+//				}
+//
+//				Thread.sleep(50);
 				}
 
-				for (ArtificialIntelligence ai : population.artificialIntelligences) {
-					frame.canvas.update((PathfindingAI) ai);
-				}
-
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				if (winner != null) {
+				if (targetsReached >= 49) {
+					winner = (PathfindingAI) ai;
 					break;
 				}
 			}
+
 			if (winner != null) {
 				break;
 			}
@@ -93,39 +115,42 @@ public class PathGame {
 
 		if (winner != null) {
 
-			List<ArtificialIntelligence> ai = new ArrayList<>();
-			ai.add(winner);
+			System.out.println("#################");
+			System.out.println("WE HAVE WINNER!!!");
 
-			frame.canvas.players.clear();
-			frame.canvas.drawPlayers(population.artificialIntelligences);
-
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			winner.currentX = 3;
-			winner.currentY = 7;
-			for (int i = 0; i < 100; ++i) {
-
-				winner.setInputs(winner.getCurrentPosition());
-				winner.think();
-				winner.move();
-
-				frame.canvas.update((PathfindingAI) ai.get(0));
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				if (winner.targetX == winner.currentX && winner.targetY == winner.currentY) {
-					break;
-				}
-			}
+//			List<ArtificialIntelligence> ai = new ArrayList<>();
+//			ai.add(winner);
+//
+//			frame.canvas.players.clear();
+//			frame.canvas.drawPlayers(population.artificialIntelligences);
+//
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//			winner.currentX = 3;
+//			winner.currentY = 7;
+//			for (int i = 0; i < 100; ++i) {
+//
+//				winner.setInputs(winner.getCurrentPosition());
+//				winner.think();
+//				winner.move();
+//
+//				frame.canvas.update((PathfindingAI) ai.get(0));
+//				try {
+//					Thread.sleep(50);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//
+//				if (winner.targetX == winner.currentX && winner.targetY == winner.currentY) {
+//					break;
+//				}
+//			}
 		}
 
 	}

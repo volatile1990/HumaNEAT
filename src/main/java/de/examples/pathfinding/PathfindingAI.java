@@ -26,6 +26,13 @@ public class PathfindingAI extends ArtificialIntelligence {
 
 	public int[][] playfield;
 
+	// Results for fitness calculation
+	public List<Integer> reachedX;
+	public List<Integer> reachedY;
+
+	public List<Integer> wasTargetX;
+	public List<Integer> wasTargetY;
+
 	/**
 	 * 
 	 */
@@ -53,13 +60,18 @@ public class PathfindingAI extends ArtificialIntelligence {
 
 	private void init() {
 
-		// Initial position
-		this.currentX = 3;
-		this.currentY = 7;
+		this.reachedX = new ArrayList<>();
+		this.reachedY = new ArrayList<>();
+		this.wasTargetX = new ArrayList<>();
+		this.wasTargetY = new ArrayList<>();
 
-		// Target position
-		this.targetX = 45;
-		this.targetY = 49;
+//		// Initial position
+//		this.currentX = 3;
+//		this.currentY = 7;
+//
+//		// Target position
+//		this.targetX = 45;
+//		this.targetY = 49;
 
 		// Playfield
 		this.playfield = new int[50][50];
@@ -82,14 +94,43 @@ public class PathfindingAI extends ArtificialIntelligence {
 	public float calculateFitness() {
 
 		float unadjustedFitness = 0;
-		unadjustedFitness += Math.abs(this.targetX - this.currentX);
-		unadjustedFitness += Math.abs(this.targetY - this.currentY);
+		for (int i = 0; i < this.reachedX.size(); ++i) {
 
-		if (unadjustedFitness == 0) {
-			unadjustedFitness = 0.001f;
+			float runFitness = 0;
+
+			runFitness += Math.abs(this.wasTargetX.get(i) - this.reachedX.get(i));
+			runFitness += Math.abs(this.wasTargetY.get(i) - this.reachedY.get(i));
+
+			if (runFitness == 0) {
+				runFitness = 0.001f;
+			}
+
+			runFitness = 100f / runFitness;
+
+			unadjustedFitness += runFitness;
 		}
+		return unadjustedFitness / 1000;
 
-		return 1000f / (unadjustedFitness * unadjustedFitness);
+		// Calculation for single target run
+//		float unadjustedFitness = 0;
+//		unadjustedFitness += Math.abs(this.targetX - this.currentX);
+//		unadjustedFitness += Math.abs(this.targetY - this.currentY);
+//
+//		if (unadjustedFitness == 0) {
+//			unadjustedFitness = 0.001f;
+//		}
+//
+//		return 1000f / (unadjustedFitness * unadjustedFitness);
+	}
+
+	/**
+	 * 
+	 */
+	public void saveDatasets() {
+		this.reachedX.add(this.currentX);
+		this.reachedY.add(this.currentY);
+		this.wasTargetX.add(this.targetX);
+		this.wasTargetY.add(this.targetY);
 	}
 
 	/**
