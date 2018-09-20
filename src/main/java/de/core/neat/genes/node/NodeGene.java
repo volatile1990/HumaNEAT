@@ -2,8 +2,8 @@ package de.core.neat.genes.node;
 
 import java.util.ArrayList;
 
-import de.core.global.Visitor;
 import de.core.global.components.node.Node;
+import de.core.global.components.node.NodeVisitor;
 
 /**
  * @author muellermak
@@ -36,7 +36,7 @@ public class NodeGene extends Node {
 	/**
 	 * @param visitor
 	 */
-	public void accept(Visitor visitor) {
+	public void accept(NodeVisitor visitor) {
 		visitor.visit(this);
 	}
 }

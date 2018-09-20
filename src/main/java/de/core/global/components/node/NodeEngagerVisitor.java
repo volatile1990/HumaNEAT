@@ -1,6 +1,5 @@
 package de.core.global.components.node;
 
-import de.core.global.Visitor;
 import de.core.lstm.genes.LSTMNodeGene;
 import de.core.neat.Property;
 import de.core.neat.genes.connection.ConnectionGene;
@@ -11,7 +10,7 @@ import de.core.neat.genes.node.NodeGeneType;
  * @author MannoR
  *
  */
-public class NodeEngagerVisitor implements Visitor {
+public class NodeEngagerVisitor implements NodeVisitor {
 
 	/**
 	 * Engages the node gene

@@ -1,4 +1,4 @@
-package de.core.global;
+package de.core.global.components.node;
 
 import de.core.lstm.genes.LSTMNodeGene;
 import de.core.neat.genes.node.NodeGene;
@@ -7,7 +7,7 @@ import de.core.neat.genes.node.NodeGene;
  * @author MannoR
  *
  */
-public interface Visitor {
+public interface NodeVisitor {
 
 	void visit(NodeGene node);
 

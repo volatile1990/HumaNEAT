@@ -1,9 +1,9 @@
 package de.core.lstm.genes;
 
-import de.core.global.Visitor;
 import de.core.global.activation.Activation;
 import de.core.global.activation.ActivationFunctions;
 import de.core.global.components.node.Node;
+import de.core.global.components.node.NodeVisitor;
 import de.core.neat.genes.node.NodeGeneType;
 
 /**
@@ -68,7 +68,7 @@ public class LSTMNodeGene extends Node {
 	/**
 	 * @param visitor
 	 */
-	public void accept(Visitor visitor) {
+	public void accept(NodeVisitor visitor) {
 		visitor.visit(this);
 	}
 }
