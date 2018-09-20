@@ -3,6 +3,10 @@ package de.core.neat;
 import de.core.global.activation.Activation;
 import de.core.global.activation.ActivationFunctions;
 
+/**
+ * @author MannoR
+ *
+ */
 public enum Property {
 
 	/**
@@ -91,14 +95,14 @@ public enum Property {
 	 * @return the property value
 	 */
 	public double getValue() {
-		return this.value;
+		return value;
 	}
 
 	/**
 	 * @return the activation function
 	 */
 	public Activation getActivationFunction() {
-		return this.activationFunction;
+		return activationFunction;
 	}
 
 }
