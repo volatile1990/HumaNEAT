@@ -2,7 +2,7 @@ package de.core;
 
 import java.util.List;
 
-import de.core.genome.Genome;
+import de.core.neat.genome.Genome;
 
 /**
  * @author MannoR

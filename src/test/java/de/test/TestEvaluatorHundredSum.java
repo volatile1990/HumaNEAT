@@ -5,9 +5,8 @@ import java.util.List;
 
 import de.core.neat.ArtificialIntelligence;
 import de.core.neat.genes.ConnectionGene;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.population.NeatPopulation;
-import de.core.neat.population.NeatPopulationConfig;
+import de.core.neat.genome.Genome;
+import de.core.neat.population.Population;
 
 /**
  * @author MannoR
@@ -25,7 +24,7 @@ public class TestEvaluatorHundredSum {
 			ais.add(new TestAI(2, 1));
 		}
 
-		NeatPopulation eval = new NeatPopulation(ais, new NeatPopulationConfig());
+		Population eval = new Population(ais);
 
 		for (int i = 0; i <= 100; ++i) {
 			eval.evolve();
@@ -33,7 +32,7 @@ public class TestEvaluatorHundredSum {
 			System.out.println("Highest fitness: " + eval.getFittestAI().brain.fitness);
 			System.out.println("Amount of species: " + eval.getSpecies().size());
 
-			NeatGenome fittestGenome = eval.getFittestAI().brain;
+			Genome fittestGenome = eval.getFittestAI().brain;
 			float sum = 0f;
 			for (ConnectionGene connection : fittestGenome.getConnectionGenes().values()) {
 				if (connection.isEnabled()) {

@@ -6,10 +6,8 @@ import java.util.List;
 import de.GenomePrinter;
 import de.core.neat.ArtificialIntelligence;
 import de.core.neat.genes.Counter;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
-import de.core.neat.population.NeatPopulation;
-import de.core.neat.population.NeatPopulationConfig;
+import de.core.neat.genome.Genome;
+import de.core.neat.population.Population;
 
 /**
  * @author MannoR
@@ -25,14 +23,14 @@ public class TestEvaluatorFewConnections {
 		Counter nodeInnovation = new Counter();
 		Counter connectionInnovation = new Counter();
 
-		NeatGenome genome = new NeatGenome(2, 1, new NeatGenomeConfig());
+		Genome genome = new Genome(2, 1);
 
 		List<ArtificialIntelligence> ais = new ArrayList<>();
 		for (int i = 0; i < 100; ++i) {
 			ais.add(new TestAI(2, 1));
 		}
 
-		NeatPopulation eval = new NeatPopulation(ais, new NeatPopulationConfig());
+		Population eval = new Population(ais);
 
 		for (int i = 0; i <= 100; ++i) {
 			eval.evolve();

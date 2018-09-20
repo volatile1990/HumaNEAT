@@ -6,8 +6,7 @@ import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.Counter;
 import de.core.neat.genes.NodeGene;
 import de.core.neat.genes.NodeGeneType;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
+import de.core.neat.genome.Genome;
 
 /**
  * @author MannoR
@@ -30,7 +29,7 @@ public class GenomeFeedForwardTest {
 	 */
 	private static void firstTest() {
 
-		NeatGenome genome = new NeatGenome(2, 1, new NeatGenomeConfig());
+		Genome genome = new Genome(2, 1);
 
 		NodeGene hidden1 = new NodeGene(NodeGeneType.HIDDEN, 3);
 
@@ -68,7 +67,7 @@ public class GenomeFeedForwardTest {
 	 */
 	private static void secondTest() {
 
-		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
+		Genome genome = new Genome();
 
 		Counter nodeInnovation = new Counter();
 		Counter connectionInnovation = new Counter();
@@ -107,7 +106,7 @@ public class GenomeFeedForwardTest {
 	 */
 	private static void thirdTest() {
 
-		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
+		Genome genome = new Genome();
 
 		Counter nodeInnovation = new Counter();
 		Counter connectionInnovation = new Counter();

@@ -6,8 +6,7 @@ import java.util.List;
 import de.GenomePrinter;
 import de.core.neat.ArtificialIntelligence;
 import de.core.neat.genes.NodeGeneType;
-import de.core.neat.population.NeatPopulation;
-import de.core.neat.population.NeatPopulationConfig;
+import de.core.neat.population.Population;
 
 /**
  * @author MannoR
@@ -30,7 +29,7 @@ public class XOR {
 			ais.add(new XorAI(2, 1));
 		}
 
-		NeatPopulation population = new NeatPopulation(ais, new NeatPopulationConfig());
+		Population population = new Population(ais);
 
 		ArtificialIntelligence winner = null;
 

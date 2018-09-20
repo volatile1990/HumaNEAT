@@ -4,8 +4,7 @@ import java.util.List;
 
 import de.core.neat.ArtificialIntelligence;
 import de.core.neat.genes.ConnectionGene;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
+import de.core.neat.genome.Genome;
 
 public class TestAI extends ArtificialIntelligence {
 
@@ -14,10 +13,10 @@ public class TestAI extends ArtificialIntelligence {
 	 * @param anzOutputs
 	 */
 	public TestAI(int anzInputs, int anzOutputs) {
-		this.brain = new NeatGenome(anzInputs, anzOutputs, new NeatGenomeConfig());
+		this.brain = new Genome(anzInputs, anzOutputs);
 	}
 
-	public TestAI(NeatGenome brain) {
+	public TestAI(Genome brain) {
 
 		this(brain.anzInputs, brain.anzOutputs);
 		this.brain = brain;
@@ -49,7 +48,7 @@ public class TestAI extends ArtificialIntelligence {
 	}
 
 	@Override
-	public ArtificialIntelligence getNewInstance(NeatGenome genome) {
+	public ArtificialIntelligence getNewInstance(Genome genome) {
 		return new TestAI(genome);
 	}
 

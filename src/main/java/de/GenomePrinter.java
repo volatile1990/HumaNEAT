@@ -14,11 +14,11 @@ import javax.imageio.ImageIO;
 import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.NodeGene;
 import de.core.neat.genes.NodeGeneType;
-import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.Genome;
 
 public class GenomePrinter {
 
-	public static void printGenome(NeatGenome genome, String path) {
+	public static void printGenome(Genome genome, String path) {
 		Random r = new Random();
 		HashMap<Integer, Point> nodeGenePositions = new HashMap<>();
 		int nodeSize = 20;
@@ -97,7 +97,7 @@ public class GenomePrinter {
 		}
 	}
 
-	private static int countNodesByType(NeatGenome genome, NodeGeneType type) {
+	private static int countNodesByType(Genome genome, NodeGeneType type) {
 		int c = 0;
 		for (NodeGene node : genome.getNodeGenes().values()) {
 			if (node.getType() == type) {

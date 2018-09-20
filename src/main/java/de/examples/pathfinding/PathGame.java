@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import de.core.neat.ArtificialIntelligence;
-import de.core.neat.population.NeatPopulation;
-import de.core.neat.population.NeatPopulationConfig;
+import de.core.neat.population.Population;
 
 /**
  * @author muellermak
@@ -34,7 +33,7 @@ public class PathGame {
 		for (int i = 0; i < populationSize; ++i) {
 			ais.add(new PathfindingAI(2, 4));
 		}
-		NeatPopulation population = new NeatPopulation(ais, new NeatPopulationConfig());
+		Population population = new Population(ais);
 
 		iniUi(ais);
 

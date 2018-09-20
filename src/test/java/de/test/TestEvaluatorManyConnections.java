@@ -9,10 +9,8 @@ import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.Counter;
 import de.core.neat.genes.NodeGene;
 import de.core.neat.genes.NodeGeneType;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
-import de.core.neat.population.NeatPopulation;
-import de.core.neat.population.NeatPopulationConfig;
+import de.core.neat.genome.Genome;
+import de.core.neat.population.Population;
 
 /**
  * @author muellermak
@@ -28,7 +26,7 @@ public class TestEvaluatorManyConnections {
 		Counter nodeInnovation = new Counter();
 		Counter connectionInnovation = new Counter();
 
-		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
+		Genome genome = new Genome();
 
 		NodeGene input1 = new NodeGene(NodeGeneType.INPUT, nodeInnovation.getNext());
 		NodeGene input2 = new NodeGene(NodeGeneType.INPUT, nodeInnovation.getNext());
@@ -46,7 +44,7 @@ public class TestEvaluatorManyConnections {
 			ais.add(new TestAI(2, 1));
 		}
 
-		NeatPopulation eval = new NeatPopulation(ais, new NeatPopulationConfig());
+		Population eval = new Population(ais);
 
 		for (int i = 0; i <= 100; ++i) {
 			eval.evolve();

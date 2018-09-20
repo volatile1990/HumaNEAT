@@ -13,14 +13,13 @@ import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.ConnectionHistory;
 import de.core.neat.genes.Counter;
 import de.core.neat.genes.NodeGene;
-import de.core.neat.genes.NodeGeneConfig;
 import de.core.neat.genes.NodeGeneType;
 
 /**
  * @author muellermak
  *
  */
-public class NeatGenome {
+public class Genome {
 
 	private Map<Integer, NodeGene> nodes;
 	private Map<Integer, ConnectionGene> connections;
@@ -38,12 +37,10 @@ public class NeatGenome {
 	public double fitness;
 	public double unadjustedFitness;
 
-	public NeatGenomeConfig config;
-
 	/**
 	 *
 	 */
-	public NeatGenome(NeatGenomeConfig config) {
+	public Genome() {
 
 		this.nodes = new HashMap<>();
 		this.connections = new HashMap<>();
@@ -53,17 +50,15 @@ public class NeatGenome {
 
 		this.fitness = 0;
 		this.unadjustedFitness = 0;
-
-		this.config = config;
 	}
 
 	/**
 	 * @param inputs
 	 * @param output
 	 */
-	public NeatGenome(int inputs, int outputs, NeatGenomeConfig config) {
+	public Genome(int inputs, int outputs) {
 
-		this(config);
+		this();
 
 		this.nodeInnovation = new Counter();
 		this.connectionInnovation = new Counter();
@@ -74,13 +69,11 @@ public class NeatGenome {
 		this.fitness = 0;
 		this.unadjustedFitness = 0;
 
-		this.config = config;
-
 		// Generate Inputs
 		List<NodeGene> inputNodes = new ArrayList<>();
 		for (int i = 0; i < inputs; ++i) {
 			int nextInnovation = this.nodeInnovation.getNext();
-			NodeGene input = new NodeGene(NodeGeneType.INPUT, nextInnovation, new NodeGeneConfig());
+			NodeGene input = new NodeGene(NodeGeneType.INPUT, nextInnovation);
 			this.nodes.put(nextInnovation, input);
 			inputNodes.add(input);
 		}
@@ -89,7 +82,7 @@ public class NeatGenome {
 		List<NodeGene> outputNodes = new ArrayList<>();
 		for (int i = 0; i < outputs; ++i) {
 			int nextInnovation = this.nodeInnovation.getNext();
-			NodeGene output = new NodeGene(NodeGeneType.OUTPUT, nextInnovation, new NodeGeneConfig());
+			NodeGene output = new NodeGene(NodeGeneType.OUTPUT, nextInnovation);
 			this.nodes.put(nextInnovation, output);
 			outputNodes.add(output);
 		}
@@ -112,7 +105,7 @@ public class NeatGenome {
 
 		// Add bias node
 		int biasInnovation = this.nodeInnovation.getNext();
-		this.biasNode = new NodeGene(NodeGeneType.BIAS, biasInnovation, new NodeGeneConfig());
+		this.biasNode = new NodeGene(NodeGeneType.BIAS, biasInnovation);
 		this.nodes.put(biasInnovation, this.biasNode);
 
 		// Connect the bias node to all outputs
@@ -503,7 +496,7 @@ public class NeatGenome {
 
 		connection.setEnabled(false);
 
-		NodeGene newNode = new NodeGene(NodeGeneType.HIDDEN, this.nodeInnovation.getNext(), new NodeGeneConfig());
+		NodeGene newNode = new NodeGene(NodeGeneType.HIDDEN, this.nodeInnovation.getNext());
 
 		int connectionInnovationNumber = this.getConnectionInnovationNumber(innovationHistory, in, newNode);
 		ConnectionGene inToNew = new ConnectionGene(in, newNode, 1f, true, connectionInnovationNumber);
@@ -545,9 +538,9 @@ public class NeatGenome {
 	 * @param unfitParent less fit parent
 	 * @return
 	 */
-	public static NeatGenome crossover(NeatGenome fitParent, NeatGenome unfitParent) {
+	public static Genome crossover(Genome fitParent, Genome unfitParent) {
 
-		NeatGenome childGenome = new NeatGenome(fitParent.anzInputs, fitParent.anzOutputs, fitParent.config);
+		Genome childGenome = new Genome(fitParent.anzInputs, fitParent.anzOutputs);
 		Random random = new SecureRandom();
 
 		childGenome.nodes.clear();
@@ -775,9 +768,9 @@ public class NeatGenome {
 	/**
 	 * @return
 	 */
-	public NeatGenome copy() {
+	public Genome copy() {
 
-		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
+		Genome genome = new Genome();
 		genome.anzInputs = this.anzInputs;
 		genome.anzOutputs = this.anzOutputs;
 

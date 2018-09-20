@@ -3,6 +3,7 @@ package de.core.neat.genes;
 import java.util.ArrayList;
 
 import de.core.global.Node;
+import de.core.neat.Property;
 
 /**
  * @author muellermak
@@ -10,13 +11,11 @@ import de.core.global.Node;
  */
 public class NodeGene extends Node {
 
-	public NodeGeneConfig config;
-
 	/**
 	 * @param type
 	 * @param id
 	 */
-	public NodeGene(NodeGeneType type, int number, NodeGeneConfig config) {
+	public NodeGene(NodeGeneType type, int number) {
 		this.type = type;
 		this.number = number;
 
@@ -24,8 +23,6 @@ public class NodeGene extends Node {
 		this.outputValue = 0;
 
 		this.outputConnections = new ArrayList<>();
-
-		this.config = config;
 	}
 
 	/**
@@ -43,7 +40,7 @@ public class NodeGene extends Node {
 	public void activate() {
 		// Don't apply sigmoid for inputs (including the bias node)
 		if (this.type != NodeGeneType.BIAS && this.type != NodeGeneType.INPUT) {
-			this.outputValue = this.config.activationFunction.activate(this.inputSum);
+			this.outputValue = Property.ACTIVATION_FUNCTION.getActivationFunction().activate(this.inputSum);
 		} else {
 			this.outputValue = this.inputSum;
 		}
@@ -69,7 +66,7 @@ public class NodeGene extends Node {
 	 *
 	 */
 	public NodeGene copy() {
-		return new NodeGene(this.type, this.number, this.config);
+		return new NodeGene(this.type, this.number);
 	}
 
 	/**

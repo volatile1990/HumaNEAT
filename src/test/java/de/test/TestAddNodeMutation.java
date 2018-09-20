@@ -6,8 +6,7 @@ import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.Counter;
 import de.core.neat.genes.NodeGene;
 import de.core.neat.genes.NodeGeneType;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
+import de.core.neat.genome.Genome;
 
 /**
  * @author muellermak
@@ -23,7 +22,7 @@ public class TestAddNodeMutation {
 		Counter innovation = new Counter();
 		Random random = new Random();
 
-		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
+		Genome genome = new Genome();
 
 		NodeGene input1 = new NodeGene(NodeGeneType.INPUT, -3);
 		NodeGene input2 = new NodeGene(NodeGeneType.INPUT, -2);

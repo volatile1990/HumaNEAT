@@ -5,8 +5,7 @@ import java.util.List;
 
 import de.GenomePrinter;
 import de.core.neat.ArtificialIntelligence;
-import de.core.neat.population.NeatPopulation;
-import de.core.neat.population.NeatPopulationConfig;
+import de.core.neat.population.Population;
 
 /**
  * @author muellermak
@@ -37,7 +36,7 @@ public class TicTacToe {
 		}
 
 		// Setup Population for first player
-		NeatPopulation population = new NeatPopulation(ais, new NeatPopulationConfig());
+		Population population = new Population(ais);
 
 		TicTacToePlayer winner = null;
 

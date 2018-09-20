@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.core.neat.ArtificialIntelligence;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
+import de.core.neat.genome.Genome;
 
 public class XorAI extends ArtificialIntelligence {
 
@@ -25,14 +24,14 @@ public class XorAI extends ArtificialIntelligence {
 		this.anzOutputs = anzOutputs;
 		this.inputs = new double[this.anzInputs];
 
-		this.brain = new NeatGenome(anzInputs, anzOutputs, new NeatGenomeConfig());
+		this.brain = new Genome(anzInputs, anzOutputs);
 
 		this.x = new ArrayList<>();
 		this.y = new ArrayList<>();
 		this.decisions = new ArrayList<>();
 	}
 
-	public XorAI(NeatGenome brain) {
+	public XorAI(Genome brain) {
 
 		this(brain.anzInputs, brain.anzOutputs);
 		this.brain = brain;
@@ -102,7 +101,7 @@ public class XorAI extends ArtificialIntelligence {
 	}
 
 	@Override
-	public ArtificialIntelligence getNewInstance(NeatGenome genome) {
+	public ArtificialIntelligence getNewInstance(Genome genome) {
 		return new XorAI(genome);
 	}
 

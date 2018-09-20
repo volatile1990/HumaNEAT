@@ -3,8 +3,7 @@ package de.examples.tictactoe;
 import java.util.List;
 
 import de.core.neat.ArtificialIntelligence;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
+import de.core.neat.genome.Genome;
 
 /**
  * @author MannoR
@@ -27,7 +26,7 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	 */
 	public TicTacToePlayer(String name, int anzInputs, int anzOutputs) {
 
-		this.brain = new NeatGenome(anzInputs, anzOutputs, new NeatGenomeConfig());
+		this.brain = new Genome(anzInputs, anzOutputs);
 
 		this.anzInputs = anzInputs;
 		this.inputs = new double[this.anzInputs];
@@ -39,7 +38,7 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	/**
 	 * @param brain
 	 */
-	public TicTacToePlayer(NeatGenome brain) {
+	public TicTacToePlayer(Genome brain) {
 		this.brain = brain;
 
 		this.inputs = new double[brain.anzInputs];
@@ -154,7 +153,7 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	}
 
 	@Override
-	public ArtificialIntelligence getNewInstance(NeatGenome genome) {
+	public ArtificialIntelligence getNewInstance(Genome genome) {
 		return new TicTacToePlayer(genome);
 	}
 

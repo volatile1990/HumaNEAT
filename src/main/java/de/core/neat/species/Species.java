@@ -11,8 +11,8 @@ import java.util.Random;
 import de.core.neat.ArtificialIntelligence;
 import de.core.neat.Property;
 import de.core.neat.genes.ConnectionHistory;
+import de.core.neat.genome.Genome;
 import de.core.neat.genome.GenomeFitnessComparator;
-import de.core.neat.genome.NeatGenome;
 
 /**
  * @author muellermak
@@ -31,12 +31,10 @@ public class Species {
 	public double totalAdjustedFitness;
 	public double averageFitness;
 
-	public SpeciesConfig config;
-
 	/**
 	 * @param mascot
 	 */
-	public Species(ArtificialIntelligence mascot, SpeciesConfig config) {
+	public Species(ArtificialIntelligence mascot) {
 		this.champion = mascot;
 		this.members = new LinkedList<>();
 		this.members.add(mascot);
@@ -45,8 +43,6 @@ public class Species {
 		this.totalAdjustedFitness = 0f;
 		this.averageFitness = 0f;
 		this.bestFitness = 0f;
-
-		this.config = config;
 	}
 
 	/**
@@ -128,26 +124,26 @@ public class Species {
 	 * @param innovationHistory
 	 * @return
 	 */
-	public NeatGenome makeBaby(Map<Integer, List<ConnectionHistory>> innovationHistory) {
+	public Genome makeBaby(Map<Integer, List<ConnectionHistory>> innovationHistory) {
 
 		Random random = new SecureRandom();
 
 		// 25% chance to directly add the selected player without crossover
-		NeatGenome baby = null;
+		Genome baby = null;
 		if (random.nextFloat() <= Property.ADD_GENOME_WITHOUT_CROSSOVER_RATE.getValue()) {
 			baby = this.selectGenomeForReproduction().copy();
 			baby.mutate(innovationHistory);
 		} else {
 
 			// Get random parents
-			NeatGenome mum = this.selectGenomeForReproduction();
-			NeatGenome dad = this.selectGenomeForReproduction();
+			Genome mum = this.selectGenomeForReproduction();
+			Genome dad = this.selectGenomeForReproduction();
 
 			// Fitter parent gotta do the work
 			if (mum.fitness < dad.fitness) {
-				baby = NeatGenome.crossover(dad, mum);
+				baby = Genome.crossover(dad, mum);
 			} else {
-				baby = NeatGenome.crossover(mum, dad);
+				baby = Genome.crossover(mum, dad);
 			}
 			baby.mutate(innovationHistory);
 		}
@@ -160,7 +156,7 @@ public class Species {
 	/**
 	 * @return
 	 */
-	public NeatGenome selectGenomeForReproduction() {
+	public Genome selectGenomeForReproduction() {
 
 		double fitnessSum = 0;
 		for (ArtificialIntelligence ai : this.members) {

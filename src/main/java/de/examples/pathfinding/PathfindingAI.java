@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.core.neat.ArtificialIntelligence;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
+import de.core.neat.genome.Genome;
 
 /**
  * @author muellermak
@@ -28,7 +27,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 	public int[][] playfield;
 
 	/**
-	 * 
+	 *
 	 */
 	public PathfindingAI(int anzInputs, int anzOutputs) {
 
@@ -36,7 +35,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 		this.anzOutputs = anzOutputs;
 		this.inputs = new double[anzInputs];
 
-		this.brain = new NeatGenome(anzInputs, anzOutputs, new NeatGenomeConfig());
+		this.brain = new Genome(anzInputs, anzOutputs);
 
 		this.init();
 	}
@@ -44,7 +43,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 	/**
 	 * @param brain
 	 */
-	public PathfindingAI(NeatGenome brain) {
+	public PathfindingAI(Genome brain) {
 
 		this(brain.anzInputs, brain.anzOutputs);
 		this.brain = brain;
@@ -159,11 +158,11 @@ public class PathfindingAI extends ArtificialIntelligence {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.core.ArtificialIntelligence#getNewInstance(de.core.genome.Genome)
 	 */
 	@Override
-	public ArtificialIntelligence getNewInstance(NeatGenome genome) {
+	public ArtificialIntelligence getNewInstance(Genome genome) {
 		return new PathfindingAI(genome);
 	}
 }

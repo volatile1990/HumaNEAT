@@ -3,7 +3,7 @@ package de.core.neat.genes;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.Genome;
 
 /**
  * @author muellermak
@@ -34,7 +34,7 @@ public class ConnectionHistory {
 	 * @param to
 	 * @return
 	 */
-	public boolean matches(NeatGenome genome, NodeGene from, NodeGene to) {
+	public boolean matches(Genome genome, NodeGene from, NodeGene to) {
 
 		if (genome.getConnectionGenes().size() != this.innovationNumbers.size()) {
 			return false;

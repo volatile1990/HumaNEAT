@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 import de.core.neat.ArtificialIntelligence;
+import de.core.neat.Property;
 import de.core.neat.genes.ConnectionHistory;
 import de.core.neat.genome.GenomeSpeciation;
 import de.core.neat.species.Species;
-import de.core.neat.species.SpeciesConfig;
 import de.core.neat.species.SpeciesFitnessComparator;
 
 /**
  * @author muellermak
  *
  */
-public class NeatPopulation {
+public class Population {
 
 	// The population per generation (best genomes from last generation + X to fit number)
 	private int populationSize;
@@ -38,9 +38,7 @@ public class NeatPopulation {
 
 	public double highestAchievedFitness;
 
-	public NeatPopulationConfig config;
-
-	public NeatPopulation(List<ArtificialIntelligence> population, NeatPopulationConfig config) {
+	public Population(List<ArtificialIntelligence> population) {
 
 		this.populationSize = population.size();
 
@@ -54,8 +52,6 @@ public class NeatPopulation {
 		this.nextGenerationAis = new ArrayList<>();
 		this.species = new ArrayList<>();
 		this.innovationHistory = new HashMap<>();
-
-		this.config = config;
 	}
 
 	/**
@@ -107,7 +103,7 @@ public class NeatPopulation {
 			for (Species species : this.species) {
 
 				GenomeSpeciation speciation = new GenomeSpeciation(ai.brain, species.champion.brain);
-				if (speciation.compatibilityDistance(this.config.c1, this.config.c2, this.config.c3) < this.config.dt) {
+				if (speciation.compatibilityDistance(Property.C1.getValue(), Property.C2.getValue(), Property.C3.getValue()) < Property.DT.getValue()) {
 					species.members.add(ai);
 					foundSpecies = true;
 					break;
@@ -116,7 +112,7 @@ public class NeatPopulation {
 
 			// Create new species with current genome as mascot
 			if (!foundSpecies) {
-				this.species.add(new Species(ai, new SpeciesConfig()));
+				this.species.add(new Species(ai));
 			}
 		}
 	}

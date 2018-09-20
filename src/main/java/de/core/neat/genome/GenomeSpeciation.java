@@ -10,8 +10,8 @@ import de.core.neat.genes.ConnectionGene;
  */
 public class GenomeSpeciation {
 
-	public NeatGenome first;
-	public NeatGenome second;
+	public Genome first;
+	public Genome second;
 
 	public int matchingGenes;
 	public int disjointGenes;
@@ -23,7 +23,7 @@ public class GenomeSpeciation {
 	 * @param first
 	 * @param second
 	 */
-	public GenomeSpeciation(NeatGenome first, NeatGenome second) {
+	public GenomeSpeciation(Genome first, Genome second) {
 		this.first = first;
 		this.second = second;
 

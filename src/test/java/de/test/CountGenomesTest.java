@@ -4,9 +4,8 @@ import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.Counter;
 import de.core.neat.genes.NodeGene;
 import de.core.neat.genes.NodeGeneType;
+import de.core.neat.genome.Genome;
 import de.core.neat.genome.GenomeSpeciation;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
 
 /**
  * @author muellermak
@@ -19,8 +18,8 @@ public class CountGenomesTest {
 	 */
 	public static void main(String[] args) {
 
-		NeatGenome first = generateFirstGenome();
-		NeatGenome second = generateSecondGenome();
+		Genome first = generateFirstGenome();
+		Genome second = generateSecondGenome();
 
 		GenomeSpeciation genomeInfo = new GenomeSpeciation(first, second);
 
@@ -31,8 +30,8 @@ public class CountGenomesTest {
 //		System.out.println("COMPATIBILITY DISTANCE: " + genomeInfo.compatibilityDistance(first, second, c1, c2, c3));
 	}
 
-	private static NeatGenome generateFirstGenome() {
-		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
+	private static Genome generateFirstGenome() {
+		Genome genome = new Genome();
 
 		NodeGene input = new NodeGene(NodeGeneType.INPUT, 0);
 		NodeGene hidden1 = new NodeGene(NodeGeneType.HIDDEN, 2);
@@ -54,8 +53,8 @@ public class CountGenomesTest {
 		return genome;
 	}
 
-	private static NeatGenome generateSecondGenome() {
-		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
+	private static Genome generateSecondGenome() {
+		Genome genome = new Genome();
 
 		NodeGene input = new NodeGene(NodeGeneType.INPUT, 0);
 		NodeGene hidden1 = new NodeGene(NodeGeneType.HIDDEN, 1);

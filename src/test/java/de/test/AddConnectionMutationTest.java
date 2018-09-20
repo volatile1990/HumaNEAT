@@ -3,8 +3,7 @@ package de.test;
 import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.NodeGene;
 import de.core.neat.genes.NodeGeneType;
-import de.core.neat.genome.NeatGenome;
-import de.core.neat.genome.NeatGenomeConfig;
+import de.core.neat.genome.Genome;
 
 /**
  * @author muellermak
@@ -17,7 +16,7 @@ public class AddConnectionMutationTest {
 	 */
 	public static void main(String[] args) {
 
-		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
+		Genome genome = new Genome();
 
 		NodeGene input1 = new NodeGene(NodeGeneType.INPUT, 1);
 		NodeGene input2 = new NodeGene(NodeGeneType.INPUT, 2);

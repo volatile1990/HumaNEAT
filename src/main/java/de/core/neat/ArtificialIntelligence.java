@@ -2,7 +2,7 @@ package de.core.neat;
 
 import java.util.List;
 
-import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.Genome;
 
 /**
  * @author MannoR
@@ -10,7 +10,7 @@ import de.core.neat.genome.NeatGenome;
  */
 public abstract class ArtificialIntelligence {
 
-	public NeatGenome brain;
+	public Genome brain;
 
 	/**
 	 * Converts the given inputs in the same order to be used for the neuronal net
@@ -36,5 +36,5 @@ public abstract class ArtificialIntelligence {
 	 *
 	 * @return
 	 */
-	public abstract ArtificialIntelligence getNewInstance(NeatGenome genome);
+	public abstract ArtificialIntelligence getNewInstance(Genome genome);
 }

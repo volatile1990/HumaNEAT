@@ -3,7 +3,7 @@ package de.core.lstm;
 import java.util.List;
 
 import de.core.lstm.genome.LSTMGenome;
-import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.Genome;
 
 /**
  * @author MannoR
@@ -37,5 +37,5 @@ public abstract class ArtificialIntelligence {
 	 *
 	 * @return
 	 */
-	public abstract ArtificialIntelligence getNewInstance(NeatGenome genome);
+	public abstract ArtificialIntelligence getNewInstance(Genome genome);
 }
