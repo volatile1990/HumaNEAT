@@ -2,14 +2,14 @@ package de.core.lstm.genes;
 
 import de.core.global.activation.Activation;
 import de.core.global.activation.ActivationFunctions;
-import de.core.neat.genes.node.NodeGene;
+import de.core.global.components.Node;
 import de.core.neat.genes.node.NodeGeneType;
 
 /**
  * @author muellermak
  *
  */
-public class LSTMNodeGene extends NodeGene {
+public class LSTMNodeGene extends Node {
 
 	// Cell state
 	public double[] cellState;
@@ -47,7 +47,8 @@ public class LSTMNodeGene extends NodeGene {
 	 * @param number
 	 */
 	public LSTMNodeGene(NodeGeneType type, int number) {
-		super(type, number);
+
+		super(new LSTMNodeEngager());
 
 		cellState = new double[2];
 		cellState[0] = LSTMNodeGene.INITIAL_CELL_STATE;
