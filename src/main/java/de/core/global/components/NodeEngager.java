@@ -6,19 +6,16 @@ package de.core.global.components;
  */
 public abstract class NodeEngager {
 
-	/**
-	 *
-	 */
-	public abstract void engage(Node node);
+	public Node node;
 
 	/**
-	 *
+	 * Activates the nodes output using the activation function
 	 */
-	public abstract void activate(Node node);
+	public abstract void activate();
 
 	/**
-	 *
+	 * Fires the output over all output connections
 	 */
-	public abstract void fire(Node node);
+	public abstract void fire();
 
 }

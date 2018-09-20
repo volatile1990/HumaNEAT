@@ -41,7 +41,8 @@ public class GenomeFeeder {
 		processInputs(inputValues, inputNodes);
 
 		// Engage bias
-		genome.biasNode.engage();
+		genome.biasNode.activate();
+		genome.biasNode.fire();
 
 		// Engage hidden nodes
 		processHiddenNodes(hiddenNodes);
@@ -81,7 +82,8 @@ public class GenomeFeeder {
 
 		// Engage inputs
 		for (NodeGene node : inputNodes) {
-			node.engage();
+			node.activate();
+			node.fire();
 		}
 	}
 
@@ -124,7 +126,8 @@ public class GenomeFeeder {
 				// Set payload from incoming connections and engage the node
 				if (dataIsComplete) {
 					node.inputSum = inputSum;
-					node.engage();
+					node.activate();
+					node.fire();
 					iter.remove();
 				}
 			}
@@ -151,7 +154,7 @@ public class GenomeFeeder {
 
 			node.inputSum = inputSum;
 			node.outputValue = inputSum;
-			node.nodeEngager.activate(node);
+			node.nodeEngager.activate();
 		}
 	}
 

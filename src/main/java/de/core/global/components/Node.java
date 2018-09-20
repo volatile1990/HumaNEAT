@@ -27,6 +27,7 @@ public abstract class Node {
 	 */
 	public Node(NodeEngager engager) {
 		nodeEngager = engager;
+		nodeEngager.node = this;
 	}
 
 	/**
@@ -46,24 +47,17 @@ public abstract class Node {
 	}
 
 	/**
-	 * Engages the node to calc and pass its data in the neural network
-	 */
-	public void engage() {
-		nodeEngager.engage(this);
-	}
-
-	/**
 	 *
 	 */
 	public void activate() {
-		nodeEngager.activate(this);
+		nodeEngager.activate();
 	}
 
 	/**
 	 *
 	 */
 	public void fire() {
-		nodeEngager.fire(this);
+		nodeEngager.fire();
 	}
 
 	/**

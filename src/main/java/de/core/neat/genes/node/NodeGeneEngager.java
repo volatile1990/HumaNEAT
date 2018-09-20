@@ -1,6 +1,5 @@
 package de.core.neat.genes.node;
 
-import de.core.global.components.Node;
 import de.core.global.components.NodeEngager;
 import de.core.neat.Property;
 import de.core.neat.genes.connection.ConnectionGene;
@@ -11,22 +10,11 @@ import de.core.neat.genes.connection.ConnectionGene;
  */
 public class NodeGeneEngager extends NodeEngager {
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see de.core.global.components.NodeEngager#engage()
-	 */
-	@Override
-	public void engage(Node node) {
-		activate(node);
-		fire(node);
-	}
-
 	/**
 	 * Activates the nodegene by using sigmoid
 	 */
 	@Override
-	public void activate(Node node) {
+	public void activate() {
 
 		// Don't apply sigmoid for inputs or bias
 		NodeGeneType type = node.type;
@@ -41,7 +29,7 @@ public class NodeGeneEngager extends NodeEngager {
 	 * Sums up the input of the connected genome with its outputValue * weight
 	 */
 	@Override
-	public void fire(Node node) {
+	public void fire() {
 		for (ConnectionGene connection : node.outputConnections) {
 
 			if (!connection.enabled) {
@@ -53,4 +41,5 @@ public class NodeGeneEngager extends NodeEngager {
 			connection.activated = true;
 		}
 	}
+
 }
