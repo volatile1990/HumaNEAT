@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.GenomePrinter;
-import de.core.ArtificialIntelligence;
-import de.core.genes.NodeGeneType;
-import de.core.population.Population;
+import de.core.neat.ArtificialIntelligence;
+import de.core.neat.genes.NodeGeneType;
+import de.core.neat.population.NeatPopulation;
+import de.core.neat.population.NeatPopulationConfig;
 
 /**
  * @author MannoR
@@ -19,7 +20,7 @@ public class XOR {
 	 */
 	public static void main(String[] args) {
 
-		float XOR_INPUT[][] = { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
+		double XOR_INPUT[][] = { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
 
 		int populationSize = 1000;
 		int generations = 400;
@@ -29,7 +30,7 @@ public class XOR {
 			ais.add(new XorAI(2, 1));
 		}
 
-		Population population = new Population(ais);
+		NeatPopulation population = new NeatPopulation(ais, new NeatPopulationConfig());
 
 		ArtificialIntelligence winner = null;
 
@@ -40,7 +41,7 @@ public class XOR {
 			for (ArtificialIntelligence ai : population.artificialIntelligences) {
 
 				for (int j = 0; j < 4; ++j) {
-					List<Float> input = new ArrayList<>();
+					List<Double> input = new ArrayList<>();
 					input.add(XOR_INPUT[j][0]);
 					input.add(XOR_INPUT[j][1]);
 
@@ -77,7 +78,7 @@ public class XOR {
 			System.out.println("######### SOLUTION FOUND #########");
 			GenomePrinter.printGenome(winner.brain, "D:/output/xor/winner.png");
 
-			float[] data = new float[2];
+			double[] data = new double[2];
 
 			data[0] = 0;
 			data[1] = 0;
@@ -102,7 +103,7 @@ public class XOR {
 
 	private static boolean testAiSuccess(ArtificialIntelligence ai) {
 
-		float[] input = new float[2];
+		double[] input = new double[2];
 
 		input[0] = 0f;
 		input[1] = 0f;

@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import de.core.ArtificialIntelligence;
+import de.core.neat.ArtificialIntelligence;
 
 public class PlayFrame extends JFrame {
 
@@ -48,7 +48,7 @@ public class PlayFrame extends JFrame {
 		// Override paintComponent to perform your own painting
 		@Override
 		public void paintComponent(Graphics g) {
-//			super.paintComponent(g); // paint parent's background
+			super.paintComponent(g); // paint parent's background
 			PlayFrame.this.setBackground(Color.BLACK); // set background color for this JPanel
 
 			g.setColor(Color.BLUE);

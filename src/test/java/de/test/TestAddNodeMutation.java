@@ -2,11 +2,12 @@ package de.test;
 
 import java.util.Random;
 
-import de.core.genes.ConnectionGene;
-import de.core.genes.Counter;
-import de.core.genes.NodeGene;
-import de.core.genes.NodeGeneType;
-import de.core.genome.Genome;
+import de.core.neat.genes.ConnectionGene;
+import de.core.neat.genes.Counter;
+import de.core.neat.genes.NodeGene;
+import de.core.neat.genes.NodeGeneType;
+import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.NeatGenomeConfig;
 
 /**
  * @author muellermak
@@ -22,7 +23,7 @@ public class TestAddNodeMutation {
 		Counter innovation = new Counter();
 		Random random = new Random();
 
-		Genome genome = new Genome();
+		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
 
 		NodeGene input1 = new NodeGene(NodeGeneType.INPUT, -3);
 		NodeGene input2 = new NodeGene(NodeGeneType.INPUT, -2);

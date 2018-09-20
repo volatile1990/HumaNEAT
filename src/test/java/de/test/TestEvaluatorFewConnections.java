@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.GenomePrinter;
-import de.core.ArtificialIntelligence;
-import de.core.genes.Counter;
-import de.core.genome.Genome;
-import de.core.population.Population;
+import de.core.neat.ArtificialIntelligence;
+import de.core.neat.genes.Counter;
+import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.NeatGenomeConfig;
+import de.core.neat.population.NeatPopulation;
+import de.core.neat.population.NeatPopulationConfig;
 
 /**
  * @author MannoR
@@ -23,14 +25,14 @@ public class TestEvaluatorFewConnections {
 		Counter nodeInnovation = new Counter();
 		Counter connectionInnovation = new Counter();
 
-		Genome genome = new Genome(2, 1);
+		NeatGenome genome = new NeatGenome(2, 1, new NeatGenomeConfig());
 
 		List<ArtificialIntelligence> ais = new ArrayList<>();
 		for (int i = 0; i < 100; ++i) {
 			ais.add(new TestAI(2, 1));
 		}
 
-		Population eval = new Population(ais);
+		NeatPopulation eval = new NeatPopulation(ais, new NeatPopulationConfig());
 
 		for (int i = 0; i <= 100; ++i) {
 			eval.evolve();

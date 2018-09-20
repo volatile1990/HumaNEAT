@@ -3,8 +3,9 @@ package de.examples.pathfinding;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.core.ArtificialIntelligence;
-import de.core.genome.Genome;
+import de.core.neat.ArtificialIntelligence;
+import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.NeatGenomeConfig;
 
 /**
  * @author muellermak
@@ -15,8 +16,8 @@ public class PathfindingAI extends ArtificialIntelligence {
 	public int anzInputs;
 	public int anzOutputs;
 
-	public float[] inputs;
-	public float[] decision;
+	public double[] inputs;
+	public double[] decision;
 
 	public int currentX;
 	public int currentY;
@@ -26,13 +27,6 @@ public class PathfindingAI extends ArtificialIntelligence {
 
 	public int[][] playfield;
 
-	// Results for fitness calculation
-	public List<Integer> reachedX;
-	public List<Integer> reachedY;
-
-	public List<Integer> wasTargetX;
-	public List<Integer> wasTargetY;
-
 	/**
 	 * 
 	 */
@@ -40,9 +34,9 @@ public class PathfindingAI extends ArtificialIntelligence {
 
 		this.anzInputs = anzInputs;
 		this.anzOutputs = anzOutputs;
-		this.inputs = new float[anzInputs];
+		this.inputs = new double[anzInputs];
 
-		this.brain = new Genome(anzInputs, anzOutputs);
+		this.brain = new NeatGenome(anzInputs, anzOutputs, new NeatGenomeConfig());
 
 		this.init();
 	}
@@ -50,7 +44,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 	/**
 	 * @param brain
 	 */
-	public PathfindingAI(Genome brain) {
+	public PathfindingAI(NeatGenome brain) {
 
 		this(brain.anzInputs, brain.anzOutputs);
 		this.brain = brain;
@@ -60,25 +54,20 @@ public class PathfindingAI extends ArtificialIntelligence {
 
 	private void init() {
 
-		this.reachedX = new ArrayList<>();
-		this.reachedY = new ArrayList<>();
-		this.wasTargetX = new ArrayList<>();
-		this.wasTargetY = new ArrayList<>();
+		// Initial position
+		this.currentX = 3;
+		this.currentY = 7;
 
-//		// Initial position
-//		this.currentX = 3;
-//		this.currentY = 7;
-//
-//		// Target position
-//		this.targetX = 45;
-//		this.targetY = 49;
+		// Target position
+		this.targetX = 45;
+		this.targetY = 49;
 
 		// Playfield
 		this.playfield = new int[50][50];
 	}
 
 	@Override
-	public void setInputs(List<Float> inputs) {
+	public void setInputs(List<Double> inputs) {
 
 		for (int i = 0; i < inputs.size(); ++i) {
 			this.inputs[i] = inputs.get(i);
@@ -91,46 +80,17 @@ public class PathfindingAI extends ArtificialIntelligence {
 	}
 
 	@Override
-	public float calculateFitness() {
+	public double calculateFitness() {
 
-		float unadjustedFitness = 0;
-		for (int i = 0; i < this.reachedX.size(); ++i) {
+		double unadjustedFitness = 0;
+		unadjustedFitness += Math.abs(this.targetX - this.currentX);
+		unadjustedFitness += Math.abs(this.targetY - this.currentY);
 
-			float runFitness = 0;
-
-			runFitness += Math.abs(this.wasTargetX.get(i) - this.reachedX.get(i));
-			runFitness += Math.abs(this.wasTargetY.get(i) - this.reachedY.get(i));
-
-			if (runFitness == 0) {
-				runFitness = 0.001f;
-			}
-
-			runFitness = 100f / runFitness;
-
-			unadjustedFitness += runFitness;
+		if (unadjustedFitness == 0) {
+			unadjustedFitness = 0.001f;
 		}
-		return unadjustedFitness / 1000;
 
-		// Calculation for single target run
-//		float unadjustedFitness = 0;
-//		unadjustedFitness += Math.abs(this.targetX - this.currentX);
-//		unadjustedFitness += Math.abs(this.targetY - this.currentY);
-//
-//		if (unadjustedFitness == 0) {
-//			unadjustedFitness = 0.001f;
-//		}
-//
-//		return 1000f / (unadjustedFitness * unadjustedFitness);
-	}
-
-	/**
-	 * 
-	 */
-	public void saveDatasets() {
-		this.reachedX.add(this.currentX);
-		this.reachedY.add(this.currentY);
-		this.wasTargetX.add(this.targetX);
-		this.wasTargetY.add(this.targetY);
+		return 1000f / (unadjustedFitness * unadjustedFitness);
 	}
 
 	/**
@@ -188,11 +148,11 @@ public class PathfindingAI extends ArtificialIntelligence {
 		}
 	}
 
-	public List<Float> getCurrentPosition() {
+	public List<Double> getCurrentPosition() {
 
-		List<Float> currentPosition = new ArrayList<>();
-		currentPosition.add((float) this.currentX);
-		currentPosition.add((float) this.currentY);
+		List<Double> currentPosition = new ArrayList<>();
+		currentPosition.add((double) this.currentX);
+		currentPosition.add((double) this.currentY);
 
 		return currentPosition;
 	}
@@ -203,7 +163,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 	 * @see de.core.ArtificialIntelligence#getNewInstance(de.core.genome.Genome)
 	 */
 	@Override
-	public ArtificialIntelligence getNewInstance(Genome genome) {
+	public ArtificialIntelligence getNewInstance(NeatGenome genome) {
 		return new PathfindingAI(genome);
 	}
 }

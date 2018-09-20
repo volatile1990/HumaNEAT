@@ -1,15 +1,16 @@
 package de.test;
 
-import de.core.genes.ConnectionGene;
-import de.core.genes.NodeGene;
-import de.core.genes.NodeGeneType;
-import de.core.genome.Genome;
+import de.core.neat.genes.ConnectionGene;
+import de.core.neat.genes.NodeGene;
+import de.core.neat.genes.NodeGeneType;
+import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.NeatGenomeConfig;
 
 public class CrossoverTest {
 	public static void main(String[] args) {
 
 		// Create first genome
-		Genome firstParent = new Genome();
+		NeatGenome firstParent = new NeatGenome(new NeatGenomeConfig());
 
 		// Three inputs
 		for (int i = 0; i < 3; ++i) {
@@ -29,7 +30,7 @@ public class CrossoverTest {
 		firstParent.addConnectionGene(new ConnectionGene(firstParent.getNodeGenes().get(1), firstParent.getNodeGenes().get(5), 1f, true, 8));
 
 		// Create second genome
-		Genome secondParent = new Genome();
+		NeatGenome secondParent = new NeatGenome(new NeatGenomeConfig());
 
 		// Three inputs
 		for (int i = 0; i < 3; ++i) {
@@ -52,7 +53,7 @@ public class CrossoverTest {
 		secondParent.addConnectionGene(new ConnectionGene(secondParent.getNodeGenes().get(3), secondParent.getNodeGenes().get(5), 1f, true, 9));
 		secondParent.addConnectionGene(new ConnectionGene(secondParent.getNodeGenes().get(1), secondParent.getNodeGenes().get(6), 1f, true, 10));
 
-		Genome child = Genome.crossover(secondParent, firstParent);
+		NeatGenome child = NeatGenome.crossover(secondParent, firstParent);
 
 		for (ConnectionGene connection : child.getConnectionGenes().values()) {
 			if (connection.isEnabled()) {

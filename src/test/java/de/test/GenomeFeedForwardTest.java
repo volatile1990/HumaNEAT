@@ -2,11 +2,12 @@ package de.test;
 
 import java.util.List;
 
-import de.core.genes.ConnectionGene;
-import de.core.genes.Counter;
-import de.core.genes.NodeGene;
-import de.core.genes.NodeGeneType;
-import de.core.genome.Genome;
+import de.core.neat.genes.ConnectionGene;
+import de.core.neat.genes.Counter;
+import de.core.neat.genes.NodeGene;
+import de.core.neat.genes.NodeGeneType;
+import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.NeatGenomeConfig;
 
 /**
  * @author MannoR
@@ -29,7 +30,7 @@ public class GenomeFeedForwardTest {
 	 */
 	private static void firstTest() {
 
-		Genome genome = new Genome(2, 1);
+		NeatGenome genome = new NeatGenome(2, 1, new NeatGenomeConfig());
 
 		NodeGene hidden1 = new NodeGene(NodeGeneType.HIDDEN, 3);
 
@@ -55,7 +56,7 @@ public class GenomeFeedForwardTest {
 
 //		GenomePrinter.printGenome(genome, "D:/output/test/out.png");
 
-		float[] inputData = new float[2];
+		double[] inputData = new double[2];
 		inputData[0] = 0.5f;
 		inputData[1] = 1.5f;
 
@@ -67,7 +68,7 @@ public class GenomeFeedForwardTest {
 	 */
 	private static void secondTest() {
 
-		Genome genome = new Genome();
+		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
 
 		Counter nodeInnovation = new Counter();
 		Counter connectionInnovation = new Counter();
@@ -92,7 +93,7 @@ public class GenomeFeedForwardTest {
 
 		genome.generateNetwork();
 
-		float[] inputData = new float[2];
+		double[] inputData = new double[2];
 		inputData[0] = 0.5f;
 		inputData[1] = 1.5f;
 
@@ -106,7 +107,7 @@ public class GenomeFeedForwardTest {
 	 */
 	private static void thirdTest() {
 
-		Genome genome = new Genome();
+		NeatGenome genome = new NeatGenome(new NeatGenomeConfig());
 
 		Counter nodeInnovation = new Counter();
 		Counter connectionInnovation = new Counter();
@@ -145,7 +146,7 @@ public class GenomeFeedForwardTest {
 
 		genome.generateNetwork();
 
-		float[] inputData = new float[2];
+		double[] inputData = new double[2];
 		inputData[0] = 0.5f;
 		inputData[1] = 1.5f;
 

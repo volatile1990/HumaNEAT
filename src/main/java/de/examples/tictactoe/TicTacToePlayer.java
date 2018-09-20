@@ -2,8 +2,9 @@ package de.examples.tictactoe;
 
 import java.util.List;
 
-import de.core.ArtificialIntelligence;
-import de.core.genome.Genome;
+import de.core.neat.ArtificialIntelligence;
+import de.core.neat.genome.NeatGenome;
+import de.core.neat.genome.NeatGenomeConfig;
 
 /**
  * @author MannoR
@@ -14,7 +15,7 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	public String name;
 	private int anzInputs;
 
-	private float[] inputs;
+	private double[] inputs;
 	private int[] nextMarkCoordinates;
 
 	public TicTacToe ticTacToe;
@@ -26,10 +27,10 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	 */
 	public TicTacToePlayer(String name, int anzInputs, int anzOutputs) {
 
-		this.brain = new Genome(anzInputs, anzOutputs);
+		this.brain = new NeatGenome(anzInputs, anzOutputs, new NeatGenomeConfig());
 
 		this.anzInputs = anzInputs;
-		this.inputs = new float[this.anzInputs];
+		this.inputs = new double[this.anzInputs];
 		this.nextMarkCoordinates = new int[2];
 
 		this.failed = false;
@@ -38,10 +39,10 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	/**
 	 * @param brain
 	 */
-	public TicTacToePlayer(Genome brain) {
+	public TicTacToePlayer(NeatGenome brain) {
 		this.brain = brain;
 
-		this.inputs = new float[brain.anzInputs];
+		this.inputs = new double[brain.anzInputs];
 		this.anzInputs = brain.anzInputs;
 		this.nextMarkCoordinates = new int[2];
 
@@ -52,7 +53,7 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	 * @param playfield
 	 */
 	@Override
-	public void setInputs(List<Float> playfield) {
+	public void setInputs(List<Double> playfield) {
 
 		for (int i = 0; i < this.anzInputs; ++i) {
 			this.inputs[i] = playfield.get(i);
@@ -69,9 +70,9 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	public void think() {
 
 		// Give the brain input to get decision
-		float[] decision = this.brain.feedForward(this.inputs);
+		double[] decision = this.brain.feedForward(this.inputs);
 
-//		float inputSum = 0;
+//		double inputSum = 0;
 //		for (int i = 0; i < this.inputs.length; ++i) {
 //			inputSum += this.inputs[i];
 //		}
@@ -125,7 +126,7 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	 * @see de.core.ArtificialIntelligence#calculateFitness()
 	 */
 	@Override
-	public float calculateFitness() {
+	public double calculateFitness() {
 
 		int unadjustedFitness = 0;
 		int[][] playfield = this.ticTacToe.playfield;
@@ -153,7 +154,7 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	}
 
 	@Override
-	public ArtificialIntelligence getNewInstance(Genome genome) {
+	public ArtificialIntelligence getNewInstance(NeatGenome genome) {
 		return new TicTacToePlayer(genome);
 	}
 

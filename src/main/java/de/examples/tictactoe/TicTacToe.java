@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.GenomePrinter;
-import de.core.ArtificialIntelligence;
-import de.core.population.Population;
+import de.core.neat.ArtificialIntelligence;
+import de.core.neat.population.NeatPopulation;
+import de.core.neat.population.NeatPopulationConfig;
 
 /**
  * @author muellermak
@@ -36,7 +37,7 @@ public class TicTacToe {
 		}
 
 		// Setup Population for first player
-		Population population = new Population(ais);
+		NeatPopulation population = new NeatPopulation(ais, new NeatPopulationConfig());
 
 		TicTacToePlayer winner = null;
 
@@ -108,19 +109,19 @@ public class TicTacToe {
 	 *
 	 * @return
 	 */
-	private List<Float> normalizePlayfield() {
+	private List<Double> normalizePlayfield() {
 
-		List<Float> normalized = new ArrayList<>();
+		List<Double> normalized = new ArrayList<>();
 
-		normalized.add(Float.valueOf(this.playfield[0][0]));
-		normalized.add(Float.valueOf(this.playfield[0][1]));
-		normalized.add(Float.valueOf(this.playfield[0][2]));
-		normalized.add(Float.valueOf(this.playfield[1][0]));
-		normalized.add(Float.valueOf(this.playfield[1][1]));
-		normalized.add(Float.valueOf(this.playfield[1][2]));
-		normalized.add(Float.valueOf(this.playfield[2][0]));
-		normalized.add(Float.valueOf(this.playfield[2][1]));
-		normalized.add(Float.valueOf(this.playfield[2][2]));
+		normalized.add(Double.valueOf(this.playfield[0][0]));
+		normalized.add(Double.valueOf(this.playfield[0][1]));
+		normalized.add(Double.valueOf(this.playfield[0][2]));
+		normalized.add(Double.valueOf(this.playfield[1][0]));
+		normalized.add(Double.valueOf(this.playfield[1][1]));
+		normalized.add(Double.valueOf(this.playfield[1][2]));
+		normalized.add(Double.valueOf(this.playfield[2][0]));
+		normalized.add(Double.valueOf(this.playfield[2][1]));
+		normalized.add(Double.valueOf(this.playfield[2][2]));
 
 		return normalized;
 	}
