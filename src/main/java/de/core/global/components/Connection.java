@@ -1,4 +1,4 @@
-package de.core.global;
+package de.core.global.components;
 
 import de.core.neat.genes.NodeGene;
 

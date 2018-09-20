@@ -42,7 +42,7 @@ public class TestAddNodeMutation {
 
 		for (ConnectionGene connection : genome.connections.values()) {
 			if (connection.enabled) {
-				System.out.println("IN-NODE-ID: " + connection.from.number + " ## OUT-NODE-ID: " + connection.to.number + " ## WEIGHT: " + connection.weight);
+				System.out.println("IN-NODE-ID: " + connection.from.innovationNumber + " ## OUT-NODE-ID: " + connection.to.innovationNumber + " ## WEIGHT: " + connection.weight);
 			}
 		}
 	}

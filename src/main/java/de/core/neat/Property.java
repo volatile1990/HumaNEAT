@@ -1,7 +1,7 @@
 package de.core.neat;
 
-import de.core.global.Activation;
-import de.core.global.ActivationFunctions;
+import de.core.global.activation.Activation;
+import de.core.global.activation.ActivationFunctions;
 
 public enum Property {
 
@@ -41,6 +41,11 @@ public enum Property {
 	ADD_CONNECTION_RATE(0.3),
 
 	/**
+	 * Chance that a connection is added during mutation
+	 */
+	ADD_CONNECTION_MAX_ATTEMPTS(15),
+
+	/**
 	 * Chance that a node is added during mutation
 	 */
 	ADD_NODE_RATE(0.001),
@@ -63,7 +68,7 @@ public enum Property {
 	/**
 	 * The used activation function
 	 */
-	ACTIVATION_FUNCTION(ActivationFunctions::shrinkedSigmoid);
+	ACTIVATION_FUNCTION(ActivationFunctions::binaryStep);
 
 	private double value;
 	private Activation activationFunction;

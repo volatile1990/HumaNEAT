@@ -1,4 +1,4 @@
-package de.core.global;
+package de.core.global.activation;
 
 /**
  * @author muellermak

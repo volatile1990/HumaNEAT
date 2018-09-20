@@ -64,7 +64,7 @@ public class CircularConnectionTest {
 		genome.addConnectionGene(hidden4ToHidden1);
 
 		GenomePrinter.printGenome(genome, "D:/output/test.png");
-		System.out.println(genome.connectionCreatesCircular(hidden4, output));
+		System.out.println(genome.getValidator().connectionCreatesCircular(hidden4, output));
 
 //		genome.generateNetwork();
 //

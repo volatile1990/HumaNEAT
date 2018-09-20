@@ -1,4 +1,4 @@
-package de.core.global;
+package de.core.global.components;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import de.core.neat.genes.NodeGeneType;
 public abstract class Node {
 
 	public NodeGeneType type;
-	public int number;
+	public int innovationNumber;
 
 	public double inputSum;
 	public double outputValue;
@@ -50,7 +50,7 @@ public abstract class Node {
 
 		Node in = (Node) o;
 
-		return this.number == in.number;
+		return this.innovationNumber == in.innovationNumber;
 	}
 
 }

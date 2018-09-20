@@ -13,6 +13,7 @@ import de.core.neat.Property;
 import de.core.neat.genes.ConnectionHistory;
 import de.core.neat.genome.Genome;
 import de.core.neat.genome.GenomeFitnessComparator;
+import de.core.neat.genome.GenomeHatchery;
 
 /**
  * @author muellermak
@@ -35,14 +36,14 @@ public class Species {
 	 * @param mascot
 	 */
 	public Species(ArtificialIntelligence mascot) {
-		this.champion = mascot;
-		this.members = new LinkedList<>();
-		this.members.add(mascot);
+		champion = mascot;
+		members = new LinkedList<>();
+		members.add(mascot);
 
-		this.staleness = 0;
-		this.totalAdjustedFitness = 0f;
-		this.averageFitness = 0f;
-		this.bestFitness = 0f;
+		staleness = 0;
+		totalAdjustedFitness = 0f;
+		averageFitness = 0f;
+		bestFitness = 0f;
 	}
 
 	/**
@@ -51,18 +52,18 @@ public class Species {
 	public void setAverageFitness() {
 
 		double sum = 0;
-		for (ArtificialIntelligence ai : this.members) {
+		for (ArtificialIntelligence ai : members) {
 			sum += ai.brain.fitness;
 		}
 
-		this.averageFitness = sum / this.members.size();
+		averageFitness = sum / members.size();
 	}
 
 	/**
 	 * @param adjustedFitness
 	 */
 	public void addAjustedFitness(double adjustedFitness) {
-		this.totalAdjustedFitness += adjustedFitness;
+		totalAdjustedFitness += adjustedFitness;
 	}
 
 	/**
@@ -71,11 +72,11 @@ public class Species {
 	public void reset(Random random) {
 
 		// Assign new mascot before clearing
-		int newMascotIndex = random.nextInt(this.members.size());
-		this.champion = this.members.get(newMascotIndex);
+		int newMascotIndex = random.nextInt(members.size());
+		champion = members.get(newMascotIndex);
 
-		this.members.clear();
-		this.totalAdjustedFitness = 0f;
+		members.clear();
+		totalAdjustedFitness = 0f;
 	}
 
 	/**
@@ -83,18 +84,18 @@ public class Species {
 	 */
 	public void sortMembersByFitness() {
 
-		Collections.sort(this.members, new GenomeFitnessComparator());
+		Collections.sort(members, new GenomeFitnessComparator());
 
-		ArtificialIntelligence fittestAi = this.members.get(0);
+		ArtificialIntelligence fittestAi = members.get(0);
 		double currentBestFitness = fittestAi.brain.fitness;
-		if (currentBestFitness > this.bestFitness) {
-			this.bestFitness = currentBestFitness;
-			this.staleness = 0;
-			this.champion = fittestAi;
+		if (currentBestFitness > bestFitness) {
+			bestFitness = currentBestFitness;
+			staleness = 0;
+			champion = fittestAi;
 		} else {
 
 			// Species didn't improve after last generation
-			++this.staleness;
+			++staleness;
 		}
 	}
 
@@ -103,20 +104,20 @@ public class Species {
 	 */
 	public void cull() {
 
-		if (this.members.size() <= 2) {
+		if (members.size() <= 2) {
 			return;
 		}
 
 		double keepPercentage = 1 - Property.REMOVE_BAD_SPECIES_MEMBERS_PERCENT.getValue();
 
-		int removeEndIndex = (int) Math.floor(this.members.size() * keepPercentage);
+		int removeEndIndex = (int) Math.floor(members.size() * keepPercentage);
 		List<ArtificialIntelligence> toRemove = new ArrayList<>();
-		for (int i = this.members.size() - 1; i >= removeEndIndex; --i) {
-			toRemove.add(this.members.get(i));
+		for (int i = members.size() - 1; i >= removeEndIndex; --i) {
+			toRemove.add(members.get(i));
 		}
 
 		for (ArtificialIntelligence ai : toRemove) {
-			this.members.remove(ai);
+			members.remove(ai);
 		}
 	}
 
@@ -131,21 +132,21 @@ public class Species {
 		// 25% chance to directly add the selected player without crossover
 		Genome baby = null;
 		if (random.nextFloat() <= Property.ADD_GENOME_WITHOUT_CROSSOVER_RATE.getValue()) {
-			baby = this.selectGenomeForReproduction().copy();
-			baby.mutate(innovationHistory);
+			baby = selectGenomeForReproduction().copy();
+			baby.getMutator().mutate(innovationHistory);
 		} else {
 
 			// Get random parents
-			Genome mum = this.selectGenomeForReproduction();
-			Genome dad = this.selectGenomeForReproduction();
+			Genome mum = selectGenomeForReproduction();
+			Genome dad = selectGenomeForReproduction();
 
 			// Fitter parent gotta do the work
 			if (mum.fitness < dad.fitness) {
-				baby = Genome.crossover(dad, mum);
+				baby = GenomeHatchery.crossover(dad, mum);
 			} else {
-				baby = Genome.crossover(mum, dad);
+				baby = GenomeHatchery.crossover(mum, dad);
 			}
-			baby.mutate(innovationHistory);
+			baby.getMutator().mutate(innovationHistory);
 		}
 
 		// Tschernobyl taking over
@@ -159,7 +160,7 @@ public class Species {
 	public Genome selectGenomeForReproduction() {
 
 		double fitnessSum = 0;
-		for (ArtificialIntelligence ai : this.members) {
+		for (ArtificialIntelligence ai : members) {
 			fitnessSum += ai.brain.fitness;
 		}
 
@@ -167,7 +168,7 @@ public class Species {
 		double randomFitness = random.nextFloat() * fitnessSum;
 
 		double countingSum = 0;
-		for (ArtificialIntelligence ai : this.members) {
+		for (ArtificialIntelligence ai : members) {
 
 			countingSum += ai.brain.fitness;
 			if (countingSum > randomFitness) {
@@ -176,16 +177,16 @@ public class Species {
 		}
 
 		// Will never happen
-		return this.members.get(0).brain;
+		return members.get(0).brain;
 	}
 
 	/**
 	 *
 	 */
 	public void fitnessSharing() {
-		for (ArtificialIntelligence ai : this.members) {
+		for (ArtificialIntelligence ai : members) {
 			ai.brain.unadjustedFitness = ai.brain.fitness;
-			ai.brain.fitness /= this.members.size();
+			ai.brain.fitness /= members.size();
 		}
 	}
 }

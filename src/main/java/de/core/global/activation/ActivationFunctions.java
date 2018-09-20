@@ -1,4 +1,4 @@
-package de.core.global;
+package de.core.global.activation;
 
 /**
  * @author muellermak
@@ -8,13 +8,13 @@ package de.core.global;
 public class ActivationFunctions {
 
 	/**
-	 * Shrinked Sigmoid activation function; Tends to got for 0 or 1 easier
+	 * Binary step activation function
 	 *
 	 * @param x
 	 * @return
 	 */
-	public static double shrinkedSigmoid(double x) {
-		return 1D / (1D + Math.exp(-4.9 * x));
+	public static double binaryStep(double x) {
+		return 1D / (1D + Math.exp(-1000 * x));
 	}
 
 	/**
@@ -24,7 +24,7 @@ public class ActivationFunctions {
 	 * @return
 	 */
 	public static double sigmoid(double x) {
-		return (1 / (1 + Math.pow(Math.E, -1 * x)));
+		return 1 / (1 + Math.pow(Math.E, -1 * x));
 	}
 
 	/**

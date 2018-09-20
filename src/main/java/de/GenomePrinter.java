@@ -34,29 +34,29 @@ public class GenomePrinter {
 		g.setColor(Color.BLUE);
 		for (NodeGene gene : genome.nodes.values()) {
 			if (gene.type == NodeGeneType.INPUT) {
-				float x = gene.number / (countNodesByType(genome, NodeGeneType.INPUT) + 1f) * imageSize;
+				float x = gene.innovationNumber / (countNodesByType(genome, NodeGeneType.INPUT) + 1f) * imageSize;
 				float y = imageSize - nodeSize / 2;
 				g.setColor(new Color(255, 0, 0));
 				g.fillOval((int) (x - nodeSize / 2), (int) (y - nodeSize / 2), nodeSize, nodeSize);
-				nodeGenePositions.put(gene.number, new Point((int) x, (int) y));
+				nodeGenePositions.put(gene.innovationNumber, new Point((int) x, (int) y));
 			} else if (gene.type == NodeGeneType.HIDDEN) {
 				int x = r.nextInt(imageSize - nodeSize * 2) + nodeSize;
 				int y = r.nextInt(imageSize - nodeSize * 3) + (int) (nodeSize * 1.5f);
 				g.setColor(new Color(0, 255, 0));
 				g.fillOval(x - nodeSize / 2, y - nodeSize / 2, nodeSize, nodeSize);
-				nodeGenePositions.put(gene.number, new Point(x, y));
+				nodeGenePositions.put(gene.innovationNumber, new Point(x, y));
 			} else if (gene.type == NodeGeneType.OUTPUT) {
 				int x = r.nextInt(imageSize - nodeSize * 2) + nodeSize;
 				int y = nodeSize / 2;
 				g.setColor(new Color(0, 0, 255));
 				g.fillOval(x - nodeSize / 2, y - nodeSize / 2, nodeSize, nodeSize);
-				nodeGenePositions.put(gene.number, new Point(x, y));
+				nodeGenePositions.put(gene.innovationNumber, new Point(x, y));
 			} else if (gene.type == NodeGeneType.BIAS) {
-				float x = gene.number / (countNodesByType(genome, NodeGeneType.INPUT) + 1f) * imageSize;
+				float x = gene.innovationNumber / (countNodesByType(genome, NodeGeneType.INPUT) + 1f) * imageSize;
 				float y = imageSize - nodeSize / 2;
 				g.setColor(new Color(150, 150, 150));
 				g.fillOval((int) (x - nodeSize / 2), (int) (y - nodeSize / 2), nodeSize, nodeSize);
-				nodeGenePositions.put(gene.number, new Point((int) x, (int) y));
+				nodeGenePositions.put(gene.innovationNumber, new Point((int) x, (int) y));
 			}
 		}
 
@@ -70,8 +70,8 @@ public class GenomePrinter {
 			if (!gene.enabled) {
 				continue;
 			}
-			Point inNode = nodeGenePositions.get(gene.from.number);
-			Point outNode = nodeGenePositions.get(gene.to.number);
+			Point inNode = nodeGenePositions.get(gene.from.innovationNumber);
+			Point outNode = nodeGenePositions.get(gene.to.innovationNumber);
 
 			if (inNode == null || outNode == null) {
 				continue;
@@ -86,8 +86,8 @@ public class GenomePrinter {
 
 		g.setColor(Color.WHITE);
 		for (NodeGene nodeGene : genome.nodes.values()) {
-			Point p = nodeGenePositions.get(nodeGene.number);
-			g.drawString("" + nodeGene.number, p.x, p.y);
+			Point p = nodeGenePositions.get(nodeGene.innovationNumber);
+			g.drawString("" + nodeGene.innovationNumber, p.x, p.y);
 		}
 
 		try {

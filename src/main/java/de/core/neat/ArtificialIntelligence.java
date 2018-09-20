@@ -27,15 +27,15 @@ public abstract class ArtificialIntelligence {
 	 */
 	public ArtificialIntelligence(int anzInputs, int anzOutputs) {
 
-		this.anzAccumulatedDatas = 0;
+		anzAccumulatedDatas = 0;
 
 		this.anzInputs = anzInputs;
 		this.anzOutputs = anzOutputs;
 
-		this.inputs = new ArrayList<>();
-		this.outputs = new ArrayList<>();
+		inputs = new ArrayList<>();
+		outputs = new ArrayList<>();
 
-		this.brain = new Genome(anzInputs, anzOutputs);
+		brain = new Genome(anzInputs, anzOutputs);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public abstract class ArtificialIntelligence {
 	 */
 	public void think(List<Double> inputs) {
 
-		if (inputs.size() != this.anzInputs) {
+		if (inputs.size() != anzInputs) {
 			throw new RuntimeException("Invalid number of inputs");
 		}
 
@@ -65,8 +65,8 @@ public abstract class ArtificialIntelligence {
 		this.inputs.add(input);
 
 		// Feed through the neural net and save decision
-		double[] output = this.brain.feedForward(input);
-		this.outputs.add(output);
+		double[] output = brain.getFeeder().feedForward(input);
+		outputs.add(output);
 
 		++anzAccumulatedDatas;
 	}
@@ -83,9 +83,9 @@ public abstract class ArtificialIntelligence {
 	 * Automatically called after calculate fitness
 	 */
 	public void clearData() {
-		this.inputs.clear();
-		this.outputs.clear();
-		this.anzAccumulatedDatas = 0;
+		inputs.clear();
+		outputs.clear();
+		anzAccumulatedDatas = 0;
 	}
 
 	/**

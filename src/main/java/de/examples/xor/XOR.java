@@ -67,8 +67,8 @@ public class XOR {
 
 //			System.out.println("Generation: " + (i + 1) + " ## Species: " + population.getSpecies().size() + " ## Highest fitness: " + population.getFittestAI().brain.fitness
 //					+ " ## HIDDENS: " + population.getFittestAI().brain.getNodesByType(NodeGeneType.HIDDEN).size());
-//			System.out.println(population.getFittestAI().brain.feedForward(XOR_INPUT[0])[0] + " ## " + population.getFittestAI().brain.feedForward(XOR_INPUT[1])[0] + " ## "
-//					+ population.getFittestAI().brain.feedForward(XOR_INPUT[2])[0] + " ## " + population.getFittestAI().brain.feedForward(XOR_INPUT[3])[0]);
+//			System.out.println(population.getFittestAI().brain.feeder.feedForward(XOR_INPUT[0])[0] + " ## " + population.getFittestAI().brain.feeder.feedForward(XOR_INPUT[1])[0] + " ## "
+//					+ population.getFittestAI().brain.feeder.feedForward(XOR_INPUT[2])[0] + " ## " + population.getFittestAI().brain.feeder.feedForward(XOR_INPUT[3])[0]);
 
 		}
 
@@ -81,19 +81,19 @@ public class XOR {
 
 			data[0] = 0;
 			data[1] = 0;
-			System.out.println("Result: " + winner.brain.feedForward(data)[0]);
+			System.out.println("Result: " + winner.brain.getFeeder().feedForward(data)[0]);
 
 			data[0] = 1;
 			data[1] = 0;
-			System.out.println("Result: " + winner.brain.feedForward(data)[0]);
+			System.out.println("Result: " + winner.brain.getFeeder().feedForward(data)[0]);
 
 			data[0] = 1;
 			data[1] = 0;
-			System.out.println("Result: " + winner.brain.feedForward(data)[0]);
+			System.out.println("Result: " + winner.brain.getFeeder().feedForward(data)[0]);
 
 			data[0] = 1;
 			data[1] = 1;
-			System.out.println("Result: " + winner.brain.feedForward(data)[0]);
+			System.out.println("Result: " + winner.brain.getFeeder().feedForward(data)[0]);
 		}
 
 //		GenomePrinter.printGenome(population.getFittestAI().brain, "D:/output/xor/result.png");
@@ -106,25 +106,25 @@ public class XOR {
 
 		input[0] = 0f;
 		input[1] = 0f;
-		if (ai.brain.feedForward(input)[0] > 0.2) {
+		if (ai.brain.getFeeder().feedForward(input)[0] > 0.2) {
 			return false;
 		}
 
 		input[0] = 1f;
 		input[1] = 0f;
-		if (ai.brain.feedForward(input)[0] < 0.8) {
+		if (ai.brain.getFeeder().feedForward(input)[0] < 0.8) {
 			return false;
 		}
 
 		input[0] = 0f;
 		input[1] = 1f;
-		if (ai.brain.feedForward(input)[0] < 0.8) {
+		if (ai.brain.getFeeder().feedForward(input)[0] < 0.8) {
 			return false;
 		}
 
 		input[0] = 1f;
 		input[1] = 1f;
-		if (ai.brain.feedForward(input)[0] > 0.2) {
+		if (ai.brain.getFeeder().feedForward(input)[0] > 0.2) {
 			return false;
 		}
 

@@ -4,6 +4,7 @@ import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.NodeGene;
 import de.core.neat.genes.NodeGeneType;
 import de.core.neat.genome.Genome;
+import de.core.neat.genome.GenomeHatchery;
 
 public class CrossoverTest {
 	public static void main(String[] args) {
@@ -52,11 +53,11 @@ public class CrossoverTest {
 		secondParent.addConnectionGene(new ConnectionGene(secondParent.nodes.get(3), secondParent.nodes.get(5), 1f, true, 9));
 		secondParent.addConnectionGene(new ConnectionGene(secondParent.nodes.get(1), secondParent.nodes.get(6), 1f, true, 10));
 
-		Genome child = Genome.crossover(secondParent, firstParent);
+		Genome child = GenomeHatchery.crossover(secondParent, firstParent);
 
 		for (ConnectionGene connection : child.connections.values()) {
 			if (connection.enabled) {
-				System.out.println("IN-NODE-ID: " + connection.from.number + " ## OUT-NODE-ID: " + connection.to.number);
+				System.out.println("IN-NODE-ID: " + connection.from.innovationNumber + " ## OUT-NODE-ID: " + connection.to.innovationNumber);
 			}
 		}
 	}

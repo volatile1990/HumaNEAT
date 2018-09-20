@@ -2,7 +2,7 @@ package de.core.neat.genes;
 
 import java.util.ArrayList;
 
-import de.core.global.Node;
+import de.core.global.components.Node;
 import de.core.neat.Property;
 
 /**
@@ -15,14 +15,14 @@ public class NodeGene extends Node {
 	 * @param type
 	 * @param id
 	 */
-	public NodeGene(NodeGeneType type, int number) {
+	public NodeGene(NodeGeneType type, int innovationNumber) {
 		this.type = type;
-		this.number = number;
+		this.innovationNumber = innovationNumber;
 
-		this.inputSum = 0;
-		this.outputValue = 0;
+		inputSum = 0;
+		outputValue = 0;
 
-		this.outputConnections = new ArrayList<>();
+		outputConnections = new ArrayList<>();
 	}
 
 	/**
@@ -30,19 +30,20 @@ public class NodeGene extends Node {
 	 */
 	@Override
 	public void engage() {
-		this.activate();
-		this.fire();
+		activate();
+		fire();
 	}
 
 	/**
 	 * Activates the nodegene by using sigmoid
 	 */
 	public void activate() {
-		// Don't apply sigmoid for inputs (including the bias node)
-		if (this.type != NodeGeneType.BIAS && this.type != NodeGeneType.INPUT) {
-			this.outputValue = Property.ACTIVATION_FUNCTION.getActivationFunction().activate(this.inputSum);
+
+		// Don't apply sigmoid for inputs or bias
+		if (type != NodeGeneType.BIAS && type != NodeGeneType.INPUT) {
+			outputValue = Property.ACTIVATION_FUNCTION.getActivationFunction().activate(inputSum);
 		} else {
-			this.outputValue = this.inputSum;
+			outputValue = inputSum;
 		}
 	}
 
@@ -50,14 +51,14 @@ public class NodeGene extends Node {
 	 * Sums up the input of the connected genome with its outputValue * weight
 	 */
 	public void fire() {
-		for (ConnectionGene connection : this.outputConnections) {
+		for (ConnectionGene connection : outputConnections) {
 
 			if (!connection.enabled) {
 				continue;
 			}
 
 			// Store weighted outputValue to the sum of the inputs of the connected nodes on every outgoing connection
-			connection.payload = connection.weight * this.outputValue;
+			connection.payload = connection.weight * outputValue;
 			connection.activated = true;
 		}
 	}
@@ -66,6 +67,6 @@ public class NodeGene extends Node {
 	 *
 	 */
 	public NodeGene copy() {
-		return new NodeGene(this.type, this.number);
+		return new NodeGene(type, innovationNumber);
 	}
 }

@@ -1,7 +1,7 @@
 package de.core.lstm.genes;
 
-import de.core.global.Activation;
-import de.core.global.ActivationFunctions;
+import de.core.global.activation.Activation;
+import de.core.global.activation.ActivationFunctions;
 import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.NodeGene;
 import de.core.neat.genes.NodeGeneType;

@@ -1,6 +1,6 @@
 package de.core.neat.genes;
 
-import de.core.global.Connection;
+import de.core.global.components.Connection;
 
 /**
  * @author muellermak

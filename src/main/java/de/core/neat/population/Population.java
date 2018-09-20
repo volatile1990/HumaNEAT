@@ -40,18 +40,18 @@ public class Population {
 
 	public Population(List<ArtificialIntelligence> population) {
 
-		this.populationSize = population.size();
+		populationSize = population.size();
 
 		// Initialize AIs
-		this.artificialIntelligences = new ArrayList<>(this.populationSize);
-		for (int i = 0; i < this.populationSize; ++i) {
-			this.artificialIntelligences.add(population.get(i));
+		artificialIntelligences = new ArrayList<>(populationSize);
+		for (int i = 0; i < populationSize; ++i) {
+			artificialIntelligences.add(population.get(i));
 		}
-		this.fittestAI = this.artificialIntelligences.get(0);
+		fittestAI = artificialIntelligences.get(0);
 
-		this.nextGenerationAis = new ArrayList<>();
-		this.species = new ArrayList<>();
-		this.innovationHistory = new HashMap<>();
+		nextGenerationAis = new ArrayList<>();
+		species = new ArrayList<>();
+		innovationHistory = new HashMap<>();
 	}
 
 	/**
@@ -60,30 +60,30 @@ public class Population {
 	public void evolve() {
 
 		// Place genomes into species
-		this.assignGenomeToSpecies();
+		assignGenomeToSpecies();
 
 		// Evaluate genomes and assign fitness
-		this.calculateFitness();
+		calculateFitness();
 
 		// Sort all species by fitness
-		this.sortSpecies();
+		sortSpecies();
 
 		// Clean species that are bad, didn't improve or are empty
-		this.cullSpecies();
+		cullSpecies();
 
 		// Breed the rest of the genomes; fill up list to populationSize
-		this.breedNewGeneration();
+		breedNewGeneration();
 
-		if (this.fittestAI.brain.unadjustedFitness == 0) {
+		if (fittestAI.brain.unadjustedFitness == 0) {
 			System.out.println();
 		}
 
 		// Use next generation as current
-		this.artificialIntelligences = this.nextGenerationAis;
-		this.nextGenerationAis = new ArrayList<>();
+		artificialIntelligences = nextGenerationAis;
+		nextGenerationAis = new ArrayList<>();
 
-		for (ArtificialIntelligence ai : this.artificialIntelligences) {
-			ai.brain.generateNetwork();
+		for (ArtificialIntelligence ai : artificialIntelligences) {
+			ai.brain.getLinker().generateNetwork();
 		}
 	}
 
@@ -97,7 +97,7 @@ public class Population {
 			species.members.clear();
 		}
 
-		for (ArtificialIntelligence ai : this.artificialIntelligences) {
+		for (ArtificialIntelligence ai : artificialIntelligences) {
 
 			boolean foundSpecies = false;
 			for (Species species : this.species) {
@@ -112,7 +112,7 @@ public class Population {
 
 			// Create new species with current genome as mascot
 			if (!foundSpecies) {
-				this.species.add(new Species(ai));
+				species.add(new Species(ai));
 			}
 		}
 	}
@@ -122,9 +122,9 @@ public class Population {
 	 */
 	private void cullSpecies() {
 
-		double averageSum = this.getAverageFitnessSum();
+		double averageSum = getAverageFitnessSum();
 
-		Iterator<Species> iterator = this.species.iterator();
+		Iterator<Species> iterator = species.iterator();
 		while (iterator.hasNext()) {
 
 			Species species = iterator.next();
@@ -141,7 +141,7 @@ public class Population {
 			}
 
 			// Remove species that won't be allowed to bring one child into the next generation
-			if (species.averageFitness / averageSum * this.populationSize < 1) {
+			if (species.averageFitness / averageSum * populationSize < 1) {
 				iterator.remove();
 			}
 
@@ -154,15 +154,15 @@ public class Population {
 	 */
 	private void calculateFitness() {
 
-		for (ArtificialIntelligence ai : this.artificialIntelligences) {
+		for (ArtificialIntelligence ai : artificialIntelligences) {
 			double fitness = ai.calculateFitness();
 			ai.clearData();
 
 			ai.brain.fitness = fitness;
 			ai.brain.unadjustedFitness = fitness;
 
-			if (ai.brain.fitness > this.fittestAI.brain.fitness) {
-				this.fittestAI = ai;
+			if (ai.brain.fitness > fittestAI.brain.fitness) {
+				fittestAI = ai;
 			}
 		}
 	}
@@ -180,7 +180,7 @@ public class Population {
 		}
 
 		// Sort species by fitness of its fittest member
-		Collections.sort(this.species, new SpeciesFitnessComparator());
+		Collections.sort(species, new SpeciesFitnessComparator());
 	}
 
 	/**
@@ -189,21 +189,21 @@ public class Population {
 	private void breedNewGeneration() {
 
 		// Put best genomes from each species into next generation
-		this.populateNextGenerationGenomes();
+		populateNextGenerationGenomes();
 
-		double averageFitnessSum = this.getAverageFitnessSum();
+		double averageFitnessSum = getAverageFitnessSum();
 
 		boolean populatingDone = false;
 		for (Species species : this.species) {
 
-			int allowedChildrenCount = (int) (species.averageFitness / averageFitnessSum * this.populationSize);
+			int allowedChildrenCount = (int) (species.averageFitness / averageFitnessSum * populationSize);
 //			System.out.println("CHILDREN ALLOWED : " + allowedChildrenCount + " ## AVG SPECIES FITNESS: " + species.averageFitness + " ## AVG FITNES SUM : " + averageFitnessSum);
 
 			for (int i = 0; i < allowedChildrenCount; ++i) {
-				ArtificialIntelligence ai = this.artificialIntelligences.get(0).getNewInstance(species.makeBaby(this.innovationHistory));
-				this.nextGenerationAis.add(ai);
+				ArtificialIntelligence ai = artificialIntelligences.get(0).getNewInstance(species.makeBaby(innovationHistory));
+				nextGenerationAis.add(ai);
 
-				if (this.nextGenerationAis.size() >= this.populationSize) {
+				if (nextGenerationAis.size() >= populationSize) {
 					populatingDone = true;
 					break;
 				}
@@ -214,13 +214,13 @@ public class Population {
 			}
 		}
 
-		while (this.nextGenerationAis.size() < this.populationSize) {
-			ArtificialIntelligence ai = this.artificialIntelligences.get(0).getNewInstance(this.species.get(0).makeBaby(this.innovationHistory));
-			this.nextGenerationAis.add(ai);
+		while (nextGenerationAis.size() < populationSize) {
+			ArtificialIntelligence ai = artificialIntelligences.get(0).getNewInstance(species.get(0).makeBaby(innovationHistory));
+			nextGenerationAis.add(ai);
 		}
 
-		for (ArtificialIntelligence ai : this.nextGenerationAis) {
-			ai.brain.generateNetwork();
+		for (ArtificialIntelligence ai : nextGenerationAis) {
+			ai.brain.getLinker().generateNetwork();
 		}
 
 	}
@@ -232,7 +232,7 @@ public class Population {
 
 		for (Species species : this.species) {
 			if (species.members.size() > 5) {
-				this.nextGenerationAis.add(species.members.get(0));
+				nextGenerationAis.add(species.members.get(0));
 			}
 		}
 	}

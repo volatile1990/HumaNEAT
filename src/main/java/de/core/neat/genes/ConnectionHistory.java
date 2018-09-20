@@ -40,7 +40,7 @@ public class ConnectionHistory {
 			return false;
 		}
 
-		if (from.number != this.fromNode || to.number != this.toNode) {
+		if (from.innovationNumber != this.fromNode || to.innovationNumber != this.toNode) {
 			return false;
 		}
 

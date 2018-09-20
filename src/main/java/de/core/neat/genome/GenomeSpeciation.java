@@ -27,7 +27,7 @@ public class GenomeSpeciation {
 		this.first = first;
 		this.second = second;
 
-		this.calculateGenomeSpeciations();
+		calculateGenomeSpeciations();
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class GenomeSpeciation {
 //		double n = amountFirstGenes > amountSecondGenes ? amountFirstGenes : amountSecondGenes;
 //		n = n < 20 ? 1 : n;
 
-		return c1 * this.excessGenes + c2 * this.disjointGenes + this.averageWeightDifference * c3;
+		return c1 * excessGenes + c2 * disjointGenes + averageWeightDifference * c3;
 	}
 
 	/**
@@ -62,80 +62,80 @@ public class GenomeSpeciation {
 	 */
 	private void calculateGenomeSpeciations() {
 
-		int secondHighestNodeNumber = Collections.max(this.second.nodes.keySet());
-		int firstHighestNodeNumber = Collections.max(this.first.nodes.keySet());
-		int secondHighestInnovationNumber = Collections.max(this.second.connections.keySet());
-		int firstHighestInnovationNumber = Collections.max(this.first.connections.keySet());
+		int secondHighestNodeNumber = Collections.max(second.nodes.keySet());
+		int firstHighestNodeNumber = Collections.max(first.nodes.keySet());
+		int secondHighestInnovationNumber = Collections.max(second.connections.keySet());
+		int firstHighestInnovationNumber = Collections.max(first.connections.keySet());
 
-		for (Integer nodeGeneId : this.first.nodes.keySet()) {
+		for (Integer nodeGeneId : first.nodes.keySet()) {
 
-			if (this.second.nodes.containsKey(nodeGeneId)) {
+			if (second.nodes.containsKey(nodeGeneId)) {
 
 				// Matching gene
-				++this.matchingGenes;
+				++matchingGenes;
 			} else if (secondHighestNodeNumber >= nodeGeneId) {
 
 				// Disjoint gene
-				++this.disjointGenes;
+				++disjointGenes;
 			} else {
 
 				// Excess gene
-				++this.excessGenes;
+				++excessGenes;
 			}
 
 		}
 
-		for (Integer nodeGeneId : this.second.nodes.keySet()) {
+		for (Integer nodeGeneId : second.nodes.keySet()) {
 
-			if (this.first.nodes.containsKey(nodeGeneId)) {
+			if (first.nodes.containsKey(nodeGeneId)) {
 				continue;
 			}
 
 			// Sum up disjoint and excess genes
 			if (firstHighestNodeNumber >= nodeGeneId) {
-				++this.disjointGenes;
+				++disjointGenes;
 			} else {
-				++this.excessGenes;
+				++excessGenes;
 			}
 		}
 
 		// Count disjoint connections by innovation number
 		int matchingConnectionGenes = 0;
-		for (Integer innovationNumber : this.first.connections.keySet()) {
+		for (Integer innovationNumber : first.connections.keySet()) {
 
-			if (this.second.connections.containsKey(innovationNumber)) {
+			if (second.connections.containsKey(innovationNumber)) {
 
 				// Calculate connection weight difference
-				ConnectionGene firstConnectionGene = this.first.connections.get(innovationNumber);
-				ConnectionGene secondConnectionGene = this.second.connections.get(innovationNumber);
+				ConnectionGene firstConnectionGene = first.connections.get(innovationNumber);
+				ConnectionGene secondConnectionGene = second.connections.get(innovationNumber);
 				++matchingConnectionGenes;
-				this.averageWeightDifference += Math.abs(firstConnectionGene.weight - secondConnectionGene.weight);
+				averageWeightDifference += Math.abs(firstConnectionGene.weight - secondConnectionGene.weight);
 
 				// Matching gene
-				++this.matchingGenes;
+				++matchingGenes;
 			} else if (secondHighestInnovationNumber >= innovationNumber) {
 
 				// Disjoint gene
-				++this.disjointGenes;
+				++disjointGenes;
 			} else {
 
 				// Excess gene
-				++this.excessGenes;
+				++excessGenes;
 			}
 		}
-		this.averageWeightDifference /= matchingConnectionGenes;
+		averageWeightDifference /= matchingConnectionGenes;
 
-		for (Integer innovationNumber : this.second.connections.keySet()) {
+		for (Integer innovationNumber : second.connections.keySet()) {
 
-			if (this.first.connections.containsKey(innovationNumber)) {
+			if (first.connections.containsKey(innovationNumber)) {
 				continue;
 			}
 
 			// Sum up disjoint & excess genes
 			if (firstHighestInnovationNumber >= innovationNumber) {
-				++this.disjointGenes;
+				++disjointGenes;
 			} else {
-				++this.excessGenes;
+				++excessGenes;
 			}
 
 		}

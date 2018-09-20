@@ -51,7 +51,7 @@ public class GenomeFeedForwardTest {
 		in1ToHidden.weight = 0.75f;
 		in2ToHidden.weight = 0.25f;
 
-		genome.generateNetwork();
+		genome.getLinker().generateNetwork();
 
 //		GenomePrinter.printGenome(genome, "D:/output/test/out.png");
 
@@ -59,7 +59,7 @@ public class GenomeFeedForwardTest {
 		inputData[0] = 0.5f;
 		inputData[1] = 1.5f;
 
-		System.out.println(genome.feedForward(inputData)[0] == 0.8452664f);
+		System.out.println(genome.getFeeder().feedForward(inputData)[0] == 0.8452664f);
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class GenomeFeedForwardTest {
 		genome.addConnectionGene(int2ToHidden1);
 		genome.addConnectionGene(hiddenToOut);
 
-		genome.generateNetwork();
+		genome.getLinker().generateNetwork();
 
 		double[] inputData = new double[2];
 		inputData[0] = 0.5f;
@@ -98,7 +98,7 @@ public class GenomeFeedForwardTest {
 
 //		GenomePrinter.printGenome(genome, "D:/output/test/out.png");
 
-		System.out.println(genome.feedForward(inputData)[0] == 0.8452664f);
+		System.out.println(genome.getFeeder().feedForward(inputData)[0] == 0.8452664f);
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class GenomeFeedForwardTest {
 		genome.addConnectionGene(hidden1ToOut);
 		genome.addConnectionGene(hidden3ToOut);
 
-		genome.generateNetwork();
+		genome.getLinker().generateNetwork();
 
 		double[] inputData = new double[2];
 		inputData[0] = 0.5f;
@@ -151,6 +151,6 @@ public class GenomeFeedForwardTest {
 
 //		GenomePrinter.printGenome(genome, "D:/output/test/out.png");
 
-		System.out.println(genome.feedForward(inputData)[0] == 0.93950474f);
+		System.out.println(genome.getFeeder().feedForward(inputData)[0] == 0.93950474f);
 	}
 }
