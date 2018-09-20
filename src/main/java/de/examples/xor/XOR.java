@@ -44,12 +44,11 @@ public class XOR {
 					input.add(XOR_INPUT[j][0]);
 					input.add(XOR_INPUT[j][1]);
 
-					ai.setInputs(input);
-					ai.think();
+					ai.think(input);
 				}
 
 //				foundSolution = testAiSuccess(ai);
-				if (ai.brain.unadjustedFitness == 16f) {
+				if (ai.brain.unadjustedFitness >= 16) {
 					winner = ai;
 					foundSolution = true;
 					break;
@@ -63,8 +62,8 @@ public class XOR {
 
 			population.evolve();
 
-			System.out.println("Generation: " + (i + 1) + " ## FITNESS: " + population.getFittestAI().brain.unadjustedFitness + " ## HIDDEN NODES: "
-					+ population.getFittestAI().brain.getNodesByType(NodeGeneType.HIDDEN).size());
+			System.out.println("Generation: " + (i + 1) + " ## FITNESS: " + population.fittestAI.brain.unadjustedFitness + " ## HIDDEN NODES: "
+					+ population.fittestAI.brain.getNodesByType(NodeGeneType.HIDDEN).size());
 
 //			System.out.println("Generation: " + (i + 1) + " ## Species: " + population.getSpecies().size() + " ## Highest fitness: " + population.getFittestAI().brain.fitness
 //					+ " ## HIDDENS: " + population.getFittestAI().brain.getNodesByType(NodeGeneType.HIDDEN).size());
@@ -75,6 +74,7 @@ public class XOR {
 
 		if (foundSolution) {
 			System.out.println("######### SOLUTION FOUND #########");
+			System.out.println("WINNER HIDDEN NODES: " + winner.brain.getNodesByType(NodeGeneType.HIDDEN).size());
 			GenomePrinter.printGenome(winner.brain, "D:/output/xor/winner.png");
 
 			double[] data = new double[2];

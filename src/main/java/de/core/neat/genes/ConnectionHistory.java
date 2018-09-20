@@ -17,7 +17,7 @@ public class ConnectionHistory {
 	public List<Integer> innovationNumbers;
 
 	/**
-	 * 
+	 *
 	 */
 	public ConnectionHistory(int fromNode, int toNode, int innovationNumber, List<Integer> innovationNumbers) {
 		this.fromNode = fromNode;
@@ -36,16 +36,16 @@ public class ConnectionHistory {
 	 */
 	public boolean matches(Genome genome, NodeGene from, NodeGene to) {
 
-		if (genome.getConnectionGenes().size() != this.innovationNumbers.size()) {
+		if (genome.connections.size() != this.innovationNumbers.size()) {
 			return false;
 		}
 
-		if (from.getNumber() != this.fromNode || to.getNumber() != this.toNode) {
+		if (from.number != this.fromNode || to.number != this.toNode) {
 			return false;
 		}
 
-		for (ConnectionGene connection : genome.getConnectionGenes().values()) {
-			if (!this.innovationNumbers.contains(connection.getInnvoationNumber())) {
+		for (ConnectionGene connection : genome.connections.values()) {
+			if (!this.innovationNumbers.contains(connection.innvoationNumber)) {
 				return false;
 			}
 		}

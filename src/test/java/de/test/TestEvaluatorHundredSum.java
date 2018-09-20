@@ -29,14 +29,14 @@ public class TestEvaluatorHundredSum {
 		for (int i = 0; i <= 100; ++i) {
 			eval.evolve();
 			System.out.println("Generation: " + i);
-			System.out.println("Highest fitness: " + eval.getFittestAI().brain.fitness);
-			System.out.println("Amount of species: " + eval.getSpecies().size());
+			System.out.println("Highest fitness: " + eval.fittestAI.brain.fitness);
+			System.out.println("Amount of species: " + eval.species.size());
 
-			Genome fittestGenome = eval.getFittestAI().brain;
+			Genome fittestGenome = eval.fittestAI.brain;
 			float sum = 0f;
-			for (ConnectionGene connection : fittestGenome.getConnectionGenes().values()) {
-				if (connection.isEnabled()) {
-					sum += Math.abs(connection.getWeight());
+			for (ConnectionGene connection : fittestGenome.connections.values()) {
+				if (connection.enabled) {
+					sum += Math.abs(connection.weight);
 				}
 			}
 

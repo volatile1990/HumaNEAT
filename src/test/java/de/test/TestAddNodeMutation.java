@@ -40,10 +40,9 @@ public class TestAddNodeMutation {
 
 //		genome.addNodeMutation(new Random());
 
-		for (ConnectionGene connection : genome.getConnectionGenes().values()) {
-			if (connection.isEnabled()) {
-				System.out.println(
-						"IN-NODE-ID: " + connection.getFrom().getNumber() + " ## OUT-NODE-ID: " + connection.getTo().getNumber() + " ## WEIGHT: " + connection.getWeight());
+		for (ConnectionGene connection : genome.connections.values()) {
+			if (connection.enabled) {
+				System.out.println("IN-NODE-ID: " + connection.from.number + " ## OUT-NODE-ID: " + connection.to.number + " ## WEIGHT: " + connection.weight);
 			}
 		}
 	}

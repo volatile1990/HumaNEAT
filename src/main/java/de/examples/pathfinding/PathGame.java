@@ -50,9 +50,7 @@ public class PathGame {
 				for (ArtificialIntelligence ai : population.artificialIntelligences) {
 
 					PathfindingAI pathfindingAI = (PathfindingAI) ai;
-
-					ai.setInputs(pathfindingAI.getCurrentPosition());
-					ai.think();
+					ai.think(pathfindingAI.getCurrentPosition());
 					pathfindingAI.move();
 
 					if (pathfindingAI.currentX == pathfindingAI.targetX && pathfindingAI.currentY == pathfindingAI.targetY) {
@@ -79,7 +77,7 @@ public class PathGame {
 
 			population.evolve();
 
-			System.out.println("GENERATION: " + (i + 1) + " ## FITNESS: " + population.getFittestAI().brain.unadjustedFitness);
+			System.out.println("GENERATION: " + (i + 1) + " ## FITNESS: " + population.fittestAI.brain.unadjustedFitness);
 		}
 
 		if (winner != null)
@@ -103,8 +101,7 @@ public class PathGame {
 			winner.currentY = 7;
 			for (int i = 0; i < 100; ++i) {
 
-				winner.setInputs(winner.getCurrentPosition());
-				winner.think();
+				winner.think(winner.getCurrentPosition());
 				winner.move();
 
 				frame.canvas.update((PathfindingAI) ai.get(0));

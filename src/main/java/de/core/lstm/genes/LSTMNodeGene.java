@@ -131,7 +131,7 @@ public class LSTMNodeGene extends NodeGene {
 		// Set the output as payload on all outgoing connections
 		for (ConnectionGene connection : this.outputConnections) {
 
-			if (!connection.isEnabled()) {
+			if (!connection.enabled) {
 				continue;
 			}
 

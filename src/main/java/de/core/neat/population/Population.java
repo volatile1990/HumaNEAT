@@ -30,9 +30,9 @@ public class Population {
 	private List<ArtificialIntelligence> nextGenerationAis;
 
 	// All species
-	private List<Species> species;
+	public List<Species> species;
 
-	private ArtificialIntelligence fittestAI;
+	public ArtificialIntelligence fittestAI;
 
 	public Map<Integer, List<ConnectionHistory>> innovationHistory;
 
@@ -156,6 +156,8 @@ public class Population {
 
 		for (ArtificialIntelligence ai : this.artificialIntelligences) {
 			double fitness = ai.calculateFitness();
+			ai.clearData();
+
 			ai.brain.fitness = fitness;
 			ai.brain.unadjustedFitness = fitness;
 
@@ -245,19 +247,5 @@ public class Population {
 			averageSum += species.averageFitness;
 		}
 		return averageSum;
-	}
-
-	/**
-	 * @return the fittestGenome
-	 */
-	public ArtificialIntelligence getFittestAI() {
-		return this.fittestAI;
-	}
-
-	/**
-	 * @return the species
-	 */
-	public List<Species> getSpecies() {
-		return this.species;
 	}
 }

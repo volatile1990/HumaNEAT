@@ -1,7 +1,5 @@
 package de.examples.tictactoe;
 
-import java.util.List;
-
 import de.core.neat.ArtificialIntelligence;
 import de.core.neat.genome.Genome;
 
@@ -12,9 +10,6 @@ import de.core.neat.genome.Genome;
 public class TicTacToePlayer extends ArtificialIntelligence {
 
 	public String name;
-	private int anzInputs;
-
-	private double[] inputs;
 	private int[] nextMarkCoordinates;
 
 	public TicTacToe ticTacToe;
@@ -26,12 +21,10 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	 */
 	public TicTacToePlayer(String name, int anzInputs, int anzOutputs) {
 
+		super(anzInputs, anzOutputs);
+
 		this.brain = new Genome(anzInputs, anzOutputs);
-
-		this.anzInputs = anzInputs;
-		this.inputs = new double[this.anzInputs];
 		this.nextMarkCoordinates = new int[2];
-
 		this.failed = false;
 	}
 
@@ -39,78 +32,48 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	 * @param brain
 	 */
 	public TicTacToePlayer(Genome brain) {
-		this.brain = brain;
 
-		this.inputs = new double[brain.anzInputs];
-		this.anzInputs = brain.anzInputs;
+		super(brain);
+
 		this.nextMarkCoordinates = new int[2];
-
 		this.failed = false;
-	}
-
-	/**
-	 * @param playfield
-	 */
-	@Override
-	public void setInputs(List<Double> playfield) {
-
-		for (int i = 0; i < this.anzInputs; ++i) {
-			this.inputs[i] = playfield.get(i);
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see de.core.ArtificialIntelligence#think()
-	 */
-	@Override
-	public void think() {
-
-		// Give the brain input to get decision
-		double[] decision = this.brain.feedForward(this.inputs);
-
-//		double inputSum = 0;
-//		for (int i = 0; i < this.inputs.length; ++i) {
-//			inputSum += this.inputs[i];
-//		}
-//		System.out.println("INPUTSUM: " + inputSum + "DECISION: " + decision[0]);
-
-		if (decision[0] >= 0 && decision[0] < 0.1) {
-			this.nextMarkCoordinates[0] = 0;
-			this.nextMarkCoordinates[1] = 0;
-		} else if (decision[0] >= 0 && decision[0] < 0.2) {
-			this.nextMarkCoordinates[0] = 0;
-			this.nextMarkCoordinates[1] = 1;
-		} else if (decision[0] >= 0.2 && decision[0] < 0.3) {
-			this.nextMarkCoordinates[0] = 0;
-			this.nextMarkCoordinates[1] = 2;
-		} else if (decision[0] >= 0.3 && decision[0] < 0.4) {
-			this.nextMarkCoordinates[0] = 1;
-			this.nextMarkCoordinates[1] = 0;
-		} else if (decision[0] >= 0.4 && decision[0] < 0.5) {
-			this.nextMarkCoordinates[0] = 1;
-			this.nextMarkCoordinates[1] = 1;
-		} else if (decision[0] >= 0.5 && decision[0] < 0.6) {
-			this.nextMarkCoordinates[0] = 1;
-			this.nextMarkCoordinates[1] = 2;
-		} else if (decision[0] >= 0.6 && decision[0] < 0.7) {
-			this.nextMarkCoordinates[0] = 2;
-			this.nextMarkCoordinates[1] = 0;
-		} else if (decision[0] >= 0.7 && decision[0] < 0.8) {
-			this.nextMarkCoordinates[0] = 2;
-			this.nextMarkCoordinates[1] = 1;
-		} else if (decision[0] >= 0.8 && decision[0] <= 1) {
-			this.nextMarkCoordinates[0] = 2;
-			this.nextMarkCoordinates[1] = 2;
-		}
 	}
 
 	/**
 	 * @param ticTacToe
 	 */
 	public void takeAction(TicTacToe ticTacToe) {
+
+		double[] lastOutput = this.outputs.get(this.outputs.size() - 1);
+
+		if (lastOutput[0] >= 0 && lastOutput[0] < 0.1) {
+			this.nextMarkCoordinates[0] = 0;
+			this.nextMarkCoordinates[1] = 0;
+		} else if (lastOutput[0] >= 0 && lastOutput[0] < 0.2) {
+			this.nextMarkCoordinates[0] = 0;
+			this.nextMarkCoordinates[1] = 1;
+		} else if (lastOutput[0] >= 0.2 && lastOutput[0] < 0.3) {
+			this.nextMarkCoordinates[0] = 0;
+			this.nextMarkCoordinates[1] = 2;
+		} else if (lastOutput[0] >= 0.3 && lastOutput[0] < 0.4) {
+			this.nextMarkCoordinates[0] = 1;
+			this.nextMarkCoordinates[1] = 0;
+		} else if (lastOutput[0] >= 0.4 && lastOutput[0] < 0.5) {
+			this.nextMarkCoordinates[0] = 1;
+			this.nextMarkCoordinates[1] = 1;
+		} else if (lastOutput[0] >= 0.5 && lastOutput[0] < 0.6) {
+			this.nextMarkCoordinates[0] = 1;
+			this.nextMarkCoordinates[1] = 2;
+		} else if (lastOutput[0] >= 0.6 && lastOutput[0] < 0.7) {
+			this.nextMarkCoordinates[0] = 2;
+			this.nextMarkCoordinates[1] = 0;
+		} else if (lastOutput[0] >= 0.7 && lastOutput[0] < 0.8) {
+			this.nextMarkCoordinates[0] = 2;
+			this.nextMarkCoordinates[1] = 1;
+		} else if (lastOutput[0] >= 0.8 && lastOutput[0] <= 1) {
+			this.nextMarkCoordinates[0] = 2;
+			this.nextMarkCoordinates[1] = 2;
+		}
 
 		// Make move
 		this.failed = !ticTacToe.setMark(this.nextMarkCoordinates[0], this.nextMarkCoordinates[1]);

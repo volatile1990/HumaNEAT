@@ -35,11 +35,11 @@ public class TestEvaluatorFewConnections {
 		for (int i = 0; i <= 100; ++i) {
 			eval.evolve();
 			System.out.println("Generation: " + i);
-			System.out.println("Highest fitness: " + eval.getFittestAI().brain.fitness);
-			System.out.println("Number of connections: " + eval.getFittestAI().brain.getConnectionGenes().size());
+			System.out.println("Highest fitness: " + eval.fittestAI.brain.fitness);
+			System.out.println("Number of connections: " + eval.fittestAI.brain.connections.size());
 
 			if (i % 10 == 0) {
-				GenomePrinter.printGenome(eval.getFittestAI().brain, "D:/output/FewConnections/Test_ " + i + ".png");
+				GenomePrinter.printGenome(eval.fittestAI.brain, "D:/output/FewConnections/Test_ " + i + ".png");
 			}
 		}
 

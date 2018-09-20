@@ -40,16 +40,16 @@ public class GenomeFeedForwardTest {
 		ConnectionGene in2ToHidden = inputNodes.get(1).outputConnections.get(0);
 		ConnectionGene hiddenToOut = new ConnectionGene(hidden1, outputNodes.get(0), 2.5f, true, 3);
 
-		in1ToHidden.setOut(hidden1);
-		in2ToHidden.setOut(hidden1);
+		in1ToHidden.to = hidden1;
+		in2ToHidden.to = hidden1;
 
 		genome.addConnectionGene(in1ToHidden);
 		genome.addConnectionGene(in2ToHidden);
 		genome.addConnectionGene(hiddenToOut);
 		genome.addNodeGene(hidden1);
 
-		in1ToHidden.setWeight(0.75f);
-		in2ToHidden.setWeight(0.25f);
+		in1ToHidden.weight = 0.75f;
+		in2ToHidden.weight = 0.25f;
 
 		genome.generateNetwork();
 

@@ -18,7 +18,7 @@ public enum Property {
 	/**
 	 * Chance that the weights of a genome mutate
 	 */
-	WEIGHT_MUTATION_RATE(0.7),
+	WEIGHT_MUTATION_RATE(1),
 
 	/**
 	 * Maximum range of a weight on random generation

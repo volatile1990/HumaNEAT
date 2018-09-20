@@ -21,12 +21,10 @@ import de.core.neat.genes.NodeGeneType;
  */
 public class Genome {
 
-	private Map<Integer, NodeGene> nodes;
-	private Map<Integer, ConnectionGene> connections;
-
-	private NodeGene biasNode;
-
-	private List<NodeGene> network;
+	public Map<Integer, NodeGene> nodes;
+	public Map<Integer, ConnectionGene> connections;
+	public NodeGene biasNode;
+	public List<NodeGene> network;
 
 	public Counter nodeInnovation;
 	public Counter connectionInnovation;
@@ -128,7 +126,7 @@ public class Genome {
 
 		// Adds the connection as an outgoing connection to its from node
 		for (ConnectionGene connection : this.connections.values()) {
-			connection.getFrom().outputConnections.add(connection);
+			connection.from.outputConnections.add(connection);
 		}
 
 	}
@@ -148,7 +146,7 @@ public class Genome {
 
 		// Populate inputSums of all input nodes with passed data
 		for (NodeGene input : inputNodes) {
-			input.inputSum = inputValues[input.getNumber()];
+			input.inputSum = inputValues[input.number];
 		}
 
 		// Bias outputs 1
@@ -174,12 +172,12 @@ public class Genome {
 				List<ConnectionGene> nodeConnections = new ArrayList<>();
 				for (ConnectionGene connection : this.connections.values()) {
 
-					if (connection.getTo() == node && connection.isEnabled()) {
+					if (connection.to == node && connection.enabled) {
 						nodeConnections.add(connection);
 					}
 				}
 
-				// Check whether there is one connection with a payload
+				// Check whether all incoming connections have payload
 				boolean dataIsComplete = true;
 				double inputSum = 0;
 				for (ConnectionGene connection : nodeConnections) {
@@ -207,7 +205,7 @@ public class Genome {
 			List<ConnectionGene> nodeConnections = new ArrayList<>();
 			double inputSum = 0;
 			for (ConnectionGene connection : this.connections.values()) {
-				if (connection.getTo() == node) {
+				if (connection.to == node) {
 					nodeConnections.add(connection);
 					inputSum += connection.payload;
 				}
@@ -247,7 +245,7 @@ public class Genome {
 
 		for (NodeGeneType layerType : NodeGeneType.values()) {
 			for (NodeGene node : this.nodes.values()) {
-				if (node.getType() == layerType) {
+				if (node.type == layerType) {
 					this.network.add(node);
 				}
 			}
@@ -258,14 +256,14 @@ public class Genome {
 	 * @param gene
 	 */
 	public void addNodeGene(NodeGene node) {
-		this.nodes.put(node.getNumber(), node);
+		this.nodes.put(node.number, node);
 	}
 
 	/**
 	 * @param connection
 	 */
 	public void addConnectionGene(ConnectionGene connection) {
-		this.connections.put(connection.getInnvoationNumber(), connection);
+		this.connections.put(connection.innvoationNumber, connection);
 	}
 
 	/**
@@ -302,11 +300,14 @@ public class Genome {
 				continue;
 			}
 
-			double weight = -2 + random.nextFloat() * 4f;
+			double max = Property.WEIGHT_RANDOM_RANGE.getValue();
+			double min = -1 * Property.WEIGHT_RANDOM_RANGE.getValue();
+			double weight = min + (max - min) * random.nextFloat();
+
 			int connectionInnovationNumber = this.getConnectionInnovationNumber(innovationHistory, first, second);
 			ConnectionGene connection = new ConnectionGene(first, second, weight, true, connectionInnovationNumber);
 
-			this.connections.put(connection.getInnvoationNumber(), connection);
+			this.connections.put(connection.innvoationNumber, connection);
 
 			success = true;
 		}
@@ -325,8 +326,8 @@ public class Genome {
 
 		int highestInnovation = 0;
 		for (ConnectionGene connection : this.connections.values()) {
-			if (connection.getInnvoationNumber() > highestInnovation) {
-				highestInnovation = connection.getInnvoationNumber();
+			if (connection.innvoationNumber > highestInnovation) {
+				highestInnovation = connection.innvoationNumber;
 			}
 		}
 
@@ -363,9 +364,9 @@ public class Genome {
 
 		for (ConnectionGene connection : this.connections.values()) {
 
-			if (connection.getFrom().equals(node1) && connection.getTo().equals(node2)) {
+			if (connection.from.equals(node1) && connection.to.equals(node2)) {
 				return true;
-			} else if (connection.getFrom().equals(node2) && connection.getTo().equals(node1)) {
+			} else if (connection.from.equals(node2) && connection.to.equals(node1)) {
 				return true;
 			}
 		}
@@ -381,13 +382,13 @@ public class Genome {
 	private boolean connectionImpossible(NodeGene node1, NodeGene node2) {
 
 		// Inputs and outputs can't be connected to each other
-		if (node1.getType() == NodeGeneType.INPUT && node2.getType() == NodeGeneType.INPUT) {
+		if (node1.type == NodeGeneType.INPUT && node2.type == NodeGeneType.INPUT) {
 			return true;
-		} else if (node1.getType() == NodeGeneType.OUTPUT && node2.getType() == NodeGeneType.OUTPUT) {
+		} else if (node1.type == NodeGeneType.OUTPUT && node2.type == NodeGeneType.OUTPUT) {
 			return true;
-		} else if (node1.getType() != NodeGeneType.HIDDEN && node2.getType() != NodeGeneType.HIDDEN) {
+		} else if (node1.type != NodeGeneType.HIDDEN && node2.type != NodeGeneType.HIDDEN) {
 			return true;
-		} else if (node1.getType() == NodeGeneType.BIAS && node2.getType() == NodeGeneType.BIAS) {
+		} else if (node1.type == NodeGeneType.BIAS && node2.type == NodeGeneType.BIAS) {
 			return true;
 		}
 
@@ -407,7 +408,7 @@ public class Genome {
 
 		List<ConnectionGene> outConnections = new ArrayList<>();
 		for (ConnectionGene connection : this.connections.values()) {
-			if (connection.getFrom() == node2 && connection.isEnabled()) {
+			if (connection.from == node2 && connection.enabled) {
 				outConnections.add(connection);
 			}
 		}
@@ -415,13 +416,13 @@ public class Genome {
 		for (ConnectionGene connection : outConnections) {
 
 			// Can't create circular before input node
-			NodeGene from = connection.getFrom();
-			if (from.getType() == NodeGeneType.INPUT || from.getType() == NodeGeneType.BIAS) {
+			NodeGene from = connection.from;
+			if (from.type == NodeGeneType.INPUT || from.type == NodeGeneType.BIAS) {
 				continue;
 			}
 
 			// Can't create circular after output node
-			if (connection.getTo().getType() == NodeGeneType.OUTPUT) {
+			if (connection.to.type == NodeGeneType.OUTPUT) {
 				continue;
 			}
 
@@ -439,14 +440,14 @@ public class Genome {
 	 */
 	private boolean connectionLeadsToNode(ConnectionGene connection, NodeGene node) {
 
-		NodeGene toNode = connection.getTo();
+		NodeGene toNode = connection.to;
 		if (toNode == node) {
 			return true;
 		}
 
 		List<ConnectionGene> outConnections = new ArrayList<>();
 		for (ConnectionGene outConnection : this.connections.values()) {
-			if (outConnection.getFrom() == toNode && outConnection.isEnabled()) {
+			if (outConnection.from == toNode && outConnection.enabled) {
 				outConnections.add(outConnection);
 			}
 		}
@@ -454,13 +455,13 @@ public class Genome {
 		for (ConnectionGene toNodeOutConnection : outConnections) {
 
 			// Can't create circular before input node
-			NodeGene from = toNodeOutConnection.getFrom();
-			if (from.getType() == NodeGeneType.INPUT || from.getType() == NodeGeneType.BIAS) {
+			NodeGene from = toNodeOutConnection.from;
+			if (from.type == NodeGeneType.INPUT || from.type == NodeGeneType.BIAS) {
 				continue;
 			}
 
 			// Can't create circular after output node
-			if (toNodeOutConnection.getTo().getType() == NodeGeneType.OUTPUT) {
+			if (toNodeOutConnection.to.type == NodeGeneType.OUTPUT) {
 				continue;
 			}
 
@@ -487,14 +488,14 @@ public class Genome {
 		ConnectionGene connection = values.get(random.nextInt(values.size()));
 
 		// Don't disconnect bias
-		while (connection.getFrom() == this.biasNode) {
+		while (connection.from == this.biasNode) {
 			connection = values.get(random.nextInt(values.size()));
 		}
 
-		NodeGene in = connection.getFrom();
-		NodeGene out = connection.getTo();
+		NodeGene in = connection.from;
+		NodeGene out = connection.to;
 
-		connection.setEnabled(false);
+		connection.enabled = false;
 
 		NodeGene newNode = new NodeGene(NodeGeneType.HIDDEN, this.nodeInnovation.getNext());
 
@@ -502,15 +503,15 @@ public class Genome {
 		ConnectionGene inToNew = new ConnectionGene(in, newNode, 1f, true, connectionInnovationNumber);
 
 		connectionInnovationNumber = this.getConnectionInnovationNumber(innovationHistory, newNode, out);
-		ConnectionGene newToOut = new ConnectionGene(newNode, out, connection.getWeight(), true, connectionInnovationNumber);
+		ConnectionGene newToOut = new ConnectionGene(newNode, out, connection.weight, true, connectionInnovationNumber);
 
 		connectionInnovationNumber = this.getConnectionInnovationNumber(innovationHistory, this.biasNode, out);
 		ConnectionGene biasToOut = new ConnectionGene(this.biasNode, out, 0, true, connectionInnovationNumber);
 
-		this.nodes.put(newNode.getNumber(), newNode);
-		this.connections.put(inToNew.getInnvoationNumber(), inToNew);
-		this.connections.put(newToOut.getInnvoationNumber(), newToOut);
-		this.connections.put(biasToOut.getInnvoationNumber(), biasToOut);
+		this.nodes.put(newNode.number, newNode);
+		this.connections.put(inToNew.innvoationNumber, inToNew);
+		this.connections.put(newToOut.innvoationNumber, newToOut);
+		this.connections.put(biasToOut.innvoationNumber, biasToOut);
 
 		this.generateNetwork();
 	}
@@ -522,8 +523,8 @@ public class Genome {
 
 		int highestInnovation = 0;
 		for (NodeGene node : this.nodes.values()) {
-			if (node.getNumber() > highestInnovation) {
-				highestInnovation = node.getNumber();
+			if (node.number > highestInnovation) {
+				highestInnovation = node.number;
 			}
 		}
 
@@ -547,22 +548,22 @@ public class Genome {
 		childGenome.connections.clear();
 
 		// Copy nodes from the most fit parent
-		for (NodeGene node : fitParent.getNodeGenes().values()) {
+		for (NodeGene node : fitParent.nodes.values()) {
 			NodeGene copy = node.copy();
 			childGenome.addNodeGene(copy);
-			if (node.getType() == NodeGeneType.BIAS) {
+			if (node.type == NodeGeneType.BIAS) {
 				childGenome.biasNode = copy;
 			}
 		}
 
 		// Copy matching connection genes
 		Map<Integer, Boolean> childConnectionEnabled = new HashMap<>();
-		for (ConnectionGene fitParentConnection : fitParent.getConnectionGenes().values()) {
+		for (ConnectionGene fitParentConnection : fitParent.connections.values()) {
 
 			// Check if the both parents have the connection with same from & to node innovationNumbers
 			boolean matchingGene = false;
-			ConnectionGene unfitConnection = unfitParent.getConnectionGenes().get(fitParentConnection.getInnvoationNumber());
-			if (unfitConnection != null && fitParent.containsConnection(unfitConnection.getFrom().getNumber(), unfitConnection.getTo().getNumber())) {
+			ConnectionGene unfitConnection = unfitParent.connections.get(fitParentConnection.innvoationNumber);
+			if (unfitConnection != null && fitParent.containsConnection(unfitConnection.from.number, unfitConnection.to.number)) {
 				matchingGene = true;
 			}
 
@@ -579,19 +580,19 @@ public class Genome {
 
 				// If either of the parents connection is disabled there is a chance to disable it for the child
 				boolean enabled = true;
-				if (!fitParentConnection.isEnabled() || !unfitParentConnection.isEnabled()) {
+				if (!fitParentConnection.enabled || !unfitParentConnection.enabled) {
 					if (random.nextFloat() <= Property.DISABLE_CONNECTION_ON_CHILD_RATE.getValue()) {
 						enabled = false;
 					}
 				}
-				childConnectionEnabled.put(sourceConnection.getInnvoationNumber(), enabled);
+				childConnectionEnabled.put(sourceConnection.innvoationNumber, enabled);
 
 				childGenome.addConnectionGene(sourceConnection);
 			} else {
 
 				// Disjoint/Excess ConnectionGene (Not present in unfit parent) will always be
 				// taken from the more fit parent
-				childConnectionEnabled.put(fitParentConnection.getInnvoationNumber(), fitParentConnection.isEnabled());
+				childConnectionEnabled.put(fitParentConnection.innvoationNumber, fitParentConnection.enabled);
 				childGenome.addConnectionGene(fitParentConnection);
 			}
 		}
@@ -600,11 +601,11 @@ public class Genome {
 		List<ConnectionGene> newConnetions = new ArrayList<>();
 		for (ConnectionGene connection : childGenome.connections.values()) {
 
-			NodeGene from = childGenome.nodes.get(connection.getFrom().getNumber());
-			NodeGene to = childGenome.nodes.get(connection.getTo().getNumber());
-			Boolean enabled = childConnectionEnabled.get(connection.getInnvoationNumber());
+			NodeGene from = childGenome.nodes.get(connection.from.number);
+			NodeGene to = childGenome.nodes.get(connection.to.number);
+			Boolean enabled = childConnectionEnabled.get(connection.innvoationNumber);
 
-			ConnectionGene newConnection = new ConnectionGene(from, to, connection.getWeight(), enabled, connection.getInnvoationNumber());
+			ConnectionGene newConnection = new ConnectionGene(from, to, connection.weight, enabled, connection.innvoationNumber);
 			newConnetions.add(newConnection);
 		}
 
@@ -614,8 +615,8 @@ public class Genome {
 		// Add the new connections
 		for (ConnectionGene newConnection : newConnetions) {
 
-			NodeGene from = newConnection.getFrom();
-			NodeGene to = newConnection.getTo();
+			NodeGene from = newConnection.from;
+			NodeGene to = newConnection.to;
 
 			if (childGenome.connectionExists(from, to)) {
 				continue;
@@ -638,7 +639,7 @@ public class Genome {
 	private boolean containsConnection(int fromId, int toId) {
 
 		for (ConnectionGene connection : this.connections.values()) {
-			if (connection.getFrom().getNumber() == fromId && connection.getTo().getNumber() == toId) {
+			if (connection.from.number == fromId && connection.to.number == toId) {
 				return true;
 			}
 		}
@@ -650,15 +651,15 @@ public class Genome {
 	 */
 	public void validateIntegrity() {
 
-		for (ConnectionGene connection : this.getConnectionGenes().values()) {
+		for (ConnectionGene connection : this.connections.values()) {
 
-			NodeGene in = connection.getFrom();
-			NodeGene out = connection.getTo();
+			NodeGene in = connection.from;
+			NodeGene out = connection.to;
 
 			boolean foundIn = false;
 			boolean foundOut = false;
-			for (NodeGene node : this.getNodeGenes().values()) {
-				if (node == in || in.getType() == NodeGeneType.BIAS) {
+			for (NodeGene node : this.nodes.values()) {
+				if (node == in || in.type == NodeGeneType.BIAS) {
 					foundIn = true;
 				}
 				if (node == out) {
@@ -687,14 +688,14 @@ public class Genome {
 					double value = Property.UNIFORMLY_PERTURB_WEIGHT_RANGE.getValue();
 					double min = -1 * (value / 2);
 					double disturbance = min + random.nextFloat() * value;
-					connection.setWeight(connection.getWeight() + disturbance);
+					connection.weight += disturbance;
 				} else {
 
 					// Assign new weight
 					double max = Property.WEIGHT_RANDOM_RANGE.getValue();
 					double min = -1 * Property.WEIGHT_RANDOM_RANGE.getValue();
 					double weight = min + (max - min) * random.nextFloat();
-					connection.setWeight(weight);
+					connection.weight = weight;
 				}
 			}
 		}
@@ -718,7 +719,7 @@ public class Genome {
 
 		boolean newConnection = true;
 		int connectionInnovationNumber = this.connectionInnovation.getCurrent() + 1;
-		List<ConnectionHistory> possibleMatches = innovationHistory.get(this.getConnectionGenes().size());
+		List<ConnectionHistory> possibleMatches = innovationHistory.get(this.connections.size());
 		if (possibleMatches != null) {
 			for (int i = 0; i < possibleMatches.size(); ++i) {
 				if (possibleMatches.get(i).matches(this, from, to)) {
@@ -732,7 +733,7 @@ public class Genome {
 
 			ArrayList<Integer> innovationNumbers = new ArrayList<>();
 			for (ConnectionGene connection : this.connections.values()) {
-				innovationNumbers.add(connection.getInnvoationNumber());
+				innovationNumbers.add(connection.innvoationNumber);
 			}
 
 			// Save new innovation history
@@ -740,7 +741,7 @@ public class Genome {
 			if (existingHistories == null) {
 				existingHistories = new ArrayList<>();
 			}
-			existingHistories.add(new ConnectionHistory(from.getNumber(), to.getNumber(), connectionInnovationNumber, innovationNumbers));
+			existingHistories.add(new ConnectionHistory(from.number, to.number, connectionInnovationNumber, innovationNumbers));
 			innovationHistory.put(innovationNumbers.size(), existingHistories);
 
 			this.connectionInnovation.getNext();
@@ -757,7 +758,7 @@ public class Genome {
 
 		List<NodeGene> nodes = new ArrayList<>();
 		for (NodeGene node : this.nodes.values()) {
-			if (node.getType() == type && node != this.biasNode) {
+			if (node.type == type && node != this.biasNode) {
 				nodes.add(node);
 			}
 		}
@@ -766,30 +767,38 @@ public class Genome {
 	}
 
 	/**
-	 * @return
+	 * @return a copy of the genome
 	 */
 	public Genome copy() {
 
+		// Create new genome
 		Genome genome = new Genome();
 		genome.anzInputs = this.anzInputs;
 		genome.anzOutputs = this.anzOutputs;
 
+		// Copy all nodes
 		for (NodeGene node : this.nodes.values()) {
 
 			NodeGene copy = node.copy();
-			genome.nodes.put(copy.getNumber(), copy);
+			genome.nodes.put(copy.number, copy);
 
-			if (copy.getType() == NodeGeneType.BIAS) {
+			if (copy.type == NodeGeneType.BIAS) {
 				genome.biasNode = copy;
 			}
 		}
 
+		// Copy all connection
 		for (ConnectionGene connection : this.connections.values()) {
 
-			NodeGene from = genome.nodes.get(connection.getFrom().getNumber());
-			NodeGene to = genome.nodes.get(connection.getTo().getNumber());
+			ConnectionGene copy = connection.copy();
 
-			genome.connections.put(connection.getInnvoationNumber(), connection.copy(from, to));
+			// Use the already copied nodes as from/to
+			NodeGene from = genome.nodes.get(connection.from.number);
+			NodeGene to = genome.nodes.get(connection.to.number);
+			copy.from = from;
+			copy.to = to;
+
+			genome.connections.put(connection.innvoationNumber, copy);
 		}
 
 		genome.nodeInnovation = this.nodeInnovation;
@@ -797,20 +806,6 @@ public class Genome {
 		genome.generateNetwork();
 
 		return genome;
-	}
-
-	/**
-	 * @return the nodes
-	 */
-	public Map<Integer, NodeGene> getNodeGenes() {
-		return this.nodes;
-	}
-
-	/**
-	 * @return the connections
-	 */
-	public Map<Integer, ConnectionGene> getConnectionGenes() {
-		return this.connections;
 	}
 
 }

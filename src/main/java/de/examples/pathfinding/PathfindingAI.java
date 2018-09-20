@@ -12,12 +12,6 @@ import de.core.neat.genome.Genome;
  */
 public class PathfindingAI extends ArtificialIntelligence {
 
-	public int anzInputs;
-	public int anzOutputs;
-
-	public double[] inputs;
-	public double[] decision;
-
 	public int currentX;
 	public int currentY;
 
@@ -30,13 +24,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 	 *
 	 */
 	public PathfindingAI(int anzInputs, int anzOutputs) {
-
-		this.anzInputs = anzInputs;
-		this.anzOutputs = anzOutputs;
-		this.inputs = new double[anzInputs];
-
-		this.brain = new Genome(anzInputs, anzOutputs);
-
+		super(anzInputs, anzOutputs);
 		this.init();
 	}
 
@@ -44,13 +32,13 @@ public class PathfindingAI extends ArtificialIntelligence {
 	 * @param brain
 	 */
 	public PathfindingAI(Genome brain) {
-
-		this(brain.anzInputs, brain.anzOutputs);
-		this.brain = brain;
-
+		super(brain);
 		this.init();
 	}
 
+	/**
+	 *
+	 */
 	private void init() {
 
 		// Initial position
@@ -65,19 +53,9 @@ public class PathfindingAI extends ArtificialIntelligence {
 		this.playfield = new int[50][50];
 	}
 
-	@Override
-	public void setInputs(List<Double> inputs) {
-
-		for (int i = 0; i < inputs.size(); ++i) {
-			this.inputs[i] = inputs.get(i);
-		}
-	}
-
-	@Override
-	public void think() {
-		this.decision = this.brain.feedForward(this.inputs);
-	}
-
+	/**
+	 * @return
+	 */
 	@Override
 	public double calculateFitness() {
 
@@ -103,10 +81,11 @@ public class PathfindingAI extends ArtificialIntelligence {
 
 		int height = this.playfield.length;
 		int width = this.playfield[0].length;
+		double[] lastOutput = this.outputs.get(this.outputs.size() - 1);
 
 		boolean didVerticalMove = false;
 		boolean didHorizontalMove = false;
-		if (this.decision[0] > 0.8) {
+		if (lastOutput[0] > 0.8) {
 
 			// Move left
 			didHorizontalMove = true;
@@ -115,7 +94,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 			}
 
 		}
-		if (this.decision[1] > 0.8) {
+		if (lastOutput[1] > 0.8) {
 
 			// Move down
 			didVerticalMove = true;
@@ -124,7 +103,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 			}
 
 		}
-		if (this.decision[2] > 0.8) {
+		if (lastOutput[2] > 0.8) {
 
 			// Move right
 			if (didVerticalMove) {
@@ -135,7 +114,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 			}
 
 		}
-		if (this.decision[3] > 0.8) {
+		if (lastOutput[3] > 0.8) {
 
 			// Move up
 			if (didHorizontalMove) {
@@ -147,6 +126,9 @@ public class PathfindingAI extends ArtificialIntelligence {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	public List<Double> getCurrentPosition() {
 
 		List<Double> currentPosition = new ArrayList<>();

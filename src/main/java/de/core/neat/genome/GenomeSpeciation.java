@@ -49,8 +49,8 @@ public class GenomeSpeciation {
 	 */
 	public double compatibilityDistance(double c1, double c2, double c3) {
 
-//		int amountFirstGenes = this.first.getNodeGenes().size() + this.first.getConnectionGenes().size();
-//		int amountSecondGenes = this.second.getNodeGenes().size() + this.second.getConnectionGenes().size();
+//		int amountFirstGenes = this.first.nodes.size() + this.first.connections.size();
+//		int amountSecondGenes = this.second.nodes.size() + this.second.connections.size();
 //		double n = amountFirstGenes > amountSecondGenes ? amountFirstGenes : amountSecondGenes;
 //		n = n < 20 ? 1 : n;
 
@@ -62,14 +62,14 @@ public class GenomeSpeciation {
 	 */
 	private void calculateGenomeSpeciations() {
 
-		int secondHighestNodeNumber = Collections.max(this.second.getNodeGenes().keySet());
-		int firstHighestNodeNumber = Collections.max(this.first.getNodeGenes().keySet());
-		int secondHighestInnovationNumber = Collections.max(this.second.getConnectionGenes().keySet());
-		int firstHighestInnovationNumber = Collections.max(this.first.getConnectionGenes().keySet());
+		int secondHighestNodeNumber = Collections.max(this.second.nodes.keySet());
+		int firstHighestNodeNumber = Collections.max(this.first.nodes.keySet());
+		int secondHighestInnovationNumber = Collections.max(this.second.connections.keySet());
+		int firstHighestInnovationNumber = Collections.max(this.first.connections.keySet());
 
-		for (Integer nodeGeneId : this.first.getNodeGenes().keySet()) {
+		for (Integer nodeGeneId : this.first.nodes.keySet()) {
 
-			if (this.second.getNodeGenes().containsKey(nodeGeneId)) {
+			if (this.second.nodes.containsKey(nodeGeneId)) {
 
 				// Matching gene
 				++this.matchingGenes;
@@ -85,9 +85,9 @@ public class GenomeSpeciation {
 
 		}
 
-		for (Integer nodeGeneId : this.second.getNodeGenes().keySet()) {
+		for (Integer nodeGeneId : this.second.nodes.keySet()) {
 
-			if (this.first.getNodeGenes().containsKey(nodeGeneId)) {
+			if (this.first.nodes.containsKey(nodeGeneId)) {
 				continue;
 			}
 
@@ -101,15 +101,15 @@ public class GenomeSpeciation {
 
 		// Count disjoint connections by innovation number
 		int matchingConnectionGenes = 0;
-		for (Integer innovationNumber : this.first.getConnectionGenes().keySet()) {
+		for (Integer innovationNumber : this.first.connections.keySet()) {
 
-			if (this.second.getConnectionGenes().containsKey(innovationNumber)) {
+			if (this.second.connections.containsKey(innovationNumber)) {
 
 				// Calculate connection weight difference
-				ConnectionGene firstConnectionGene = this.first.getConnectionGenes().get(innovationNumber);
-				ConnectionGene secondConnectionGene = this.second.getConnectionGenes().get(innovationNumber);
+				ConnectionGene firstConnectionGene = this.first.connections.get(innovationNumber);
+				ConnectionGene secondConnectionGene = this.second.connections.get(innovationNumber);
 				++matchingConnectionGenes;
-				this.averageWeightDifference += Math.abs(firstConnectionGene.getWeight() - secondConnectionGene.getWeight());
+				this.averageWeightDifference += Math.abs(firstConnectionGene.weight - secondConnectionGene.weight);
 
 				// Matching gene
 				++this.matchingGenes;
@@ -125,9 +125,9 @@ public class GenomeSpeciation {
 		}
 		this.averageWeightDifference /= matchingConnectionGenes;
 
-		for (Integer innovationNumber : this.second.getConnectionGenes().keySet()) {
+		for (Integer innovationNumber : this.second.connections.keySet()) {
 
-			if (this.first.getConnectionGenes().containsKey(innovationNumber)) {
+			if (this.first.connections.containsKey(innovationNumber)) {
 				continue;
 			}
 

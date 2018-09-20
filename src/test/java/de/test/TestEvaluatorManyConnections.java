@@ -49,11 +49,11 @@ public class TestEvaluatorManyConnections {
 		for (int i = 0; i <= 100; ++i) {
 			eval.evolve();
 			System.out.println("Generation: " + i);
-			System.out.println("Highest fitness: " + eval.getFittestAI().brain.fitness);
-			System.out.println("Amount of species: " + eval.getSpecies().size());
+			System.out.println("Highest fitness: " + eval.fittestAI.brain.fitness);
+			System.out.println("Amount of species: " + eval.species.size());
 
 			if (i % 10 == 0) {
-				GenomePrinter.printGenome(eval.getFittestAI().brain, "D:/output/ManyConnections/Test_ " + i + ".png");
+				GenomePrinter.printGenome(eval.fittestAI.brain, "D:/output/ManyConnections/Test_ " + i + ".png");
 			}
 		}
 	}

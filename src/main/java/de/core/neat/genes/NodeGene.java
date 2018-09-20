@@ -52,12 +52,12 @@ public class NodeGene extends Node {
 	public void fire() {
 		for (ConnectionGene connection : this.outputConnections) {
 
-			if (!connection.isEnabled()) {
+			if (!connection.enabled) {
 				continue;
 			}
 
 			// Store weighted outputValue to the sum of the inputs of the connected nodes on every outgoing connection
-			connection.payload = connection.getWeight() * this.outputValue;
+			connection.payload = connection.weight * this.outputValue;
 			connection.activated = true;
 		}
 	}
@@ -67,19 +67,5 @@ public class NodeGene extends Node {
 	 */
 	public NodeGene copy() {
 		return new NodeGene(this.type, this.number);
-	}
-
-	/**
-	 * @return the type
-	 */
-	public NodeGeneType getType() {
-		return this.type;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public int getNumber() {
-		return this.number;
 	}
 }

@@ -64,7 +64,7 @@ public class TicTacToe {
 			// Cultivate a new generation in the population
 			population.evolve();
 
-			System.out.println("Generation: " + (i + 1) + " ## Fitness: " + population.getFittestAI().brain.fitness + " ## Species: " + population.getSpecies().size());
+			System.out.println("Generation: " + (i + 1) + " ## Fitness: " + population.fittestAI.brain.fitness + " ## Species: " + population.species.size());
 		}
 
 		if (winner != null) {
@@ -90,8 +90,7 @@ public class TicTacToe {
 
 		while (this.gameState == 0) {
 
-			this.artificialIntelligence.setInputs(this.normalizePlayfield());
-			this.artificialIntelligence.think();
+			this.artificialIntelligence.think(this.normalizePlayfield());
 			this.artificialIntelligence.takeAction(this);
 
 			if (showGame) {

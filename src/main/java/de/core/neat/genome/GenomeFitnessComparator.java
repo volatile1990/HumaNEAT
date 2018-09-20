@@ -4,8 +4,17 @@ import java.util.Comparator;
 
 import de.core.neat.ArtificialIntelligence;
 
+/**
+ * @author MannoR
+ *
+ */
 public class GenomeFitnessComparator implements Comparator<ArtificialIntelligence> {
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	 */
 	@Override
 	public int compare(ArtificialIntelligence first, ArtificialIntelligence second) {
 
