@@ -2,9 +2,9 @@ package de.core.lstm.genes;
 
 import de.core.global.activation.Activation;
 import de.core.global.activation.ActivationFunctions;
-import de.core.neat.genes.ConnectionGene;
-import de.core.neat.genes.NodeGene;
-import de.core.neat.genes.NodeGeneType;
+import de.core.neat.genes.connection.ConnectionGene;
+import de.core.neat.genes.node.NodeGene;
+import de.core.neat.genes.node.NodeGeneType;
 
 /**
  * @author muellermak

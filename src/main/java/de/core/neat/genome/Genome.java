@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import de.core.global.Random;
-import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.Counter;
-import de.core.neat.genes.NodeGene;
-import de.core.neat.genes.NodeGeneType;
+import de.core.neat.genes.connection.ConnectionGene;
+import de.core.neat.genes.node.NodeGene;
+import de.core.neat.genes.node.NodeGeneType;
 
 /**
  * @author muellermak

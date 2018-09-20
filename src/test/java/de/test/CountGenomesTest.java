@@ -1,9 +1,9 @@
 package de.test;
 
-import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.Counter;
-import de.core.neat.genes.NodeGene;
-import de.core.neat.genes.NodeGeneType;
+import de.core.neat.genes.connection.ConnectionGene;
+import de.core.neat.genes.node.NodeGene;
+import de.core.neat.genes.node.NodeGeneType;
 import de.core.neat.genome.Genome;
 import de.core.neat.genome.GenomeSpeciation;
 

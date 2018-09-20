@@ -1,13 +1,15 @@
-package de.core.neat.genes;
+package de.core.neat.genes.connection;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.core.neat.genes.node.NodeGene;
 import de.core.neat.genome.Genome;
 
 /**
  * @author muellermak
  *
+ *         Stores information about all connections that have occured over a whole population. This keeps innovations unique.
  */
 public class ConnectionHistory {
 
@@ -36,16 +38,16 @@ public class ConnectionHistory {
 	 */
 	public boolean matches(Genome genome, NodeGene from, NodeGene to) {
 
-		if (genome.connections.size() != this.innovationNumbers.size()) {
+		if (genome.connections.size() != innovationNumbers.size()) {
 			return false;
 		}
 
-		if (from.innovationNumber != this.fromNode || to.innovationNumber != this.toNode) {
+		if (from.innovationNumber != fromNode || to.innovationNumber != toNode) {
 			return false;
 		}
 
 		for (ConnectionGene connection : genome.connections.values()) {
-			if (!this.innovationNumbers.contains(connection.innvoationNumber)) {
+			if (!innovationNumbers.contains(connection.innvoationNumber)) {
 				return false;
 			}
 		}

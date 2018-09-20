@@ -2,9 +2,9 @@ package de.core.global.components;
 
 import java.util.List;
 
-import de.core.neat.genes.ConnectionGene;
-import de.core.neat.genes.NodeGene;
-import de.core.neat.genes.NodeGeneType;
+import de.core.neat.genes.connection.ConnectionGene;
+import de.core.neat.genes.node.NodeGene;
+import de.core.neat.genes.node.NodeGeneType;
 
 /**
  * @author MannoR

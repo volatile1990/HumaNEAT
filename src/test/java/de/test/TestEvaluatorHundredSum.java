@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.core.neat.ArtificialIntelligence;
-import de.core.neat.genes.ConnectionGene;
+import de.core.neat.genes.connection.ConnectionGene;
 import de.core.neat.genome.Genome;
 import de.core.neat.population.Population;
 

@@ -1,7 +1,7 @@
 package de.core.lstm.genes;
 
-import de.core.neat.genes.ConnectionGene;
-import de.core.neat.genes.NodeGene;
+import de.core.neat.genes.connection.ConnectionGene;
+import de.core.neat.genes.node.NodeGene;
 
 /**
  * @author muellermak

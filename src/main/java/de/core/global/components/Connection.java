@@ -1,6 +1,6 @@
 package de.core.global.components;
 
-import de.core.neat.genes.NodeGene;
+import de.core.neat.genes.node.NodeGene;
 
 /**
  * @author MannoR

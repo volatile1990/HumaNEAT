@@ -1,4 +1,4 @@
-package de.core.neat.genes;
+package de.core.neat.genes.node;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ public class NodeGene extends Node {
 	 */
 	public NodeGene(NodeGeneType type, int innovationNumber) {
 
-		super(new NeatNodeEngager());
+		super(new NodeGeneEngager());
 
 		this.type = type;
 		this.innovationNumber = innovationNumber;

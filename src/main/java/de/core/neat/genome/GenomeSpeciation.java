@@ -2,7 +2,7 @@ package de.core.neat.genome;
 
 import java.util.Collections;
 
-import de.core.neat.genes.ConnectionGene;
+import de.core.neat.genes.connection.ConnectionGene;
 
 /**
  * @author muellermak

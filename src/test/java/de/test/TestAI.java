@@ -1,7 +1,7 @@
 package de.test;
 
 import de.core.neat.ArtificialIntelligence;
-import de.core.neat.genes.ConnectionGene;
+import de.core.neat.genes.connection.ConnectionGene;
 import de.core.neat.genome.Genome;
 
 public class TestAI extends ArtificialIntelligence {

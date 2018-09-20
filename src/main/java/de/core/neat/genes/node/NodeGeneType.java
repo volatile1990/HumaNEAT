@@ -1,4 +1,4 @@
-package de.core.neat.genes;
+package de.core.neat.genes.node;
 
 /**
  * @author MannoR

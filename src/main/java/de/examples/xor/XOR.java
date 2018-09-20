@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.GenomePrinter;
 import de.core.neat.ArtificialIntelligence;
-import de.core.neat.genes.NodeGeneType;
+import de.core.neat.genes.node.NodeGeneType;
 import de.core.neat.population.Population;
 
 /**
