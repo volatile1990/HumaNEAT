@@ -6,6 +6,10 @@ import de.core.neat.genes.ConnectionGene;
 import de.core.neat.genes.NodeGene;
 import de.core.neat.genes.NodeGeneType;
 
+/**
+ * @author MannoR
+ *
+ */
 public abstract class Node {
 
 	public NodeGeneType type;
@@ -16,6 +20,15 @@ public abstract class Node {
 
 	public List<ConnectionGene> outputConnections;
 
+	public NodeEngager nodeEngager;
+
+	/**
+	 * @param engager
+	 */
+	public Node(NodeEngager engager) {
+		nodeEngager = engager;
+	}
+
 	/**
 	 * Checks whether this node is before the passed one concerning the type
 	 *
@@ -23,9 +36,9 @@ public abstract class Node {
 	 */
 	public boolean before(Node node) {
 
-		if (this.type == NodeGeneType.INPUT && node.type != NodeGeneType.INPUT) {
+		if (type == NodeGeneType.INPUT && node.type != NodeGeneType.INPUT) {
 			return true;
-		} else if (this.type == NodeGeneType.HIDDEN && node.type == NodeGeneType.OUTPUT) {
+		} else if (type == NodeGeneType.HIDDEN && node.type == NodeGeneType.OUTPUT) {
 			return true;
 		}
 
@@ -35,7 +48,23 @@ public abstract class Node {
 	/**
 	 * Engages the node to calc and pass its data in the neural network
 	 */
-	public abstract void engage();
+	public void engage() {
+		nodeEngager.engage(this);
+	}
+
+	/**
+	 *
+	 */
+	public void activate() {
+		nodeEngager.activate(this);
+	}
+
+	/**
+	 *
+	 */
+	public void fire() {
+		nodeEngager.fire(this);
+	}
 
 	/**
 	 * @param o
@@ -50,7 +79,7 @@ public abstract class Node {
 
 		Node in = (Node) o;
 
-		return this.innovationNumber == in.innovationNumber;
+		return innovationNumber == in.innovationNumber;
 	}
 
 }

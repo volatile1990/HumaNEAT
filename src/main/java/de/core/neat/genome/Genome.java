@@ -89,6 +89,8 @@ public class Genome {
 
 		this.anzInputs = anzInputs;
 		this.anzOutputs = anzOutputs;
+
+		manager.initialize();
 	}
 
 	/**
