@@ -2,7 +2,8 @@ package de.core.neat.genes.node;
 
 import java.util.ArrayList;
 
-import de.core.global.components.Node;
+import de.core.global.Visitor;
+import de.core.global.components.node.Node;
 
 /**
  * @author muellermak
@@ -15,8 +16,6 @@ public class NodeGene extends Node {
 	 * @param id
 	 */
 	public NodeGene(NodeGeneType type, int innovationNumber) {
-
-		super(new NodeGeneEngager());
 
 		this.type = type;
 		this.innovationNumber = innovationNumber;
@@ -32,5 +31,12 @@ public class NodeGene extends Node {
 	 */
 	public NodeGene copy() {
 		return new NodeGene(type, innovationNumber);
+	}
+
+	/**
+	 * @param visitor
+	 */
+	public void accept(Visitor visitor) {
+		visitor.visit(this);
 	}
 }

@@ -1,8 +1,9 @@
 package de.core.lstm.genes;
 
+import de.core.global.Visitor;
 import de.core.global.activation.Activation;
 import de.core.global.activation.ActivationFunctions;
-import de.core.global.components.Node;
+import de.core.global.components.node.Node;
 import de.core.neat.genes.node.NodeGeneType;
 
 /**
@@ -37,18 +38,16 @@ public class LSTMNodeGene extends Node {
 	/**
 	 * Output vectors of the gates
 	 */
-	double[] forgetGateOut = new double[2];
-	double[] inputGateOut = new double[2];
-	double[] selectGateOut = new double[2];
-	double[] outputGateOut = new double[2];
+	public double[] forgetGateOut = new double[2];
+	public double[] inputGateOut = new double[2];
+	public double[] selectGateOut = new double[2];
+	public double[] outputGateOut = new double[2];
 
 	/**
 	 * @param type
 	 * @param number
 	 */
 	public LSTMNodeGene(NodeGeneType type, int number) {
-
-		super(new LSTMNodeEngager());
 
 		cellState = new double[2];
 		cellState[0] = LSTMNodeGene.INITIAL_CELL_STATE;
@@ -67,40 +66,9 @@ public class LSTMNodeGene extends Node {
 	}
 
 	/**
-	 * Engages the LSTM node with all its gates
+	 * @param visitor
 	 */
-	public void engage() {
-
-		// Activate all gates
-		activate();
-
-		// Update the cell state with current gate outputs
-		updateCellState();
-
-		// Output the result on the outgoing connection
-		fire();
+	public void accept(Visitor visitor) {
+		visitor.visit(this);
 	}
-
-	/**
-	 * Updates the current cell state with the following operations:
-	 * 1: Multiply with the forget gate output vector
-	 * 2: Add to the muliplied input * select gate vector
-	 *
-	 */
-	private void updateCellState() {
-
-		// Multiply with select gate output vector
-		cellState[0] *= forgetGateOut[0];
-		cellState[1] *= forgetGateOut[1];
-
-		// Multiply input and select gate vectors
-		double[] selectInputMultResult = new double[2];
-		selectInputMultResult[0] = inputGateOut[0] * selectGateOut[0];
-		selectInputMultResult[1] = inputGateOut[1] * selectGateOut[1];
-
-		// Add input * select to the cell state vector
-		cellState[0] += selectInputMultResult[0];
-		cellState[1] += selectInputMultResult[1];
-	}
-
 }

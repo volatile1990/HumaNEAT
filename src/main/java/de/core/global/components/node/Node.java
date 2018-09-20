@@ -1,4 +1,4 @@
-package de.core.global.components;
+package de.core.global.components.node;
 
 import java.util.List;
 
@@ -20,16 +20,6 @@ public abstract class Node {
 
 	public List<ConnectionGene> outputConnections;
 
-	public NodeEngager nodeEngager;
-
-	/**
-	 * @param engager
-	 */
-	public Node(NodeEngager engager) {
-		nodeEngager = engager;
-		nodeEngager.node = this;
-	}
-
 	/**
 	 * Checks whether this node is before the passed one concerning the type
 	 *
@@ -44,20 +34,6 @@ public abstract class Node {
 		}
 
 		return false;
-	}
-
-	/**
-	 *
-	 */
-	public void activate() {
-		nodeEngager.activate();
-	}
-
-	/**
-	 *
-	 */
-	public void fire() {
-		nodeEngager.fire();
 	}
 
 	/**

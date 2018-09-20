@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.core.global.components.node.NodeEngagerVisitor;
 import de.core.neat.genes.connection.ConnectionGene;
 import de.core.neat.genes.node.NodeGene;
 import de.core.neat.genes.node.NodeGeneType;
@@ -41,8 +42,7 @@ public class GenomeFeeder {
 		processInputs(inputValues, inputNodes);
 
 		// Engage bias
-		genome.biasNode.activate();
-		genome.biasNode.fire();
+		genome.biasNode.accept(new NodeEngagerVisitor());
 
 		// Engage hidden nodes
 		processHiddenNodes(hiddenNodes);
@@ -82,8 +82,7 @@ public class GenomeFeeder {
 
 		// Engage inputs
 		for (NodeGene node : inputNodes) {
-			node.activate();
-			node.fire();
+			node.accept(new NodeEngagerVisitor());
 		}
 	}
 
@@ -126,8 +125,7 @@ public class GenomeFeeder {
 				// Set payload from incoming connections and engage the node
 				if (dataIsComplete) {
 					node.inputSum = inputSum;
-					node.activate();
-					node.fire();
+					node.accept(new NodeEngagerVisitor());
 					iter.remove();
 				}
 			}
@@ -154,7 +152,7 @@ public class GenomeFeeder {
 
 			node.inputSum = inputSum;
 			node.outputValue = inputSum;
-			node.nodeEngager.activate();
+			node.accept(new NodeEngagerVisitor());
 		}
 	}
 

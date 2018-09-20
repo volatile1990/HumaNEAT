@@ -1,6 +1,6 @@
 package de.core.neat.genes.connection;
 
-import de.core.global.components.Connection;
+import de.core.global.components.connection.Connection;
 import de.core.neat.genes.node.NodeGene;
 
 /**
