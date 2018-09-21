@@ -1,8 +1,8 @@
-package de.test;
+package de.humaneat.test;
 
-import de.core.neat.ArtificialIntelligence;
-import de.core.neat.genes.connection.ConnectionGene;
-import de.core.neat.genome.Genome;
+import de.humaneat.core.neat.ArtificialIntelligence;
+import de.humaneat.core.neat.genes.connection.ConnectionGene;
+import de.humaneat.core.neat.genome.Genome;
 
 public class TestAI extends ArtificialIntelligence {
 
@@ -21,7 +21,7 @@ public class TestAI extends ArtificialIntelligence {
 	@Override
 	public double calculateFitness() {
 		double weightSum = 0f;
-		for (ConnectionGene connection : this.brain.connections.values()) {
+		for (ConnectionGene connection : brain.connections.values()) {
 			if (connection.enabled) {
 				weightSum += Math.abs(connection.weight);
 			}

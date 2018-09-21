@@ -1,10 +1,10 @@
-package de.test;
+package de.humaneat.test;
 
-import de.core.neat.genes.connection.ConnectionGene;
-import de.core.neat.genes.node.NodeGene;
-import de.core.neat.genes.node.NodeGeneType;
-import de.core.neat.genome.Genome;
-import de.core.neat.genome.GenomeHatchery;
+import de.humaneat.core.neat.genes.connection.ConnectionGene;
+import de.humaneat.core.neat.genes.node.NodeGene;
+import de.humaneat.core.neat.genes.node.NodeGeneType;
+import de.humaneat.core.neat.genome.Genome;
+import de.humaneat.core.neat.genome.GenomeHatchery;
 
 public class CrossoverTest {
 	public static void main(String[] args) {

@@ -1,12 +1,12 @@
-package de.test;
+package de.humaneat.test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.core.neat.ArtificialIntelligence;
-import de.core.neat.genes.connection.ConnectionGene;
-import de.core.neat.genome.Genome;
-import de.core.neat.population.Population;
+import de.humaneat.core.neat.ArtificialIntelligence;
+import de.humaneat.core.neat.genes.connection.ConnectionGene;
+import de.humaneat.core.neat.genome.Genome;
+import de.humaneat.core.neat.population.Population;
 
 /**
  * @author MannoR

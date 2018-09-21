@@ -1,4 +1,4 @@
-package de;
+package de.humaneat;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,10 +11,10 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import de.core.neat.genes.connection.ConnectionGene;
-import de.core.neat.genes.node.NodeGene;
-import de.core.neat.genes.node.NodeGeneType;
-import de.core.neat.genome.Genome;
+import de.humaneat.core.neat.genes.connection.ConnectionGene;
+import de.humaneat.core.neat.genes.node.NodeGene;
+import de.humaneat.core.neat.genes.node.NodeGeneType;
+import de.humaneat.core.neat.genome.Genome;
 
 public class GenomePrinter {
 
