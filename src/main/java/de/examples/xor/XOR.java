@@ -19,7 +19,7 @@ public class XOR {
 	 */
 	public static void main(String[] args) {
 
-		double XOR_INPUT[][] = { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
+		double XOR_INPUT[][] = { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
 
 		int populationSize = 1000;
 		int generations = 400;

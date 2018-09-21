@@ -104,15 +104,4 @@ public class Population {
 		++currentGeneration;
 	}
 
-	/**
-	 * @return
-	 */
-	public double getAverageFitnessSum() {
-
-		double averageSum = 0;
-		for (Species species : this.species) {
-			averageSum += species.averageFitness;
-		}
-		return averageSum;
-	}
 }

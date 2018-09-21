@@ -12,4 +12,5 @@ public interface NodeVisitor {
 	void visit(NodeGene node);
 
 	void visit(LSTMNodeGene node);
+
 }

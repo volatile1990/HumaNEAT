@@ -59,8 +59,6 @@ public class PopulationCore {
 	 */
 	public void cullSpecies() {
 
-		double averageSum = population.getAverageFitnessSum();
-
 		Iterator<Species> iterator = population.species.iterator();
 		while (iterator.hasNext()) {
 
@@ -78,7 +76,7 @@ public class PopulationCore {
 			}
 
 			// Remove species that won't be allowed to bring one child into the next generation
-			if (species.averageFitness / averageSum * population.populationSize < 1) {
+			if (allowedChildrenForNextGeneration(species) < 1) {
 				iterator.remove();
 			}
 
@@ -128,12 +126,10 @@ public class PopulationCore {
 		// Put best genomes from each species into next generation
 		populateNextGenerationGenomes();
 
-		double averageFitnessSum = population.getAverageFitnessSum();
-
 		boolean populatingDone = false;
 		for (Species species : population.species) {
 
-			int allowedChildrenCount = (int) (species.averageFitness / averageFitnessSum * population.populationSize);
+			int allowedChildrenCount = allowedChildrenForNextGeneration(species);
 //			System.out.println("CHILDREN ALLOWED : " + allowedChildrenCount + " ## AVG SPECIES FITNESS: " + species.averageFitness + " ## AVG FITNES SUM : " + averageFitnessSum);
 
 			for (int i = 0; i < allowedChildrenCount; ++i) {
@@ -172,6 +168,27 @@ public class PopulationCore {
 				population.nextGenerationAis.add(species.members.get(0));
 			}
 		}
+	}
+
+	/**
+	 * @return how many children this species is allowed to produce for the next generation
+	 */
+	public int allowedChildrenForNextGeneration(Species species) {
+
+		double averageFitnessSum = getAverageFitnessSum();
+		return (int) (species.averageFitness / averageFitnessSum * population.populationSize);
+	}
+
+	/**
+	 * @return the sum of the average fitness of all species
+	 */
+	private double getAverageFitnessSum() {
+
+		double averageSum = 0;
+		for (Species species : population.species) {
+			averageSum += species.averageFitness;
+		}
+		return averageSum;
 	}
 
 }
