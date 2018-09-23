@@ -1,11 +1,11 @@
 package de.humaneat.test;
 
-import de.humaneat.GenomePrinter;
 import de.humaneat.core.neat.genes.Counter;
 import de.humaneat.core.neat.genes.connection.ConnectionGene;
 import de.humaneat.core.neat.genes.node.NodeGene;
 import de.humaneat.core.neat.genes.node.NodeGeneType;
 import de.humaneat.core.neat.genome.Genome;
+import de.humaneat.graphics.GenomePrinter;
 
 /**
  * @author MannoR

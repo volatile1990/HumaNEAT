@@ -3,11 +3,11 @@ package de.humaneat.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.humaneat.GenomePrinter;
 import de.humaneat.core.neat.ArtificialIntelligence;
 import de.humaneat.core.neat.genes.Counter;
 import de.humaneat.core.neat.genome.Genome;
 import de.humaneat.core.neat.population.Population;
+import de.humaneat.graphics.GenomePrinter;
 
 /**
  * @author MannoR
