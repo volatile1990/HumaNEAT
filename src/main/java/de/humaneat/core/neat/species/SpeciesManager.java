@@ -3,8 +3,8 @@ package de.humaneat.core.neat.species;
 import java.util.Collections;
 import java.util.Random;
 
-import de.humaneat.core.global.genome.GenomeFitnessComparator;
 import de.humaneat.core.neat.ArtificialIntelligence;
+import de.humaneat.core.neat.genome.GenomeFitnessComparator;
 
 /**
  * @author MannoR

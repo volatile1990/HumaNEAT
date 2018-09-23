@@ -1,4 +1,4 @@
-package de.humaneat.core.global.genome;
+package de.humaneat.core.neat.genome;
 
 import java.util.Comparator;
 
