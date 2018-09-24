@@ -1,16 +1,16 @@
-package de.humaneat.core.neat;
+package de.humaneat.core.lstm;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.humaneat.core.global.DefaultArtificialIntelligence;
-import de.humaneat.core.neat.genome.Genome;
+import de.humaneat.core.lstm.genome.LstmGenome;
 
 /**
- * @author MannoR
+ * @author muellermak
  *
  */
-public abstract class ArtificialIntelligence implements DefaultArtificialIntelligence {
+public abstract class ArtificialLstmIntelligence implements DefaultArtificialIntelligence {
 
 	public int anzInputs;
 	public int anzOutputs;
@@ -20,13 +20,13 @@ public abstract class ArtificialIntelligence implements DefaultArtificialIntelli
 
 	public int anzAccumulatedDatas;
 
-	public Genome brain;
+	public LstmGenome brain;
 
 	/**
 	 * @param anzInputs
 	 * @param anzOutputs
 	 */
-	public ArtificialIntelligence(int anzInputs, int anzOutputs) {
+	public ArtificialLstmIntelligence(int anzInputs, int anzOutputs) {
 
 		anzAccumulatedDatas = 0;
 
@@ -36,13 +36,13 @@ public abstract class ArtificialIntelligence implements DefaultArtificialIntelli
 		inputs = new ArrayList<>();
 		outputs = new ArrayList<>();
 
-		brain = new Genome(anzInputs, anzOutputs);
+		brain = new LstmGenome(anzInputs, anzOutputs);
 	}
 
 	/**
 	 * @param brain
 	 */
-	public ArtificialIntelligence(Genome brain) {
+	public ArtificialLstmIntelligence(LstmGenome brain) {
 
 		this(brain.anzInputs, brain.anzOutputs);
 		this.brain = brain;
@@ -94,5 +94,5 @@ public abstract class ArtificialIntelligence implements DefaultArtificialIntelli
 	/**
 	 * @return a copy of itself
 	 */
-	public abstract ArtificialIntelligence getNewInstance(Genome genome);
+	public abstract ArtificialLstmIntelligence getNewInstance(LstmGenome genome);
 }

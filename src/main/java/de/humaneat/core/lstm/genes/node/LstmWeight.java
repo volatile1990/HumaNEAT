@@ -1,10 +1,10 @@
-package de.humaneat.core.lstm.genes;
+package de.humaneat.core.lstm.genes.node;
 
 /**
  * @author MannoR
  *         This class contains all weights for a LSTM cell
  */
-public class LSTMWeight {
+public class LstmWeight {
 
 	/**
 	 * There are four lstm weights
@@ -22,7 +22,7 @@ public class LSTMWeight {
 	 * @param selectGateWeight
 	 * @param outputGateWeight
 	 */
-	public LSTMWeight(Weights inputWeights, Weights recurrentWeights) {
+	public LstmWeight(Weights inputWeights, Weights recurrentWeights) {
 		this.inputWeights = inputWeights;
 		this.recurrentWeights = recurrentWeights;
 	}

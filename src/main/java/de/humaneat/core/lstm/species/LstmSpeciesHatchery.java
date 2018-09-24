@@ -1,4 +1,4 @@
-package de.humaneat.core.neat.species;
+package de.humaneat.core.lstm.species;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -7,22 +7,22 @@ import java.util.Map;
 import java.util.Random;
 
 import de.humaneat.core.global.components.connection.ConnectionHistory;
-import de.humaneat.core.neat.ArtificialIntelligence;
+import de.humaneat.core.lstm.ArtificialLstmIntelligence;
+import de.humaneat.core.lstm.genome.LstmGenome;
 import de.humaneat.core.neat.Property;
-import de.humaneat.core.neat.genome.Genome;
 
 /**
- * @author MannoR
+ * @author muellermak
  *
  */
-public class SpeciesHatchery {
+public class LstmSpeciesHatchery {
 
-	private Species species;
+	private LstmSpecies species;
 
 	/**
 	 * @param species
 	 */
-	public SpeciesHatchery(Species species) {
+	public LstmSpeciesHatchery(LstmSpecies species) {
 		this.species = species;
 	}
 
@@ -38,12 +38,12 @@ public class SpeciesHatchery {
 		double keepPercentage = 1 - Property.REMOVE_BAD_SPECIES_MEMBERS_PERCENT.getValue();
 
 		int removeEndIndex = (int) Math.floor(species.members.size() * keepPercentage);
-		List<ArtificialIntelligence> toRemove = new ArrayList<>();
+		List<ArtificialLstmIntelligence> toRemove = new ArrayList<>();
 		for (int i = species.members.size() - 1; i >= removeEndIndex; --i) {
 			toRemove.add(species.members.get(i));
 		}
 
-		for (ArtificialIntelligence ai : toRemove) {
+		for (ArtificialLstmIntelligence ai : toRemove) {
 			species.members.remove(ai);
 		}
 	}
@@ -52,20 +52,20 @@ public class SpeciesHatchery {
 	 * @param innovationHistory
 	 * @return
 	 */
-	public Genome makeBaby(Map<Integer, List<ConnectionHistory>> innovationHistory) {
+	public LstmGenome makeBaby(Map<Integer, List<ConnectionHistory>> innovationHistory) {
 
 		Random random = new SecureRandom();
 
 		// 25% chance to directly add the selected player without crossover
-		Genome baby = null;
+		LstmGenome baby = null;
 		if (random.nextFloat() <= Property.ADD_GENOME_WITHOUT_CROSSOVER_RATE.getValue()) {
 			baby = selectGenomeForReproduction().copy();
 			baby.getMutator().mutate(innovationHistory);
 		} else {
 
 			// Get random parents
-			Genome mum = selectGenomeForReproduction();
-			Genome dad = selectGenomeForReproduction();
+			LstmGenome mum = selectGenomeForReproduction();
+			LstmGenome dad = selectGenomeForReproduction();
 
 			// Fitter parent gotta do the work
 			if (dad.fitness > mum.fitness) {
@@ -84,10 +84,10 @@ public class SpeciesHatchery {
 	/**
 	 * @return
 	 */
-	public Genome selectGenomeForReproduction() {
+	public LstmGenome selectGenomeForReproduction() {
 
 		double fitnessSum = 0;
-		for (ArtificialIntelligence ai : species.members) {
+		for (ArtificialLstmIntelligence ai : species.members) {
 			fitnessSum += ai.brain.fitness;
 		}
 
@@ -95,7 +95,7 @@ public class SpeciesHatchery {
 		double randomFitness = random.nextFloat() * fitnessSum;
 
 		double countingSum = 0;
-		for (ArtificialIntelligence ai : species.members) {
+		for (ArtificialLstmIntelligence ai : species.members) {
 
 			countingSum += ai.brain.fitness;
 			if (countingSum > randomFitness) {

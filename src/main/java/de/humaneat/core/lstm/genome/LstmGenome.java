@@ -1,4 +1,4 @@
-package de.humaneat.core.neat.genome;
+package de.humaneat.core.lstm.genome;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,43 +8,42 @@ import java.util.Map;
 import de.humaneat.core.global.Random;
 import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.global.genome.DefaultGenome;
+import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
+import de.humaneat.core.lstm.genes.node.LstmNodeGene;
 import de.humaneat.core.neat.genes.Counter;
-import de.humaneat.core.neat.genes.connection.ConnectionGene;
-import de.humaneat.core.neat.genes.node.NodeGene;
 
 /**
  * @author muellermak
  *
- *         A Genome is representating a whole neural network
  */
-public class Genome extends DefaultGenome {
+public class LstmGenome extends DefaultGenome {
 
 	/**
 	 * Neural Network components
 	 */
-	public Map<Integer, NodeGene> nodes;
-	public Map<Integer, ConnectionGene> connections;
-	public NodeGene biasNode;
+	public Map<Integer, LstmNodeGene> nodes;
+	public Map<Integer, LstmConnectionGene> connections;
+	public LstmNodeGene biasNode;
 
 	/**
 	 * The linked network for feeding forward
 	 */
-	public List<NodeGene> network;
+	public List<LstmNodeGene> network;
 
 	/**
 	 * Genome related operators
 	 */
-	private GenomeManager manager;
-	private GenomeLinker linker;
-	private GenomeValidator validator;
-	private GenomeFeeder feeder;
-	private GenomeMutator mutator;
-	private GenomeHatchery hatchery;
+	private LstmGenomeManager manager;
+	private LstmGenomeLinker linker;
+	private LstmGenomeValidator validator;
+	private LstmGenomeFeeder feeder;
+	private LstmGenomeMutator mutator;
+	private LstmGenomeHatchery hatchery;
 
 	/**
 	 *
 	 */
-	public Genome() {
+	public LstmGenome() {
 
 		nodes = new HashMap<>();
 		connections = new HashMap<>();
@@ -55,19 +54,19 @@ public class Genome extends DefaultGenome {
 		fitness = 0;
 		unadjustedFitness = 0;
 
-		manager = new GenomeManager(this);
-		linker = new GenomeLinker(this);
-		validator = new GenomeValidator(this);
-		feeder = new GenomeFeeder(this);
-		mutator = new GenomeMutator(this);
-		hatchery = new GenomeHatchery(this);
+		manager = new LstmGenomeManager(this);
+		linker = new LstmGenomeLinker(this);
+		validator = new LstmGenomeValidator(this);
+		feeder = new LstmGenomeFeeder(this);
+		mutator = new LstmGenomeMutator(this);
+		hatchery = new LstmGenomeHatchery(this);
 	}
 
 	/**
 	 * @param inputs
 	 * @param output
 	 */
-	public Genome(int anzInputs, int anzOutputs) {
+	public LstmGenome(int anzInputs, int anzOutputs) {
 
 		this();
 
@@ -80,25 +79,41 @@ public class Genome extends DefaultGenome {
 	/**
 	 * @param gene
 	 */
-	public void addNodeGene(NodeGene node) {
+	public void addLstmNodeGene(LstmNodeGene node) {
 		nodes.put(node.innovationNumber, node);
 	}
 
 	/**
 	 * @param connection
 	 */
-	public void addConnectionGene(ConnectionGene connection) {
+	public void addLstmConnectionGene(LstmConnectionGene connection) {
 		connections.put(connection.innvoationNumber, connection);
+	}
+
+	/**
+	 * @param type
+	 * @return
+	 */
+	public List<LstmNodeGene> getNodesByType(NodeGeneType type) {
+
+		List<LstmNodeGene> nodes = new ArrayList<>();
+		for (LstmNodeGene node : this.nodes.values()) {
+			if (node.type == type && node != biasNode) {
+				nodes.add(node);
+			}
+		}
+
+		return nodes;
 	}
 
 	/**
 	 * @return
 	 */
-	public NodeGene getRandomNode() {
+	public LstmNodeGene getRandomNode() {
 
-		List<NodeGene> valuesList = new ArrayList<>(nodes.values());
+		List<LstmNodeGene> valuesList = new ArrayList<>(nodes.values());
 
-		NodeGene node = Random.random(valuesList);
+		LstmNodeGene node = Random.random(valuesList);
 		while (node == biasNode) {
 			node = Random.random(valuesList);
 		}
@@ -113,7 +128,7 @@ public class Genome extends DefaultGenome {
 	 */
 	public boolean containsConnection(int fromId, int toId) {
 
-		for (ConnectionGene connection : connections.values()) {
+		for (LstmConnectionGene connection : connections.values()) {
 			if (connection.from.innovationNumber == fromId && connection.to.innovationNumber == toId) {
 				return true;
 			}
@@ -122,35 +137,19 @@ public class Genome extends DefaultGenome {
 	}
 
 	/**
-	 * @param type
-	 * @return
-	 */
-	public List<NodeGene> getNodesByType(NodeGeneType type) {
-
-		List<NodeGene> nodes = new ArrayList<>();
-		for (NodeGene node : this.nodes.values()) {
-			if (node.type == type && node != biasNode) {
-				nodes.add(node);
-			}
-		}
-
-		return nodes;
-	}
-
-	/**
 	 * @return a copy of the genome
 	 */
-	public Genome copy() {
+	public LstmGenome copy() {
 
 		// Create new genome
-		Genome genome = new Genome();
+		LstmGenome genome = new LstmGenome();
 		genome.anzInputs = anzInputs;
 		genome.anzOutputs = anzOutputs;
 
 		// Copy all nodes
-		for (NodeGene node : nodes.values()) {
+		for (LstmNodeGene node : nodes.values()) {
 
-			NodeGene copy = node.copy();
+			LstmNodeGene copy = node.copy();
 			genome.nodes.put(copy.innovationNumber, copy);
 
 			if (copy.type == NodeGeneType.BIAS) {
@@ -159,13 +158,13 @@ public class Genome extends DefaultGenome {
 		}
 
 		// Copy all connection
-		for (ConnectionGene connection : connections.values()) {
+		for (LstmConnectionGene connection : connections.values()) {
 
-			ConnectionGene copy = connection.copy();
+			LstmConnectionGene copy = connection.copy();
 
 			// Use the already copied nodes as from/to
-			NodeGene from = genome.nodes.get(connection.from.innovationNumber);
-			NodeGene to = genome.nodes.get(connection.to.innovationNumber);
+			LstmNodeGene from = genome.nodes.get(connection.from.innovationNumber);
+			LstmNodeGene to = genome.nodes.get(connection.to.innovationNumber);
 			copy.from = from;
 			copy.to = to;
 
@@ -182,43 +181,42 @@ public class Genome extends DefaultGenome {
 	/**
 	 * @return the manager
 	 */
-	public GenomeManager getManager() {
+	public LstmGenomeManager getManager() {
 		return manager;
 	}
 
 	/**
 	 * @return the linker
 	 */
-	public GenomeLinker getLinker() {
+	public LstmGenomeLinker getLinker() {
 		return linker;
 	}
 
 	/**
 	 * @return the validator
 	 */
-	public GenomeValidator getValidator() {
+	public LstmGenomeValidator getValidator() {
 		return validator;
 	}
 
 	/**
 	 * @return the feeder
 	 */
-	public GenomeFeeder getFeeder() {
+	public LstmGenomeFeeder getFeeder() {
 		return feeder;
 	}
 
 	/**
 	 * @return
 	 */
-	public GenomeMutator getMutator() {
+	public LstmGenomeMutator getMutator() {
 		return mutator;
 	}
 
 	/**
 	 * @return
 	 */
-	public GenomeHatchery getHatchery() {
+	public LstmGenomeHatchery getHatchery() {
 		return hatchery;
 	}
-
 }

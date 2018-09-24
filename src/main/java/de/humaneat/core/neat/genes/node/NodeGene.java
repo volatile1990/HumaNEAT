@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.humaneat.core.global.components.node.Node;
+import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.global.components.node.NodeVisitor;
 import de.humaneat.core.neat.genes.connection.ConnectionGene;
 

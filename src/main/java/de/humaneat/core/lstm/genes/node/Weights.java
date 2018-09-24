@@ -1,4 +1,4 @@
-package de.humaneat.core.lstm.genes;
+package de.humaneat.core.lstm.genes.node;
 
 /**
  * @author MannoR

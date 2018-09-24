@@ -1,4 +1,4 @@
-package de.humaneat.core.neat.genome;
+package de.humaneat.core.lstm.genome;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,40 +7,32 @@ import java.util.Map;
 
 import de.humaneat.core.global.Random;
 import de.humaneat.core.global.components.node.NodeGeneType;
+import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
+import de.humaneat.core.lstm.genes.node.LstmNodeGene;
 import de.humaneat.core.neat.Property;
-import de.humaneat.core.neat.genes.connection.ConnectionGene;
-import de.humaneat.core.neat.genes.node.NodeGene;
 
-/**
- * @author MannoR
- *
- *         FSK 18: Produces new little genome babies
- */
-public class GenomeHatchery {
+public class LstmGenomeHatchery {
 
-	private Genome genome;
+	private LstmGenome genome;
 
 	/**
-	 * 
+	 * @param genome
 	 */
-	public GenomeHatchery(Genome genome) {
+	public LstmGenomeHatchery(LstmGenome genome) {
 		this.genome = genome;
 	}
 
 	/**
-	 * This method is producing a crossover from two genomes to generate a new one.
-	 *
-	 * @param fitParent   more fit parent
-	 * @param unfitParent less fit parent
+	 * @param unfitParent
 	 * @return
 	 */
-	public Genome crossover(Genome unfitParent) {
+	public LstmGenome crossover(LstmGenome unfitParent) {
 
 		if (genome.fitness < unfitParent.fitness) {
 			throw new IllegalArgumentException("The first given parent for a crossover must have a higher fitness than the second one");
 		}
 
-		Genome childGenome = new Genome(genome.anzInputs, genome.anzOutputs);
+		LstmGenome childGenome = new LstmGenome(genome.anzInputs, genome.anzOutputs);
 
 		childGenome.nodes.clear();
 		childGenome.connections.clear();
@@ -51,7 +43,7 @@ public class GenomeHatchery {
 		Map<Integer, Boolean> childConnectionEnabled = crossoverConnections(genome, unfitParent, childGenome);
 
 		// Clone all inherited connections to connect the childs new nodes
-		List<ConnectionGene> newConnetions = cloneConnections(childGenome, childConnectionEnabled);
+		List<LstmConnectionGene> newConnetions = cloneConnections(childGenome, childConnectionEnabled);
 
 		// Remove parents template connections after its own were created
 		childGenome.connections.clear();
@@ -71,18 +63,18 @@ public class GenomeHatchery {
 	 * @param childGenome
 	 * @param newConnetions
 	 */
-	private void addNewConnections(Genome childGenome, List<ConnectionGene> newConnetions) {
+	private void addNewConnections(LstmGenome childGenome, List<LstmConnectionGene> newConnetions) {
 
-		for (ConnectionGene newConnection : newConnetions) {
+		for (LstmConnectionGene newConnection : newConnetions) {
 
-			NodeGene from = newConnection.from;
-			NodeGene to = newConnection.to;
+			LstmNodeGene from = newConnection.from;
+			LstmNodeGene to = newConnection.to;
 
 			if (childGenome.getValidator().connectionExists(from, to)) {
 				continue;
 			}
 
-			childGenome.addConnectionGene(newConnection);
+			childGenome.addLstmConnectionGene(newConnection);
 		}
 	}
 
@@ -93,16 +85,16 @@ public class GenomeHatchery {
 	 * @param childConnectionEnabled
 	 * @return
 	 */
-	private List<ConnectionGene> cloneConnections(Genome childGenome, Map<Integer, Boolean> childConnectionEnabled) {
+	private List<LstmConnectionGene> cloneConnections(LstmGenome childGenome, Map<Integer, Boolean> childConnectionEnabled) {
 
-		List<ConnectionGene> newConnetions = new ArrayList<>();
-		for (ConnectionGene connection : childGenome.connections.values()) {
+		List<LstmConnectionGene> newConnetions = new ArrayList<>();
+		for (LstmConnectionGene connection : childGenome.connections.values()) {
 
-			NodeGene from = childGenome.nodes.get(connection.from.innovationNumber);
-			NodeGene to = childGenome.nodes.get(connection.to.innovationNumber);
+			LstmNodeGene from = childGenome.nodes.get(connection.from.innovationNumber);
+			LstmNodeGene to = childGenome.nodes.get(connection.to.innovationNumber);
 			Boolean enabled = childConnectionEnabled.get(connection.innvoationNumber);
 
-			ConnectionGene newConnection = new ConnectionGene(from, to, connection.weight, enabled, connection.innvoationNumber);
+			LstmConnectionGene newConnection = new LstmConnectionGene(from, to, enabled, connection.innvoationNumber);
 			newConnetions.add(newConnection);
 		}
 
@@ -119,14 +111,14 @@ public class GenomeHatchery {
 	 * @param childGenome
 	 * @return
 	 */
-	private Map<Integer, Boolean> crossoverConnections(Genome fitParent, Genome unfitParent, Genome childGenome) {
+	private Map<Integer, Boolean> crossoverConnections(LstmGenome fitParent, LstmGenome unfitParent, LstmGenome childGenome) {
 
 		Map<Integer, Boolean> childConnectionEnabled = new HashMap<>();
-		for (ConnectionGene fitParentConnection : fitParent.connections.values()) {
+		for (LstmConnectionGene fitParentConnection : fitParent.connections.values()) {
 
 			// Check if the both parents have the connection with same from & to node innovationNumbers
 			boolean matchingGene = false;
-			ConnectionGene unfitConnection = unfitParent.connections.get(fitParentConnection.innvoationNumber);
+			LstmConnectionGene unfitConnection = unfitParent.connections.get(fitParentConnection.innvoationNumber);
 			if (unfitConnection != null && fitParent.containsConnection(unfitConnection.from.innovationNumber, unfitConnection.to.innovationNumber)) {
 				matchingGene = true;
 			}
@@ -135,8 +127,8 @@ public class GenomeHatchery {
 			if (matchingGene) {
 
 				// Randomly take connection from first or second parent
-				ConnectionGene sourceConnection = null;
-				ConnectionGene unfitParentConnection = unfitConnection;
+				LstmConnectionGene sourceConnection = null;
+				LstmConnectionGene unfitParentConnection = unfitConnection;
 				if (Random.random.nextBoolean()) {
 					sourceConnection = fitParentConnection;
 				} else {
@@ -153,14 +145,14 @@ public class GenomeHatchery {
 
 				// Temporary add connection
 				childConnectionEnabled.put(sourceConnection.innvoationNumber, enabled);
-				childGenome.addConnectionGene(sourceConnection);
+				childGenome.addLstmConnectionGene(sourceConnection);
 
 			} else {
 
-				// Disjoint/Excess ConnectionGene (Not present in unfit parent) will always be
+				// Disjoint/Excess LstmConnectionGene (Not present in unfit parent) will always be
 				// taken from the more fit parent
 				childConnectionEnabled.put(fitParentConnection.innvoationNumber, fitParentConnection.enabled);
-				childGenome.addConnectionGene(fitParentConnection);
+				childGenome.addLstmConnectionGene(fitParentConnection);
 			}
 		}
 
@@ -173,13 +165,13 @@ public class GenomeHatchery {
 	 * @param fitParent
 	 * @param childGenome
 	 */
-	private void crossoverNodes(Genome fitParent, Genome childGenome) {
+	private void crossoverNodes(LstmGenome fitParent, LstmGenome childGenome) {
 
 		// Copy nodes from the most fit parent
-		for (NodeGene node : fitParent.nodes.values()) {
+		for (LstmNodeGene node : fitParent.nodes.values()) {
 
-			NodeGene copy = node.copy();
-			childGenome.addNodeGene(copy);
+			LstmNodeGene copy = node.copy();
+			childGenome.addLstmNodeGene(copy);
 
 			// Set bias
 			if (node.type == NodeGeneType.BIAS) {

@@ -11,9 +11,9 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.neat.genes.connection.ConnectionGene;
 import de.humaneat.core.neat.genes.node.NodeGene;
-import de.humaneat.core.neat.genes.node.NodeGeneType;
 import de.humaneat.core.neat.genome.Genome;
 
 public class GenomePrinter {

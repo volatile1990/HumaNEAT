@@ -9,6 +9,9 @@ import de.humaneat.core.neat.genes.node.NodeGene;
  */
 public class ConnectionGene extends Connection {
 
+	public NodeGene from;
+	public NodeGene to;
+
 	public double weight;
 
 	/**
@@ -19,8 +22,11 @@ public class ConnectionGene extends Connection {
 	 * @param innovationNumber
 	 * @param circular2
 	 */
-	public ConnectionGene(NodeGene in, NodeGene out, double weight, boolean enabled, int innovationNumber) {
-		super(in, out, enabled, innovationNumber);
+	public ConnectionGene(NodeGene from, NodeGene to, double weight, boolean enabled, int innovationNumber) {
+		super(enabled, innovationNumber);
+
+		this.from = from;
+		this.to = to;
 		this.weight = weight;
 	}
 

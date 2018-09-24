@@ -1,26 +1,26 @@
-package de.humaneat.core.neat.population;
+package de.humaneat.core.lstm.population;
 
 import java.util.Collections;
 import java.util.Iterator;
 
-import de.humaneat.core.neat.ArtificialIntelligence;
+import de.humaneat.core.lstm.ArtificialLstmIntelligence;
+import de.humaneat.core.lstm.genome.LstmGenomeSpeciation;
+import de.humaneat.core.lstm.species.LstmSpecies;
+import de.humaneat.core.lstm.species.LstmSpeciesFitnessComparator;
 import de.humaneat.core.neat.Property;
-import de.humaneat.core.neat.genome.GenomeSpeciation;
-import de.humaneat.core.neat.species.Species;
-import de.humaneat.core.neat.species.SpeciesFitnessComparator;
 
 /**
  * @author muellermak
  *
  */
-public class PopulationCore {
+public class LstmPopulationCore {
 
-	private Population population;
+	private LstmPopulation population;
 
 	/**
 	 *
 	 */
-	public PopulationCore(Population population) {
+	public LstmPopulationCore(LstmPopulation population) {
 		this.population = population;
 	}
 
@@ -30,16 +30,16 @@ public class PopulationCore {
 	public void assignGenomeToSpecies() {
 
 		// Clear all species before filling again
-		for (Species species : population.species) {
+		for (LstmSpecies species : population.species) {
 			species.members.clear();
 		}
 
-		for (ArtificialIntelligence ai : population.artificialIntelligences) {
+		for (ArtificialLstmIntelligence ai : population.artificialIntelligences) {
 
 			boolean foundSpecies = false;
-			for (Species species : population.species) {
+			for (LstmSpecies species : population.species) {
 
-				GenomeSpeciation speciation = new GenomeSpeciation(ai.brain, species.champion.brain);
+				LstmGenomeSpeciation speciation = new LstmGenomeSpeciation(ai.brain, species.champion.brain);
 				if (speciation.compatibilityDistance(Property.C1.getValue(), Property.C2.getValue(), Property.C3.getValue()) < Property.DT.getValue()) {
 					species.members.add(ai);
 					foundSpecies = true;
@@ -49,7 +49,7 @@ public class PopulationCore {
 
 			// Create new species with current genome as mascot
 			if (!foundSpecies) {
-				population.species.add(new Species(ai));
+				population.species.add(new LstmSpecies(ai));
 			}
 		}
 	}
@@ -59,10 +59,10 @@ public class PopulationCore {
 	 */
 	public void cullSpecies() {
 
-		Iterator<Species> iterator = population.species.iterator();
+		Iterator<LstmSpecies> iterator = population.species.iterator();
 		while (iterator.hasNext()) {
 
-			Species species = iterator.next();
+			LstmSpecies species = iterator.next();
 
 			// Remove bottom half of each species
 			species.getHatchery().cull();
@@ -89,7 +89,7 @@ public class PopulationCore {
 	 */
 	public void calculateFitness() {
 
-		for (ArtificialIntelligence ai : population.artificialIntelligences) {
+		for (ArtificialLstmIntelligence ai : population.artificialIntelligences) {
 			double fitness = ai.calculateFitness();
 			ai.clearData();
 
@@ -108,14 +108,14 @@ public class PopulationCore {
 	public void sortSpecies() {
 
 		// Sort species members
-		for (Species species : population.species) {
+		for (LstmSpecies species : population.species) {
 			if (species.members.size() > 0) {
 				species.getManager().sortMembersByFitness();
 			}
 		}
 
 		// Sort species by fitness of its fittest member
-		Collections.sort(population.species, new SpeciesFitnessComparator());
+		Collections.sort(population.species, new LstmSpeciesFitnessComparator());
 	}
 
 	/**
@@ -127,12 +127,12 @@ public class PopulationCore {
 		populateNextGenerationGenomes();
 
 		boolean populatingDone = false;
-		for (Species species : population.species) {
+		for (LstmSpecies species : population.species) {
 
 			int allowedChildrenCount = allowedChildrenForNextGeneration(species);
 
 			for (int i = 0; i < allowedChildrenCount; ++i) {
-				ArtificialIntelligence ai = population.artificialIntelligences.get(0).getNewInstance(species.getHatchery().makeBaby(population.innovationHistory));
+				ArtificialLstmIntelligence ai = population.artificialIntelligences.get(0).getNewInstance(species.getHatchery().makeBaby(population.innovationHistory));
 				population.nextGenerationAis.add(ai);
 
 				if (population.nextGenerationAis.size() >= population.populationSize) {
@@ -147,11 +147,12 @@ public class PopulationCore {
 		}
 
 		while (population.nextGenerationAis.size() < population.populationSize) {
-			ArtificialIntelligence ai = population.artificialIntelligences.get(0).getNewInstance(population.species.get(0).getHatchery().makeBaby(population.innovationHistory));
+			ArtificialLstmIntelligence ai = population.artificialIntelligences.get(0)
+					.getNewInstance(population.species.get(0).getHatchery().makeBaby(population.innovationHistory));
 			population.nextGenerationAis.add(ai);
 		}
 
-		for (ArtificialIntelligence ai : population.nextGenerationAis) {
+		for (ArtificialLstmIntelligence ai : population.nextGenerationAis) {
 			ai.brain.getLinker().generateNetwork();
 		}
 
@@ -162,7 +163,7 @@ public class PopulationCore {
 	 */
 	public void populateNextGenerationGenomes() {
 
-		for (Species species : population.species) {
+		for (LstmSpecies species : population.species) {
 			if (species.members.size() > 5) {
 				population.nextGenerationAis.add(species.members.get(0));
 			}
@@ -172,7 +173,7 @@ public class PopulationCore {
 	/**
 	 * @return how many children this species is allowed to produce for the next generation
 	 */
-	public int allowedChildrenForNextGeneration(Species species) {
+	public int allowedChildrenForNextGeneration(LstmSpecies species) {
 
 		double averageFitnessSum = getAverageFitnessSum();
 		return (int) (species.averageFitness / averageFitnessSum * population.populationSize);
@@ -184,7 +185,7 @@ public class PopulationCore {
 	private double getAverageFitnessSum() {
 
 		double averageSum = 0;
-		for (Species species : population.species) {
+		for (LstmSpecies species : population.species) {
 			averageSum += species.averageFitness;
 		}
 		return averageSum;

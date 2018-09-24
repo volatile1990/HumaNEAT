@@ -17,10 +17,10 @@ import com.jme3.scene.shape.Cylinder;
 import com.jme3.scene.shape.Sphere;
 
 import de.humaneat.core.global.Random;
+import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.neat.genes.Counter;
 import de.humaneat.core.neat.genes.connection.ConnectionGene;
 import de.humaneat.core.neat.genes.node.NodeGene;
-import de.humaneat.core.neat.genes.node.NodeGeneType;
 import de.humaneat.core.neat.genome.Genome;
 
 /**

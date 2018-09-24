@@ -1,4 +1,4 @@
-package de.humaneat.core.neat.genes.node;
+package de.humaneat.core.global.components.node;
 
 /**
  * @author MannoR

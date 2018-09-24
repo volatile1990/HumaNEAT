@@ -1,24 +1,24 @@
-package de.humaneat.core.neat.genome;
+package de.humaneat.core.lstm.genome;
 
 import java.util.ArrayList;
 
 import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.global.genome.DefaultGenomeLinker;
-import de.humaneat.core.neat.genes.connection.ConnectionGene;
-import de.humaneat.core.neat.genes.node.NodeGene;
+import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
+import de.humaneat.core.lstm.genes.node.LstmNodeGene;
 
 /**
- * @author MannoR
+ * @author muellermak
  *
  */
-public class GenomeLinker implements DefaultGenomeLinker {
+public class LstmGenomeLinker implements DefaultGenomeLinker {
 
-	private Genome genome;
+	private LstmGenome genome;
 
 	/**
 	 * @param genome
 	 */
-	public GenomeLinker(Genome genome) {
+	public LstmGenomeLinker(LstmGenome genome) {
 		this.genome = genome;
 	}
 
@@ -28,11 +28,12 @@ public class GenomeLinker implements DefaultGenomeLinker {
 	 */
 	@Override
 	public void generateNetwork() {
+
 		connectNodes();
 		genome.network = new ArrayList<>();
 
 		for (NodeGeneType layerType : NodeGeneType.values()) {
-			for (NodeGene node : genome.nodes.values()) {
+			for (LstmNodeGene node : genome.nodes.values()) {
 
 				if (node.type != layerType) {
 					continue;
@@ -49,12 +50,12 @@ public class GenomeLinker implements DefaultGenomeLinker {
 	public void connectNodes() {
 
 		// Clear all output connections
-		for (NodeGene node : genome.nodes.values()) {
+		for (LstmNodeGene node : genome.nodes.values()) {
 			node.outputConnections.clear();
 		}
 
 		// Adds the connection as an outgoing connection to its from node
-		for (ConnectionGene connection : genome.connections.values()) {
+		for (LstmConnectionGene connection : genome.connections.values()) {
 			connection.from.outputConnections.add(connection);
 		}
 

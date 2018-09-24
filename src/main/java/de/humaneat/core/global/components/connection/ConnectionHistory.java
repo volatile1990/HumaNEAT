@@ -1,10 +1,7 @@
-package de.humaneat.core.neat.genes.connection;
+package de.humaneat.core.global.components.connection;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.humaneat.core.neat.genes.node.NodeGene;
-import de.humaneat.core.neat.genome.Genome;
 
 /**
  * @author muellermak
@@ -32,22 +29,22 @@ public class ConnectionHistory {
 
 	/**
 	 * @param genome
-	 * @param from
-	 * @param to
+	 * @param fromInnovationNumber
+	 * @param toInnovationNumber
 	 * @return
 	 */
-	public boolean matches(Genome genome, NodeGene from, NodeGene to) {
+	public boolean matches(List<Integer> innovationNumbers, int fromInnovationNumber, int toInnovationNumber) {
 
-		if (genome.connections.size() != innovationNumbers.size()) {
+		if (innovationNumbers.size() != this.innovationNumbers.size()) {
 			return false;
 		}
 
-		if (from.innovationNumber != fromNode || to.innovationNumber != toNode) {
+		if (fromInnovationNumber != fromNode || toInnovationNumber != toNode) {
 			return false;
 		}
 
-		for (ConnectionGene connection : genome.connections.values()) {
-			if (!innovationNumbers.contains(connection.innvoationNumber)) {
+		for (Integer innovationNumber : innovationNumbers) {
+			if (!this.innovationNumbers.contains(innovationNumber)) {
 				return false;
 			}
 		}

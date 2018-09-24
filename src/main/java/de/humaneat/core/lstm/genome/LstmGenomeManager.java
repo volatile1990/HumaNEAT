@@ -1,38 +1,32 @@
-package de.humaneat.core.neat.genome;
+package de.humaneat.core.lstm.genome;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import de.humaneat.core.global.Random;
 import de.humaneat.core.global.components.connection.ConnectionHistory;
 import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.global.genome.DefaultGenomeManager;
-import de.humaneat.core.neat.Property;
-import de.humaneat.core.neat.genes.connection.ConnectionGene;
-import de.humaneat.core.neat.genes.node.NodeGene;
+import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
+import de.humaneat.core.lstm.genes.node.LstmNodeGene;
 
 /**
- * @author MannoR
+ * @author muellermak
  *
  */
-public class GenomeManager implements DefaultGenomeManager {
+public class LstmGenomeManager implements DefaultGenomeManager {
 
-	public Genome genome;
+	private LstmGenome genome;
 
 	/**
 	 * @param genome
 	 */
-	public GenomeManager(Genome genome) {
+	public LstmGenomeManager(LstmGenome genome) {
 		this.genome = genome;
 	}
 
 	/**
-	 * Generates all inputs and outputs
-	 * Links all inputs to all outputs
-	 * Creates the bias nodes and links it to all generated outputs
-	 *
-	 * @param genome
+	 * 
 	 */
 	@Override
 	public void initialize() {
@@ -53,16 +47,16 @@ public class GenomeManager implements DefaultGenomeManager {
 	 * @param genome
 	 * @return
 	 */
-	private List<NodeGene> generateInputs() {
+	private List<LstmNodeGene> generateInputs() {
 
-		List<NodeGene> inputNodes = new ArrayList<>();
+		List<LstmNodeGene> inputNodes = new ArrayList<>();
 		for (int i = 0; i < genome.anzInputs; ++i) {
 
 			// Get next node innovation number
 			int nextInnovation = genome.nodeInnovation.getNext();
 
 			// Create input node
-			NodeGene input = new NodeGene(NodeGeneType.INPUT, nextInnovation);
+			LstmNodeGene input = new LstmNodeGene(NodeGeneType.INPUT, nextInnovation);
 
 			// Add input node
 			genome.nodes.put(nextInnovation, input);
@@ -78,16 +72,16 @@ public class GenomeManager implements DefaultGenomeManager {
 	 * @param genome
 	 * @return
 	 */
-	private List<NodeGene> generateOutputs() {
+	private List<LstmNodeGene> generateOutputs() {
 
-		List<NodeGene> outputNodes = new ArrayList<>();
+		List<LstmNodeGene> outputNodes = new ArrayList<>();
 		for (int i = 0; i < genome.anzOutputs; ++i) {
 
 			// Get next node innovatin number
 			int nextInnovation = genome.nodeInnovation.getNext();
 
 			// Create output node
-			NodeGene output = new NodeGene(NodeGeneType.OUTPUT, nextInnovation);
+			LstmNodeGene output = new LstmNodeGene(NodeGeneType.OUTPUT, nextInnovation);
 
 			// Add output node
 			genome.nodes.put(nextInnovation, output);
@@ -105,17 +99,13 @@ public class GenomeManager implements DefaultGenomeManager {
 	 * @param outputNodes
 	 * @return
 	 */
-	private void connectInputsAndOutputs(List<NodeGene> inputNodes, List<NodeGene> outputNodes) {
+	private void connectInputsAndOutputs(List<LstmNodeGene> inputNodes, List<LstmNodeGene> outputNodes) {
 
-		for (NodeGene inputNode : inputNodes) {
-			for (NodeGene outputNode : outputNodes) {
+		for (LstmNodeGene inputNode : inputNodes) {
+			for (LstmNodeGene outputNode : outputNodes) {
 
-				double max = Property.WEIGHT_RANDOM_RANGE.getValue();
-				double min = -1 * Property.WEIGHT_RANDOM_RANGE.getValue();
-				double weight = Random.random(min, max);
-
-				ConnectionGene connection = new ConnectionGene(inputNode, outputNode, weight, true, genome.connectionInnovation.getNext());
-				genome.addConnectionGene(connection);
+				LstmConnectionGene connection = new LstmConnectionGene(inputNode, outputNode, true, genome.connectionInnovation.getNext());
+				genome.addLstmConnectionGene(connection);
 			}
 		}
 	}
@@ -130,18 +120,14 @@ public class GenomeManager implements DefaultGenomeManager {
 
 		// Create and add bias node
 		int biasInnovation = genome.nodeInnovation.getNext();
-		genome.biasNode = new NodeGene(NodeGeneType.BIAS, biasInnovation);
+		genome.biasNode = new LstmNodeGene(NodeGeneType.BIAS, biasInnovation);
 		genome.nodes.put(biasInnovation, genome.biasNode);
 
 		// Connect the bias node to all outputs
-		for (NodeGene outputNode : genome.getNodesByType(NodeGeneType.OUTPUT)) {
+		for (LstmNodeGene outputNode : genome.getNodesByType(NodeGeneType.OUTPUT)) {
 
-			double max = Property.WEIGHT_RANDOM_RANGE.getValue();
-			double min = -1 * Property.WEIGHT_RANDOM_RANGE.getValue();
-			double weight = Random.random(min, max);
-
-			ConnectionGene connection = new ConnectionGene(genome.biasNode, outputNode, weight, true, genome.connectionInnovation.getNext());
-			genome.addConnectionGene(connection);
+			LstmConnectionGene connection = new LstmConnectionGene(genome.biasNode, outputNode, true, genome.connectionInnovation.getNext());
+			genome.addLstmConnectionGene(connection);
 		}
 	}
 
@@ -152,7 +138,7 @@ public class GenomeManager implements DefaultGenomeManager {
 	public void updateConnectionInnovation() {
 
 		int highestInnovation = 0;
-		for (ConnectionGene connection : genome.connections.values()) {
+		for (LstmConnectionGene connection : genome.connections.values()) {
 			if (connection.innvoationNumber > highestInnovation) {
 				highestInnovation = connection.innvoationNumber;
 			}
@@ -168,7 +154,7 @@ public class GenomeManager implements DefaultGenomeManager {
 	public void updateNodeInnovation() {
 
 		int highestInnovation = 0;
-		for (NodeGene node : genome.nodes.values()) {
+		for (LstmNodeGene node : genome.nodes.values()) {
 			if (node.innovationNumber > highestInnovation) {
 				highestInnovation = node.innovationNumber;
 			}
@@ -191,7 +177,6 @@ public class GenomeManager implements DefaultGenomeManager {
 		List<ConnectionHistory> possibleMatches = innovationHistory.get(genome.connections.size());
 		if (possibleMatches != null) {
 			for (int i = 0; i < possibleMatches.size(); ++i) {
-
 				if (possibleMatches.get(i).matches(getInnovationNumbers(), fromInnovationNumber, toInnovationNumber)) {
 					newConnection = false;
 					return possibleMatches.get(i).innovationNumber;
@@ -202,7 +187,7 @@ public class GenomeManager implements DefaultGenomeManager {
 		if (newConnection) {
 
 			ArrayList<Integer> innovationNumbers = new ArrayList<>();
-			for (ConnectionGene connection : genome.connections.values()) {
+			for (LstmConnectionGene connection : genome.connections.values()) {
 				innovationNumbers.add(connection.innvoationNumber);
 			}
 
@@ -226,7 +211,7 @@ public class GenomeManager implements DefaultGenomeManager {
 	private List<Integer> getInnovationNumbers() {
 
 		List<Integer> innovationNumbers = new ArrayList<>();
-		for (ConnectionGene connection : genome.connections.values()) {
+		for (LstmConnectionGene connection : genome.connections.values()) {
 			innovationNumbers.add(connection.innvoationNumber);
 		}
 

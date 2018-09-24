@@ -1,4 +1,4 @@
-package de.humaneat.core.neat.genome;
+package de.humaneat.core.lstm.genome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,32 +8,26 @@ import de.humaneat.core.global.Random;
 import de.humaneat.core.global.components.connection.ConnectionHistory;
 import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.global.genome.DefaultGenomeMutator;
+import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
+import de.humaneat.core.lstm.genes.node.LstmNodeGene;
 import de.humaneat.core.neat.Property;
-import de.humaneat.core.neat.genes.connection.ConnectionGene;
-import de.humaneat.core.neat.genes.node.NodeGene;
 
 /**
- * @author MannoR
+ * @author muellermak
  *
- *         Executes all available genome mutations
  */
-public class GenomeMutator implements DefaultGenomeMutator {
+public class LstmGenomeMutator implements DefaultGenomeMutator {
 
-	private Genome genome;
+	private LstmGenome genome;
 
 	/**
 	 * @param genome
 	 */
-	public GenomeMutator(Genome genome) {
+	public LstmGenomeMutator(LstmGenome genome) {
 		this.genome = genome;
 	}
 
 	/**
-	 * Adds a new node at a random position:
-	 * Old Structure: Node -> Connection -> Node
-	 * New Structure: Node -> Connection -> NewNode -> Connection -> Node
-	 *
-	 * @param random
 	 * @param innovationHistory
 	 */
 	@Override
@@ -44,34 +38,34 @@ public class GenomeMutator implements DefaultGenomeMutator {
 		genome.getManager().updateConnectionInnovation();
 
 		// Get a random connection to create a node in between
-		List<ConnectionGene> values = new ArrayList<>(genome.connections.values());
-		ConnectionGene connection = Random.random(values);
+		List<LstmConnectionGene> values = new ArrayList<>(genome.connections.values());
+		LstmConnectionGene connection = Random.random(values);
 
 		// Don't disconnect bias
 		while (connection.from == genome.biasNode) {
 			connection = Random.random(values);
 		}
 
-		NodeGene in = connection.from;
-		NodeGene out = connection.to;
+		LstmNodeGene in = connection.from;
+		LstmNodeGene out = connection.to;
 
 		// Disable old connection
 		connection.enabled = false;
 
 		// Create new node
-		NodeGene newNode = new NodeGene(NodeGeneType.HIDDEN, genome.nodeInnovation.getNext());
+		LstmNodeGene newNode = new LstmNodeGene(NodeGeneType.HIDDEN, genome.nodeInnovation.getNext());
 
 		// Create in to new node connection
 		int connectionInnovationNumber = genome.getManager().getConnectionInnovationNumber(innovationHistory, in.innovationNumber, newNode.innovationNumber);
-		ConnectionGene inToNew = new ConnectionGene(in, newNode, 1f, true, connectionInnovationNumber);
+		LstmConnectionGene inToNew = new LstmConnectionGene(in, newNode, true, connectionInnovationNumber);
 
 		// Create new node to out connection
 		connectionInnovationNumber = genome.getManager().getConnectionInnovationNumber(innovationHistory, newNode.innovationNumber, out.innovationNumber);
-		ConnectionGene newToOut = new ConnectionGene(newNode, out, connection.weight, true, connectionInnovationNumber);
+		LstmConnectionGene newToOut = new LstmConnectionGene(newNode, out, true, connectionInnovationNumber);
 
 		// Create bias to out connection
 		connectionInnovationNumber = genome.getManager().getConnectionInnovationNumber(innovationHistory, genome.biasNode.innovationNumber, out.innovationNumber);
-		ConnectionGene biasToOut = new ConnectionGene(genome.biasNode, out, 0, true, connectionInnovationNumber);
+		LstmConnectionGene biasToOut = new LstmConnectionGene(genome.biasNode, out, true, connectionInnovationNumber);
 
 		// Add new node and connections
 		genome.nodes.put(newNode.innovationNumber, newNode);
@@ -84,11 +78,7 @@ public class GenomeMutator implements DefaultGenomeMutator {
 	}
 
 	/**
-	 * Randomly connects two unconnected nodes
-	 *
-	 * @param random
 	 * @param innovationHistory
-	 * @param connectionInnovation
 	 */
 	@Override
 	public void addConnectionMutation(Map<Integer, List<ConnectionHistory>> innovationHistory) {
@@ -101,12 +91,12 @@ public class GenomeMutator implements DefaultGenomeMutator {
 		while (tries < Property.ADD_CONNECTION_MAX_ATTEMPTS.getValue() && !success) {
 
 			++tries;
-			NodeGene node1 = genome.getRandomNode();
-			NodeGene node2 = genome.getRandomNode();
+			LstmNodeGene node1 = genome.getRandomNode();
+			LstmNodeGene node2 = genome.getRandomNode();
 
 			// Swap for correct node order if neccessary
-			NodeGene first = null;
-			NodeGene second = null;
+			LstmNodeGene first = null;
+			LstmNodeGene second = null;
 			boolean reversed = node2.before(node1);
 			if (reversed) {
 				first = node2;
@@ -120,12 +110,8 @@ public class GenomeMutator implements DefaultGenomeMutator {
 				continue;
 			}
 
-			double max = Property.WEIGHT_RANDOM_RANGE.getValue();
-			double min = -1 * Property.WEIGHT_RANDOM_RANGE.getValue();
-			double weight = Random.random(min, max);
-
 			int connectionInnovationNumber = genome.getManager().getConnectionInnovationNumber(innovationHistory, first.innovationNumber, second.innovationNumber);
-			ConnectionGene connection = new ConnectionGene(first, second, weight, true, connectionInnovationNumber);
+			LstmConnectionGene connection = new LstmConnectionGene(first, second, true, connectionInnovationNumber);
 
 			genome.connections.put(connection.innvoationNumber, connection);
 
@@ -141,30 +127,46 @@ public class GenomeMutator implements DefaultGenomeMutator {
 	}
 
 	/**
-	 * Mutates the genomes connection weights
-	 *
 	 * @param innovationHistory
 	 */
 	@Override
 	public void mutate(Map<Integer, List<ConnectionHistory>> innovationHistory) {
 
 		if (Random.success(Property.WEIGHT_MUTATION_RATE.getValue())) {
-			for (ConnectionGene connection : genome.connections.values()) {
+			for (LstmNodeGene node : genome.nodes.values()) {
+
 				if (Random.success(Property.PROBABILITY_PERTURBING.getValue())) {
 
-					// Uniformly perturb weight
+					// Uniformly perturb weights
 					double min = -1 * Property.UNIFORMLY_PERTURB_WEIGHT_RANGE.getValue();
 					double max = Property.UNIFORMLY_PERTURB_WEIGHT_RANGE.getValue();
-					double disturbance = Random.random(min, max);
-					connection.weight += disturbance;
+
+					node.weight.inputWeights.forgetGateWeight += Random.random(min, max);
+					node.weight.inputWeights.inputGateWeight += Random.random(min, max);
+					node.weight.inputWeights.outputGateWeight += Random.random(min, max);
+					node.weight.inputWeights.selectGateWeight += Random.random(min, max);
+
+					node.weight.recurrentWeights.forgetGateWeight += Random.random(min, max);
+					node.weight.recurrentWeights.inputGateWeight += Random.random(min, max);
+					node.weight.recurrentWeights.outputGateWeight += Random.random(min, max);
+					node.weight.recurrentWeights.selectGateWeight += Random.random(min, max);
 
 				} else {
 
-					// Assign new weight
-					double max = Property.WEIGHT_RANDOM_RANGE.getValue();
+					// Assign new weights
 					double min = -1 * Property.WEIGHT_RANDOM_RANGE.getValue();
-					double weight = Random.random(min, max);
-					connection.weight = weight;
+					double max = Property.WEIGHT_RANDOM_RANGE.getValue();
+
+					node.weight.inputWeights.forgetGateWeight = Random.random(min, max);
+					node.weight.inputWeights.inputGateWeight = Random.random(min, max);
+					node.weight.inputWeights.outputGateWeight = Random.random(min, max);
+					node.weight.inputWeights.selectGateWeight = Random.random(min, max);
+
+					node.weight.recurrentWeights.forgetGateWeight = Random.random(min, max);
+					node.weight.recurrentWeights.inputGateWeight = Random.random(min, max);
+					node.weight.recurrentWeights.outputGateWeight = Random.random(min, max);
+					node.weight.recurrentWeights.selectGateWeight = Random.random(min, max);
+
 				}
 			}
 		}

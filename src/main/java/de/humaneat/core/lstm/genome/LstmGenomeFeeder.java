@@ -1,4 +1,4 @@
-package de.humaneat.core.neat.genome;
+package de.humaneat.core.lstm.genome;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,22 +7,21 @@ import java.util.List;
 import de.humaneat.core.global.components.node.NodeEngagerVisitor;
 import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.global.genome.DefaultGenomeFeeder;
-import de.humaneat.core.neat.genes.connection.ConnectionGene;
-import de.humaneat.core.neat.genes.node.NodeGene;
+import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
+import de.humaneat.core.lstm.genes.node.LstmNodeGene;
 
 /**
- * @author MannoR
+ * @author muellermak
  *
- *         Contains all available methods to feed data through a genome
  */
-public class GenomeFeeder implements DefaultGenomeFeeder {
+public class LstmGenomeFeeder implements DefaultGenomeFeeder {
 
-	private Genome genome;
+	private LstmGenome genome;
 
 	/**
 	 * @param genome
 	 */
-	public GenomeFeeder(Genome genome) {
+	public LstmGenomeFeeder(LstmGenome genome) {
 		this.genome = genome;
 	}
 
@@ -36,9 +35,9 @@ public class GenomeFeeder implements DefaultGenomeFeeder {
 		genome.getValidator().validateIntegrity();
 		genome.getLinker().generateNetwork();
 
-		List<NodeGene> inputNodes = genome.getNodesByType(NodeGeneType.INPUT);
-		List<NodeGene> hiddenNodes = genome.getNodesByType(NodeGeneType.HIDDEN);
-		List<NodeGene> outputNodes = genome.getNodesByType(NodeGeneType.OUTPUT);
+		List<LstmNodeGene> inputNodes = genome.getNodesByType(NodeGeneType.INPUT);
+		List<LstmNodeGene> hiddenNodes = genome.getNodesByType(NodeGeneType.HIDDEN);
+		List<LstmNodeGene> outputNodes = genome.getNodesByType(NodeGeneType.OUTPUT);
 
 		// Sets up & engages inputs
 		processInputs(inputValues, inputNodes);
@@ -53,12 +52,12 @@ public class GenomeFeeder implements DefaultGenomeFeeder {
 		processOutputNodes(outputNodes);
 
 		// Reset connection activation
-		for (ConnectionGene connection : genome.connections.values()) {
+		for (LstmConnectionGene connection : genome.connections.values()) {
 			connection.activated = false;
 		}
 
 		// Resets the input sum of all nodes
-		for (NodeGene node : genome.nodes.values()) {
+		for (LstmNodeGene node : genome.nodes.values()) {
 			node.inputSum = 0;
 		}
 
@@ -72,10 +71,10 @@ public class GenomeFeeder implements DefaultGenomeFeeder {
 	 * @param inputValues
 	 * @param inputNodes
 	 */
-	private void processInputs(double[] inputValues, List<NodeGene> inputNodes) {
+	private void processInputs(double[] inputValues, List<LstmNodeGene> inputNodes) {
 
 		// Populate inputSums of all input nodes with passed data
-		for (NodeGene input : inputNodes) {
+		for (LstmNodeGene input : inputNodes) {
 			input.inputSum = inputValues[input.innovationNumber];
 		}
 
@@ -83,7 +82,7 @@ public class GenomeFeeder implements DefaultGenomeFeeder {
 		genome.biasNode.outputValue = 1;
 
 		// Engage inputs
-		for (NodeGene node : inputNodes) {
+		for (LstmNodeGene node : inputNodes) {
 			node.accept(new NodeEngagerVisitor());
 		}
 	}
@@ -94,18 +93,18 @@ public class GenomeFeeder implements DefaultGenomeFeeder {
 	 *
 	 * @param hiddenNodes
 	 */
-	private void processHiddenNodes(List<NodeGene> hiddenNodes) {
+	private void processHiddenNodes(List<LstmNodeGene> hiddenNodes) {
 
 		while (hiddenNodes.size() > 0) {
 
-			Iterator<NodeGene> iter = hiddenNodes.iterator();
+			Iterator<LstmNodeGene> iter = hiddenNodes.iterator();
 			while (iter.hasNext()) {
 
-				NodeGene node = iter.next();
+				LstmNodeGene node = iter.next();
 
 				// Collect all connections which have the current node as output
-				List<ConnectionGene> nodeConnections = new ArrayList<>();
-				for (ConnectionGene connection : genome.connections.values()) {
+				List<LstmConnectionGene> nodeConnections = new ArrayList<>();
+				for (LstmConnectionGene connection : genome.connections.values()) {
 
 					if (connection.to == node && connection.enabled) {
 						nodeConnections.add(connection);
@@ -115,7 +114,7 @@ public class GenomeFeeder implements DefaultGenomeFeeder {
 				// Check whether all incoming connections have payload
 				boolean dataIsComplete = true;
 				double inputSum = 0;
-				for (ConnectionGene connection : nodeConnections) {
+				for (LstmConnectionGene connection : nodeConnections) {
 					if (!connection.activated) {
 						dataIsComplete = false;
 					} else {
@@ -137,15 +136,15 @@ public class GenomeFeeder implements DefaultGenomeFeeder {
 	/**
 	 * @param outputNodes
 	 */
-	private void processOutputNodes(List<NodeGene> outputNodes) {
+	private void processOutputNodes(List<LstmNodeGene> outputNodes) {
 
 		// Engage output nodes
-		for (NodeGene node : outputNodes) {
+		for (LstmNodeGene node : outputNodes) {
 
 			// Collect all connections which have the current node as output
-			List<ConnectionGene> nodeConnections = new ArrayList<>();
+			List<LstmConnectionGene> nodeConnections = new ArrayList<>();
 			double inputSum = 0;
-			for (ConnectionGene connection : genome.connections.values()) {
+			for (LstmConnectionGene connection : genome.connections.values()) {
 				if (connection.to == node) {
 					nodeConnections.add(connection);
 					inputSum += connection.payload;
@@ -164,11 +163,11 @@ public class GenomeFeeder implements DefaultGenomeFeeder {
 	 * @param outputNodes
 	 * @return the populated outputs
 	 */
-	private double[] populateOutputs(List<NodeGene> outputNodes) {
+	private double[] populateOutputs(List<LstmNodeGene> outputNodes) {
 
 		double[] outputs = new double[genome.anzOutputs];
 		int i = 0;
-		for (NodeGene output : outputNodes) {
+		for (LstmNodeGene output : outputNodes) {
 			outputs[i++] = output.outputValue;
 		}
 		return outputs;

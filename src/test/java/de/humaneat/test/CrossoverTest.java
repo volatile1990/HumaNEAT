@@ -1,10 +1,9 @@
 package de.humaneat.test;
 
+import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.neat.genes.connection.ConnectionGene;
 import de.humaneat.core.neat.genes.node.NodeGene;
-import de.humaneat.core.neat.genes.node.NodeGeneType;
 import de.humaneat.core.neat.genome.Genome;
-import de.humaneat.core.neat.genome.GenomeHatchery;
 
 public class CrossoverTest {
 	public static void main(String[] args) {
@@ -53,7 +52,7 @@ public class CrossoverTest {
 		secondParent.addConnectionGene(new ConnectionGene(secondParent.nodes.get(3), secondParent.nodes.get(5), 1f, true, 9));
 		secondParent.addConnectionGene(new ConnectionGene(secondParent.nodes.get(1), secondParent.nodes.get(6), 1f, true, 10));
 
-		Genome child = GenomeHatchery.crossover(secondParent, firstParent);
+		Genome child = secondParent.getHatchery().crossover(firstParent);
 
 		for (ConnectionGene connection : child.connections.values()) {
 			if (connection.enabled) {

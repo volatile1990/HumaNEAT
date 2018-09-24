@@ -1,4 +1,4 @@
-package de.humaneat.core.neat.population;
+package de.humaneat.core.lstm.population;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,37 +6,37 @@ import java.util.List;
 import java.util.Map;
 
 import de.humaneat.core.global.components.connection.ConnectionHistory;
-import de.humaneat.core.neat.ArtificialIntelligence;
-import de.humaneat.core.neat.species.Species;
+import de.humaneat.core.lstm.ArtificialLstmIntelligence;
+import de.humaneat.core.lstm.species.LstmSpecies;
 
 /**
  * @author muellermak
  *
  */
-public class Population {
+public class LstmPopulation {
 
 	public int currentGeneration;
 
 	/**
 	 * The population and its size
 	 */
-	public List<ArtificialIntelligence> artificialIntelligences;
+	public List<ArtificialLstmIntelligence> artificialIntelligences;
 	public int populationSize;
 
 	/**
 	 * Genomes of the new generation after evaluation
 	 */
-	public List<ArtificialIntelligence> nextGenerationAis;
+	public List<ArtificialLstmIntelligence> nextGenerationAis;
 
 	/**
 	 * All species in this population
 	 */
-	public List<Species> species;
+	public List<LstmSpecies> species;
 
 	/**
 	 * Fitness tracker
 	 */
-	public ArtificialIntelligence fittestAI;
+	public ArtificialLstmIntelligence fittestAI;
 	public double highestAchievedFitness;
 
 	/**
@@ -47,17 +47,17 @@ public class Population {
 	/**
 	 * Provides core functionality for the population
 	 */
-	private PopulationCore core;
+	private LstmPopulationCore core;
 
 	/**
 	 * The initial population
 	 */
-	public List<ArtificialIntelligence> startPopulation;
+	public List<ArtificialLstmIntelligence> startPopulation;
 
 	/**
 	 * @param population
 	 */
-	public Population(List<ArtificialIntelligence> population) {
+	public LstmPopulation(List<ArtificialLstmIntelligence> population) {
 
 		if (population.isEmpty()) {
 			throw new RuntimeException("Population must not be empty");
@@ -69,7 +69,7 @@ public class Population {
 	/**
 	 * @param population
 	 */
-	private void initialize(List<ArtificialIntelligence> population) {
+	private void initialize(List<ArtificialLstmIntelligence> population) {
 		populationSize = population.size();
 
 		// Initialize AIs
@@ -83,7 +83,7 @@ public class Population {
 		species = new ArrayList<>();
 		innovationHistory = new HashMap<>();
 
-		core = new PopulationCore(this);
+		core = new LstmPopulationCore(this);
 		currentGeneration = 1;
 
 		startPopulation = population;
@@ -92,7 +92,7 @@ public class Population {
 	/**
 	 * @param population
 	 */
-	public void restart(List<ArtificialIntelligence> population) {
+	public void restart(List<ArtificialLstmIntelligence> population) {
 		initialize(population);
 	}
 
@@ -121,7 +121,7 @@ public class Population {
 		nextGenerationAis = new ArrayList<>();
 
 		// Link all brains of the new generation
-		for (ArtificialIntelligence ai : artificialIntelligences) {
+		for (ArtificialLstmIntelligence ai : artificialIntelligences) {
 			ai.brain.getLinker().generateNetwork();
 		}
 

@@ -1,7 +1,6 @@
 package de.humaneat.core.global.components.node;
 
 import de.humaneat.core.neat.genes.node.NodeGene;
-import de.humaneat.core.neat.genes.node.NodeGeneType;
 
 /**
  * @author MannoR
@@ -46,5 +45,10 @@ public abstract class Node {
 
 		return innovationNumber == in.innovationNumber;
 	}
+
+	/**
+	 *
+	 */
+	public abstract Node copy();
 
 }

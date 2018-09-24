@@ -69,12 +69,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.jmonkeyengine</groupId>
-			<artifactId>jme3-jbullet</artifactId>
-			<version>${jmonkey.version}</version>
-			<type>pom</type>
-		</dependency>
-		<dependency>
-			<groupId>org.jmonkeyengine</groupId>
 			<artifactId>jme3-jogg</artifactId>
 			<version>${jmonkey.version}</version>
 			<type>pom</type>

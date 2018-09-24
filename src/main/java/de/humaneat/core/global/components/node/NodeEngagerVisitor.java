@@ -1,13 +1,12 @@
 package de.humaneat.core.global.components.node;
 
 import de.humaneat.core.global.activation.ActivationFunctions;
-import de.humaneat.core.lstm.genes.LSTMConnectionGene;
-import de.humaneat.core.lstm.genes.LSTMNodeGene;
-import de.humaneat.core.lstm.genes.Weights;
+import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
+import de.humaneat.core.lstm.genes.node.LstmNodeGene;
+import de.humaneat.core.lstm.genes.node.Weights;
 import de.humaneat.core.neat.Property;
 import de.humaneat.core.neat.genes.connection.ConnectionGene;
 import de.humaneat.core.neat.genes.node.NodeGene;
-import de.humaneat.core.neat.genes.node.NodeGeneType;
 
 /**
  * @author MannoR
@@ -62,7 +61,7 @@ public class NodeEngagerVisitor implements NodeVisitor {
 	 * Engages the LSTM node with all its gates
 	 */
 	@Override
-	public void visit(LSTMNodeGene node) {
+	public void visit(LstmNodeGene node) {
 
 		// Activate all gates
 		activate(node);
@@ -77,7 +76,7 @@ public class NodeEngagerVisitor implements NodeVisitor {
 	/**
 	 * Activates all lstm node gates
 	 */
-	public void activate(LSTMNodeGene node) {
+	public void activate(LstmNodeGene node) {
 
 		Weights inputWeights = node.weight.inputWeights;
 		Weights recurrentWeights = node.weight.recurrentWeights;
@@ -105,7 +104,7 @@ public class NodeEngagerVisitor implements NodeVisitor {
 	 * 2: Add to the muliplied input * select gate vector
 	 *
 	 */
-	private void updateCellState(LSTMNodeGene node) {
+	private void updateCellState(LstmNodeGene node) {
 
 		// Multiply with select gate output vector
 		node.cellState[0] *= node.forgetGateOut[0];
@@ -126,13 +125,13 @@ public class NodeEngagerVisitor implements NodeVisitor {
 	 * 1: Use tanh on the cell state vector
 	 * 2: Multiply the output gate result with the cell state vector
 	 */
-	public void fire(LSTMNodeGene node) {
+	public void fire(LstmNodeGene node) {
 
 		node.recurrentCellOutput = node.cellStateActivation.activate(node.cellState[0]) * node.outputGateOut[0];
 		node.outputValue = node.cellStateActivation.activate(node.cellState[1]) * node.outputGateOut[1];
 
 		// Set the output as payload on all outgoing connections
-		for (LSTMConnectionGene connection : node.outputConnections) {
+		for (LstmConnectionGene connection : node.outputConnections) {
 
 			if (!connection.enabled) {
 				continue;

@@ -1,4 +1,4 @@
-package de.humaneat.core.lstm.genes;
+package de.humaneat.core.lstm.genes.node;
 
 import java.util.List;
 
@@ -6,15 +6,16 @@ import de.humaneat.core.global.Random;
 import de.humaneat.core.global.activation.Activation;
 import de.humaneat.core.global.activation.ActivationFunctions;
 import de.humaneat.core.global.components.node.Node;
+import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.global.components.node.NodeVisitor;
+import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
 import de.humaneat.core.neat.Property;
-import de.humaneat.core.neat.genes.node.NodeGeneType;
 
 /**
  * @author muellermak
  *
  */
-public class LSTMNodeGene extends Node {
+public class LstmNodeGene extends Node {
 
 	// Cell state
 	public double[] cellState;
@@ -41,22 +42,22 @@ public class LSTMNodeGene extends Node {
 	/**
 	 * Output connections
 	 */
-	public List<LSTMConnectionGene> outputConnections;
+	public List<LstmConnectionGene> outputConnections;
 
 	/**
 	 * All weights associated with that lstm cell
 	 */
-	public LSTMWeight weight;
+	public LstmWeight weight;
 
 	/**
 	 * @param type
 	 * @param number
 	 */
-	public LSTMNodeGene(NodeGeneType type, int number) {
+	public LstmNodeGene(NodeGeneType type, int number) {
 
 		cellState = new double[2];
-		cellState[0] = LSTMNodeGene.INITIAL_CELL_STATE;
-		cellState[1] = LSTMNodeGene.INITIAL_CELL_STATE;
+		cellState[0] = LstmNodeGene.INITIAL_CELL_STATE;
+		cellState[1] = LstmNodeGene.INITIAL_CELL_STATE;
 
 		recurrentCellOutput = 0;
 
@@ -68,7 +69,7 @@ public class LSTMNodeGene extends Node {
 		cellStateActivation = ActivationFunctions::tanh;
 
 		// Initialize with random weights
-		weight = new LSTMWeight(getRandomWeights(), getRandomWeights());
+		weight = new LstmWeight(getRandomWeights(), getRandomWeights());
 	}
 
 	/**
@@ -94,5 +95,13 @@ public class LSTMNodeGene extends Node {
 	 */
 	public void accept(NodeVisitor visitor) {
 		visitor.visit(this);
+	}
+
+	/**
+	 * @return
+	 */
+	@Override
+	public LstmNodeGene copy() {
+		return new LstmNodeGene(type, innovationNumber);
 	}
 }

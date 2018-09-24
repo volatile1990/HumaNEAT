@@ -3,10 +3,9 @@ package de.humaneat.examples.xor;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.humaneat.core.global.components.node.NodeGeneType;
 import de.humaneat.core.neat.ArtificialIntelligence;
-import de.humaneat.core.neat.genes.node.NodeGeneType;
 import de.humaneat.core.neat.population.Population;
-import de.humaneat.graphics.GenomeViewer;
 
 /**
  * @author MannoR
@@ -31,15 +30,15 @@ public class XOR {
 
 		Population population = new Population(ais);
 
-		GenomeViewer genomeViewer = new GenomeViewer(ais.get(0).brain);
-		genomeViewer.start();
-
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		System.out.println("STARING:");
+//		GenomeViewer genomeViewer = new GenomeViewer(ais.get(0).brain);
+//		genomeViewer.start();
+//
+//		try {
+//			Thread.sleep(10000);
+//		} catch (InterruptedException e1) {
+//			e1.printStackTrace();
+//		}
+//		System.out.println("STARING:");
 
 		ArtificialIntelligence winner = null;
 
@@ -72,7 +71,7 @@ public class XOR {
 
 			population.evolve();
 
-			genomeViewer.genome = population.fittestAI.brain;
+//			genomeViewer.genome = population.fittestAI.brain;
 
 			try {
 				Thread.sleep(500);

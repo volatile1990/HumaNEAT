@@ -1,24 +1,24 @@
-package de.humaneat.core.neat.genome;
+package de.humaneat.core.lstm.genome;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.humaneat.core.global.components.node.NodeGeneType;
-import de.humaneat.core.neat.genes.connection.ConnectionGene;
-import de.humaneat.core.neat.genes.node.NodeGene;
+import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
+import de.humaneat.core.lstm.genes.node.LstmNodeGene;
 
 /**
- * @author MannoR
+ * @author muellermak
  *
  */
-public class GenomeValidator {
+public class LstmGenomeValidator {
 
-	private Genome genome;
+	private LstmGenome genome;
 
 	/**
 	 * @param genome
 	 */
-	public GenomeValidator(Genome genome) {
+	public LstmGenomeValidator(LstmGenome genome) {
 		this.genome = genome;
 	}
 
@@ -26,7 +26,7 @@ public class GenomeValidator {
 	 * @param firstNode
 	 * @return whether a connection between the given nodes is allowed
 	 */
-	public boolean connectionAllowed(NodeGene firstNode, NodeGene secondNode) {
+	public boolean connectionAllowed(LstmNodeGene firstNode, LstmNodeGene secondNode) {
 		return !(genome.getValidator().connectionExists(firstNode, secondNode) || genome.getValidator().connectionImpossible(firstNode, secondNode)
 				|| genome.getValidator().connectionCreatesCircular(firstNode, secondNode));
 	}
@@ -36,14 +36,14 @@ public class GenomeValidator {
 	 * @param secondNode
 	 * @return whether the connection already exists
 	 */
-	public boolean connectionExists(NodeGene firstNode, NodeGene secondNode) {
+	public boolean connectionExists(LstmNodeGene firstNode, LstmNodeGene secondNode) {
 
 		// No connections exist
 		if (genome.connections == null || genome.connections.size() <= 0) {
 			return false;
 		}
 
-		for (ConnectionGene connection : genome.connections.values()) {
+		for (LstmConnectionGene connection : genome.connections.values()) {
 
 			if (connection.from.equals(firstNode) && connection.to.equals(secondNode)) {
 				return true;
@@ -60,7 +60,7 @@ public class GenomeValidator {
 	 * @param secondNode
 	 * @return whether the connection between the given nodes is impossible
 	 */
-	public boolean connectionImpossible(NodeGene firstNode, NodeGene secondNode) {
+	public boolean connectionImpossible(LstmNodeGene firstNode, LstmNodeGene secondNode) {
 
 		// Inputs and outputs can't be connected to each other, one node has to be a hidden node, can't connect bias to bias
 		if (firstNode.type == NodeGeneType.INPUT && secondNode.type == NodeGeneType.INPUT) {
@@ -85,19 +85,19 @@ public class GenomeValidator {
 	 * @param secondNode
 	 * @return whether a connection between those two nodes create a circular connection
 	 */
-	public boolean connectionCreatesCircular(NodeGene firstNode, NodeGene secondNode) {
+	public boolean connectionCreatesCircular(LstmNodeGene firstNode, LstmNodeGene secondNode) {
 
-		List<ConnectionGene> outConnections = new ArrayList<>();
-		for (ConnectionGene connection : genome.connections.values()) {
+		List<LstmConnectionGene> outConnections = new ArrayList<>();
+		for (LstmConnectionGene connection : genome.connections.values()) {
 			if (connection.from == secondNode && connection.enabled) {
 				outConnections.add(connection);
 			}
 		}
 
-		for (ConnectionGene connection : outConnections) {
+		for (LstmConnectionGene connection : outConnections) {
 
 			// Can't create circular before input node
-			NodeGene from = connection.from;
+			LstmNodeGene from = connection.from;
 			if (from.type == NodeGeneType.INPUT || from.type == NodeGeneType.BIAS) {
 				continue;
 			}
@@ -119,24 +119,24 @@ public class GenomeValidator {
 	 * @param node
 	 * @return whether the given connection at some point leads to the given node
 	 */
-	private boolean connectionLeadsToNode(ConnectionGene connection, NodeGene node) {
+	private boolean connectionLeadsToNode(LstmConnectionGene connection, LstmNodeGene node) {
 
-		NodeGene toNode = connection.to;
+		LstmNodeGene toNode = connection.to;
 		if (toNode == node) {
 			return true;
 		}
 
-		List<ConnectionGene> outConnections = new ArrayList<>();
-		for (ConnectionGene outConnection : genome.connections.values()) {
+		List<LstmConnectionGene> outConnections = new ArrayList<>();
+		for (LstmConnectionGene outConnection : genome.connections.values()) {
 			if (outConnection.from == toNode && outConnection.enabled) {
 				outConnections.add(outConnection);
 			}
 		}
 
-		for (ConnectionGene toNodeOutConnection : outConnections) {
+		for (LstmConnectionGene toNodeOutConnection : outConnections) {
 
 			// Can't create circular before input node
-			NodeGene from = toNodeOutConnection.from;
+			LstmNodeGene from = toNodeOutConnection.from;
 			if (from.type == NodeGeneType.INPUT || from.type == NodeGeneType.BIAS) {
 				continue;
 			}
@@ -159,14 +159,14 @@ public class GenomeValidator {
 	 */
 	public void validateIntegrity() {
 
-		for (ConnectionGene connection : genome.connections.values()) {
+		for (LstmConnectionGene connection : genome.connections.values()) {
 
-			NodeGene in = connection.from;
-			NodeGene out = connection.to;
+			LstmNodeGene in = connection.from;
+			LstmNodeGene out = connection.to;
 
 			boolean foundIn = false;
 			boolean foundOut = false;
-			for (NodeGene node : genome.nodes.values()) {
+			for (LstmNodeGene node : genome.nodes.values()) {
 				if (node == in || in.type == NodeGeneType.BIAS) {
 					foundIn = true;
 				}
