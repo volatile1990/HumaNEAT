@@ -7,6 +7,7 @@ import java.util.Map;
 
 import de.humaneat.core.global.components.connection.ConnectionHistory;
 import de.humaneat.core.neat.ArtificialIntelligence;
+import de.humaneat.core.neat.Property;
 import de.humaneat.core.neat.species.Species;
 
 /**
@@ -37,7 +38,6 @@ public class Population {
 	 * Fitness tracker
 	 */
 	public ArtificialIntelligence fittestAI;
-	public double highestAchievedFitness;
 
 	/**
 	 * The history of all connection innovations of this population; used for reproduction
@@ -50,33 +50,48 @@ public class Population {
 	private PopulationCore core;
 
 	/**
-	 * The initial population
+	 * The Class of the ArtificialIntelligence implementation
 	 */
-	public List<ArtificialIntelligence> startPopulation;
+	Class<? extends ArtificialIntelligence> aiClazz;
 
 	/**
 	 * @param population
 	 */
-	public Population(List<ArtificialIntelligence> population) {
+	public Population(Class<? extends ArtificialIntelligence> aiClazz) {
 
-		if (population.isEmpty()) {
-			throw new RuntimeException("Population must not be empty");
+		if (aiClazz == null) {
+			throw new RuntimeException("Network needs an AI - extending - Class to operate with");
 		}
+		this.aiClazz = aiClazz;
 
-		initialize(population);
+		// Initialize population
+		try {
+			initialize();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * @param population
+	 * @throws Exception
 	 */
-	private void initialize(List<ArtificialIntelligence> population) {
-		populationSize = population.size();
+	private void initialize() throws Exception {
 
-		// Initialize AIs
-		artificialIntelligences = new ArrayList<>(populationSize);
+		populationSize = (int) Property.POPULATION_SIZE.getValue();
+
+		// Create AIs for this population
+		artificialIntelligences = new ArrayList<>();
 		for (int i = 0; i < populationSize; ++i) {
-			artificialIntelligences.add(population.get(i));
+
+			// Create new AI
+			ArtificialIntelligence ai = aiClazz.newInstance();
+
+			// Add to population
+			artificialIntelligences.add(ai);
 		}
+
+		// Select random element as first fittest ai
 		fittestAI = artificialIntelligences.get(0);
 
 		nextGenerationAis = new ArrayList<>();
@@ -86,14 +101,6 @@ public class Population {
 		core = new PopulationCore(this);
 		currentGeneration = 1;
 
-		startPopulation = population;
-	}
-
-	/**
-	 * @param population
-	 */
-	public void restart(List<ArtificialIntelligence> population) {
-		initialize(population);
 	}
 
 	/**

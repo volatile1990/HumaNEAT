@@ -7,7 +7,7 @@ import de.humaneat.core.neat.genes.Counter;
  * 
  *         A Genome is representating a whole neural network
  */
-public class DefaultGenome {
+public abstract class DefaultGenome {
 
 	/**
 	 * Innovation counters

@@ -1,7 +1,9 @@
 package de.humaneat.examples.xor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.humaneat.core.neat.ArtificialIntelligence;
-import de.humaneat.core.neat.genome.Genome;
 
 /**
  * @author MannoR
@@ -9,23 +11,28 @@ import de.humaneat.core.neat.genome.Genome;
  */
 public class XorAI extends ArtificialIntelligence {
 
+	private double XOR_INPUT[][] = { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
+
 	/**
-	 * @param anzInputs
-	 * @param anzOutputs
+	 * @return a list of all input datasets
 	 */
-	public XorAI(int anzInputs, int anzOutputs) {
-		super(anzInputs, anzOutputs);
+	@Override
+	public List<List<Double>> getInputs() {
+
+		List<List<Double>> allInputs = new ArrayList<>();
+
+		for (int j = 0; j < 4; ++j) {
+			List<Double> input = new ArrayList<>();
+			input.add(XOR_INPUT[j][0]);
+			input.add(XOR_INPUT[j][1]);
+			allInputs.add(input);
+		}
+
+		return allInputs;
 	}
 
 	/**
-	 * @param genome
-	 */
-	public XorAI(Genome genome) {
-		super(genome);
-	}
-
-	/**
-	 * @return
+	 * @return the unadjusted fitness
 	 */
 	@Override
 	public double calculateFitness() {
@@ -41,12 +48,11 @@ public class XorAI extends ArtificialIntelligence {
 	}
 
 	/**
-	 * @param genome
-	 * @return
+	 * @param output
 	 */
 	@Override
-	public ArtificialIntelligence getNewInstance(Genome genome) {
-		return new XorAI(genome);
+	public void takeAction(List<Double> output) {
+		// Nothing to do for xor evaluation
 	}
 
 }

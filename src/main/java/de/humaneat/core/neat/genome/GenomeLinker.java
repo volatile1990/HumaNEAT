@@ -28,6 +28,7 @@ public class GenomeLinker implements DefaultGenomeLinker {
 	 */
 	@Override
 	public void generateNetwork() {
+
 		connectNodes();
 		genome.network = new ArrayList<>();
 

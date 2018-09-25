@@ -1,7 +1,8 @@
 package de.humaneat.examples.tictactoe;
 
+import java.util.List;
+
 import de.humaneat.core.neat.ArtificialIntelligence;
-import de.humaneat.core.neat.genome.Genome;
 
 /**
  * @author MannoR
@@ -15,28 +16,10 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	public TicTacToe ticTacToe;
 	public boolean failed;
 
-	/**
-	 * @param anzInputs
-	 * @param anzOutputs
-	 */
-	public TicTacToePlayer(String name, int anzInputs, int anzOutputs) {
+	@Override
+	public List<List<Double>> getInputs() {
 
-		super(anzInputs, anzOutputs);
-
-		brain = new Genome(anzInputs, anzOutputs);
-		nextMarkCoordinates = new int[2];
-		failed = false;
-	}
-
-	/**
-	 * @param brain
-	 */
-	public TicTacToePlayer(Genome brain) {
-
-		super(brain);
-
-		nextMarkCoordinates = new int[2];
-		failed = false;
+		return null;
 	}
 
 	/**
@@ -113,11 +96,6 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 //		}
 
 		return unadjustedFitness;
-	}
-
-	@Override
-	public ArtificialIntelligence getNewInstance(Genome genome) {
-		return new TicTacToePlayer(genome);
 	}
 
 }

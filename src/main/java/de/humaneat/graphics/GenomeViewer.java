@@ -40,9 +40,12 @@ public class GenomeViewer extends SimpleApplication {
 
 	public List<Geometry> items;
 
+	public boolean initialized;
+
 	public GenomeViewer(Genome genome) {
 		this.genome = genome;
 		items = new ArrayList<>();
+		initialized = false;
 	}
 
 	@Override
@@ -115,6 +118,8 @@ public class GenomeViewer extends SimpleApplication {
 		flyCam.setMoveSpeed(50);
 
 		addLight();
+
+		initialized = true;
 	}
 
 	/**

@@ -7,6 +7,7 @@ import java.util.Random;
 
 import de.humaneat.core.neat.ArtificialIntelligence;
 import de.humaneat.core.neat.population.Population;
+import de.humaneat.core.neat.training.PopulationTrainer;
 
 /**
  * @author muellermak
@@ -22,20 +23,14 @@ public class PathGame {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 
-		int populationSize = 30;
-		int generations = 200;
+		// Create new population
+		Population population = new Population(PathfindingAI.class);
 
-		// Initialize field
-		int[][] playfield = getRandomPlayfield(50, 50);
+		// Assign population to a population trainer
+		PopulationTrainer trainer = new PopulationTrainer(population, false);
 
-		// Create AIS
-		List<ArtificialIntelligence> ais = new ArrayList<>();
-		for (int i = 0; i < populationSize; ++i) {
-			ais.add(new PathfindingAI(2, 4));
-		}
-		Population population = new Population(ais);
-
-		iniUi(ais);
+		// Train until desired fitness is reached
+		trainer.train();
 
 		// Run NN
 		PathfindingAI winner = null;

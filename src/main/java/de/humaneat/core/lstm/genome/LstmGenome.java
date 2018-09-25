@@ -219,4 +219,5 @@ public class LstmGenome extends DefaultGenome {
 	public LstmGenomeHatchery getHatchery() {
 		return hatchery;
 	}
+
 }

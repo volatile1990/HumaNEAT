@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.humaneat.core.neat.ArtificialIntelligence;
-import de.humaneat.core.neat.genome.Genome;
 
 /**
  * @author muellermak
@@ -23,23 +22,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 	/**
 	 *
 	 */
-	public PathfindingAI(int anzInputs, int anzOutputs) {
-		super(anzInputs, anzOutputs);
-		init();
-	}
-
-	/**
-	 * @param brain
-	 */
-	public PathfindingAI(Genome brain) {
-		super(brain);
-		init();
-	}
-
-	/**
-	 *
-	 */
-	private void init() {
+	public PathfindingAI() {
 
 		// Initial position
 		currentX = 3;
@@ -51,6 +34,23 @@ public class PathfindingAI extends ArtificialIntelligence {
 
 		// Playfield
 		playfield = new int[50][50];
+	}
+
+	/**
+	 * @return
+	 */
+	@Override
+	public List<List<Double>> getInputs() {
+
+		getCurrentPosition();
+		move();
+
+		return null;
+	}
+
+	@Override
+	public void takeAction(List<Double> output) {
+		move();
 	}
 
 	/**
@@ -138,13 +138,4 @@ public class PathfindingAI extends ArtificialIntelligence {
 		return currentPosition;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see de.core.ArtificialIntelligence#getNewInstance(de.core.genome.Genome)
-	 */
-	@Override
-	public ArtificialIntelligence getNewInstance(Genome genome) {
-		return new PathfindingAI(genome);
-	}
 }

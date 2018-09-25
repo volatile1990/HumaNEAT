@@ -10,6 +10,26 @@ import de.humaneat.core.global.activation.ActivationFunctions;
 public enum Property {
 
 	/**
+	 * Default count of generations to evolve
+	 */
+	GENERATIONS(500),
+
+	/**
+	 * Default size of a population
+	 */
+	POPULATION_SIZE(1000),
+
+	/**
+	 * Amount of inputs
+	 */
+	INPUT_COUNT(2),
+
+	/**
+	 * Amount of outputs
+	 */
+	OUTPUT_COUNT(1),
+
+	/**
 	 * Compatibility distance adjusting
 	 */
 	C1(1.0), C2(1.0), C3(0.4),

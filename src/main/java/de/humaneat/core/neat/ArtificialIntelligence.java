@@ -8,7 +8,7 @@ import de.humaneat.core.neat.genome.Genome;
 
 /**
  * @author MannoR
- *
+ * 
  */
 public abstract class ArtificialIntelligence implements DefaultArtificialIntelligence {
 
@@ -26,12 +26,12 @@ public abstract class ArtificialIntelligence implements DefaultArtificialIntelli
 	 * @param anzInputs
 	 * @param anzOutputs
 	 */
-	public ArtificialIntelligence(int anzInputs, int anzOutputs) {
+	public ArtificialIntelligence() {
 
 		anzAccumulatedDatas = 0;
 
-		this.anzInputs = anzInputs;
-		this.anzOutputs = anzOutputs;
+		anzInputs = (int) Property.INPUT_COUNT.getValue();
+		anzOutputs = (int) Property.OUTPUT_COUNT.getValue();
 
 		inputs = new ArrayList<>();
 		outputs = new ArrayList<>();
@@ -40,37 +40,37 @@ public abstract class ArtificialIntelligence implements DefaultArtificialIntelli
 	}
 
 	/**
-	 * @param brain
-	 */
-	public ArtificialIntelligence(Genome brain) {
-
-		this(brain.anzInputs, brain.anzOutputs);
-		this.brain = brain;
-	}
-
-	/**
 	 * Converts the given inputs in the same order to be used for the neuronal net
 	 * Takes them and feeds it through the genome to get a decision
+	 * Does this for every given input dataset
 	 */
 	@Override
-	public void think(List<Double> inputs) {
+	public void think() {
 
-		if (inputs.size() != anzInputs) {
-			throw new RuntimeException("Invalid number of inputs");
+		List<List<Double>> allInputs = getInputs();
+
+		// For every given input dataset
+		for (List<Double> inputs : allInputs) {
+
+			if (inputs.size() != anzInputs) {
+				throw new RuntimeException("Invalid number of inputs");
+			}
+
+			// Get inputs and save them for fitness evaluation
+			double[] input = new double[anzInputs];
+			for (int i = 0; i < inputs.size(); ++i) {
+				input[i] = inputs.get(i);
+			}
+			this.inputs.add(input);
+
+			// Feed through the neural net and save decision
+			double[] output = brain.getFeeder().feedForward(input);
+			outputs.add(output);
+
+//			takeAction(new ArrayList<>(Arrays.asList(output)));
+
+			++anzAccumulatedDatas;
 		}
-
-		// Get inputs and save them
-		double[] input = new double[anzInputs];
-		for (int i = 0; i < inputs.size(); ++i) {
-			input[i] = inputs.get(i);
-		}
-		this.inputs.add(input);
-
-		// Feed through the neural net and save decision
-		double[] output = brain.getFeeder().feedForward(input);
-		outputs.add(output);
-
-		++anzAccumulatedDatas;
 	}
 
 	/**
@@ -91,8 +91,4 @@ public abstract class ArtificialIntelligence implements DefaultArtificialIntelli
 		anzAccumulatedDatas = 0;
 	}
 
-	/**
-	 * @return a copy of itself
-	 */
-	public abstract ArtificialIntelligence getNewInstance(Genome genome);
 }

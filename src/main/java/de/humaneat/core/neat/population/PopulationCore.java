@@ -3,8 +3,10 @@ package de.humaneat.core.neat.population;
 import java.util.Collections;
 import java.util.Iterator;
 
+import de.humaneat.core.global.Random;
 import de.humaneat.core.neat.ArtificialIntelligence;
 import de.humaneat.core.neat.Property;
+import de.humaneat.core.neat.genome.Genome;
 import de.humaneat.core.neat.genome.GenomeSpeciation;
 import de.humaneat.core.neat.species.Species;
 import de.humaneat.core.neat.species.SpeciesFitnessComparator;
@@ -123,6 +125,11 @@ public class PopulationCore {
 	 */
 	public void breedNewGeneration() {
 
+		// End if every species is dead
+		if (population.species.size() <= 0) {
+			throw new RuntimeException("All species died. Retry with different parameters.");
+		}
+
 		// Put best genomes from each species into next generation
 		populateNextGenerationGenomes();
 
@@ -132,9 +139,16 @@ public class PopulationCore {
 			int allowedChildrenCount = allowedChildrenForNextGeneration(species);
 
 			for (int i = 0; i < allowedChildrenCount; ++i) {
-				ArtificialIntelligence ai = population.artificialIntelligences.get(0).getNewInstance(species.getHatchery().makeBaby(population.innovationHistory));
+
+				// Get child from current species
+				Genome babyBrain = species.getHatchery().makeBaby(population.innovationHistory);
+
+				// Create new ai using that child genome as brain
+				ArtificialIntelligence ai = generateNewAi();
+				ai.brain = babyBrain;
 				population.nextGenerationAis.add(ai);
 
+				// Until desired population size is reached
 				if (population.nextGenerationAis.size() >= population.populationSize) {
 					populatingDone = true;
 					break;
@@ -146,8 +160,18 @@ public class PopulationCore {
 			}
 		}
 
+		// May happen if the species were not allowed to produce enough children for the next generation
 		while (population.nextGenerationAis.size() < population.populationSize) {
-			ArtificialIntelligence ai = population.artificialIntelligences.get(0).getNewInstance(population.species.get(0).getHatchery().makeBaby(population.innovationHistory));
+
+			// Create new baby using a random species
+			Species randomSpecies = Random.random(population.species);
+			Genome babyBrain = randomSpecies.getHatchery().makeBaby(population.innovationHistory);
+
+			// Generate a new AI using that genome
+			ArtificialIntelligence ai = generateNewAi();
+			ai.brain = babyBrain;
+
+			// Populate for next generation
 			population.nextGenerationAis.add(ai);
 		}
 
@@ -155,6 +179,19 @@ public class PopulationCore {
 			ai.brain.getLinker().generateNetwork();
 		}
 
+	}
+
+	/**
+	 * Generations a new ai using the type the population is initialized with
+	 */
+	private ArtificialIntelligence generateNewAi() {
+
+		try {
+			return population.aiClazz.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Couldn't create new ArtificialIntelligences for the population");
+		}
 	}
 
 	/**
