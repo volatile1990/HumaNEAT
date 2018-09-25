@@ -42,9 +42,8 @@ public class PathfindingAI extends ArtificialIntelligence {
 	@Override
 	public List<List<Double>> getInputs() {
 
-		getCurrentPosition();
-		move();
-
+		List<List<Double>>
+		
 		return null;
 	}
 
