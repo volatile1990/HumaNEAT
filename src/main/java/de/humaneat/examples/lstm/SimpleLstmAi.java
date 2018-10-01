@@ -1,5 +1,7 @@
 package de.humaneat.examples.lstm;
 
+import java.util.List;
+
 import de.humaneat.core.lstm.ArtificialLstmIntelligence;
 import de.humaneat.core.lstm.genome.LstmGenome;
 
@@ -29,13 +31,28 @@ public class SimpleLstmAi extends ArtificialLstmIntelligence {
 		return 0;
 	}
 
-	/**
-	 * @param genome
-	 * @return
-	 */
 	@Override
-	public ArtificialLstmIntelligence getNewInstance(LstmGenome genome) {
-		return new SimpleLstmAi(genome);
+	public void doAiLogic() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<Double> getInputs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void think() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void takeAction(List<Double> output) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

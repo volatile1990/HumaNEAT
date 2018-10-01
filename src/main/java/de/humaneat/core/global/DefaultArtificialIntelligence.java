@@ -9,9 +9,14 @@ import java.util.List;
 public interface DefaultArtificialIntelligence {
 
 	/**
+	 * Will be called during every generation. Execute all tasks the AI should do here.
+	 */
+	public void doAiLogic();
+
+	/**
 	 * Returns all inputs for the next feed forward
 	 */
-	public List<List<Double>> getInputs();
+	public List<Double> getInputs();
 
 	/**
 	 * Takes its inputs and feeds it through the genome to get a decision

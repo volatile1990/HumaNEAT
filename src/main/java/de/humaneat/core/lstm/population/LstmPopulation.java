@@ -8,6 +8,7 @@ import java.util.Map;
 import de.humaneat.core.global.components.connection.ConnectionHistory;
 import de.humaneat.core.lstm.ArtificialLstmIntelligence;
 import de.humaneat.core.lstm.species.LstmSpecies;
+import de.humaneat.core.neat.Property;
 
 /**
  * @author muellermak
@@ -50,33 +51,47 @@ public class LstmPopulation {
 	private LstmPopulationCore core;
 
 	/**
-	 * The initial population
+	 * The Class of the ArtificialIntelligence implementation
 	 */
-	public List<ArtificialLstmIntelligence> startPopulation;
+	Class<? extends ArtificialLstmIntelligence> aiClazz;
 
 	/**
 	 * @param population
 	 */
-	public LstmPopulation(List<ArtificialLstmIntelligence> population) {
+	public LstmPopulation(Class<? extends ArtificialLstmIntelligence> aiClazz) {
 
-		if (population.isEmpty()) {
-			throw new RuntimeException("Population must not be empty");
+		if (aiClazz == null) {
+			throw new RuntimeException("Network needs an AI - extending - Class to operate with");
 		}
+		this.aiClazz = aiClazz;
 
-		initialize(population);
+		// Initialize population
+		try {
+			initialize();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * @param population
 	 */
-	private void initialize(List<ArtificialLstmIntelligence> population) {
-		populationSize = population.size();
+	private void initialize() throws Exception {
 
-		// Initialize AIs
-		artificialIntelligences = new ArrayList<>(populationSize);
+		populationSize = (int) Property.POPULATION_SIZE.getValue();
+
+		// Create AIs for this population
+		artificialIntelligences = new ArrayList<>();
 		for (int i = 0; i < populationSize; ++i) {
-			artificialIntelligences.add(population.get(i));
+
+			// Create new AI
+			ArtificialLstmIntelligence ai = aiClazz.newInstance();
+
+			// Add to population
+			artificialIntelligences.add(ai);
 		}
+
+		// Select random element as first fittest ai
 		fittestAI = artificialIntelligences.get(0);
 
 		nextGenerationAis = new ArrayList<>();
@@ -86,14 +101,6 @@ public class LstmPopulation {
 		core = new LstmPopulationCore(this);
 		currentGeneration = 1;
 
-		startPopulation = population;
-	}
-
-	/**
-	 * @param population
-	 */
-	public void restart(List<ArtificialLstmIntelligence> population) {
-		initialize(population);
 	}
 
 	/**

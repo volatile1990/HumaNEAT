@@ -47,30 +47,32 @@ public abstract class ArtificialIntelligence implements DefaultArtificialIntelli
 	@Override
 	public void think() {
 
-		List<List<Double>> allInputs = getInputs();
+		List<Double> inputs = getInputs();
 
-		// For every given input dataset
-		for (List<Double> inputs : allInputs) {
-
-			if (inputs.size() != anzInputs) {
-				throw new RuntimeException("Invalid number of inputs");
-			}
-
-			// Get inputs and save them for fitness evaluation
-			double[] input = new double[anzInputs];
-			for (int i = 0; i < inputs.size(); ++i) {
-				input[i] = inputs.get(i);
-			}
-			this.inputs.add(input);
-
-			// Feed through the neural net and save decision
-			double[] output = brain.getFeeder().feedForward(input);
-			outputs.add(output);
-
-//			takeAction(new ArrayList<>(Arrays.asList(output)));
-
-			++anzAccumulatedDatas;
+		if (inputs.size() != anzInputs) {
+			throw new RuntimeException("Invalid number of inputs");
 		}
+
+		// Get inputs and save them for fitness evaluation
+		double[] input = new double[anzInputs];
+		for (int i = 0; i < inputs.size(); ++i) {
+			input[i] = inputs.get(i);
+		}
+		this.inputs.add(input);
+
+		// Feed through the neural net and save decision
+		double[] output = brain.getFeeder().feedForward(input);
+		outputs.add(output);
+
+		// Convert primitve array to list
+		List<Double> out = new ArrayList<>();
+		for (int i = 0; i < output.length; ++i) {
+			out.add(output[i]);
+		}
+
+		takeAction(out);
+
+		++anzAccumulatedDatas;
 	}
 
 	/**

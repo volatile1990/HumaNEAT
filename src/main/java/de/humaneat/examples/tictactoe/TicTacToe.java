@@ -3,10 +3,6 @@ package de.humaneat.examples.tictactoe;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.humaneat.core.neat.ArtificialIntelligence;
-import de.humaneat.core.neat.population.Population;
-import de.humaneat.graphics.GenomePrinter;
-
 /**
  * @author muellermak
  *
@@ -26,52 +22,52 @@ public class TicTacToe {
 
 	public static void main(String[] args) {
 
-		int populationSize = 1000;
-		int inputs = 9;
-		int outputs = 1;
-
-		List<ArtificialIntelligence> ais = new ArrayList<>();
-		for (int i = 0; i < populationSize; ++i) {
-			ais.add(new TicTacToePlayer("Player_" + i, inputs, outputs));
-		}
-
-		// Setup Population for first player
-		Population population = new Population(ais);
-
-		TicTacToePlayer winner = null;
-
-		int generations = 100;
-		for (int i = 0; i < generations; ++i) {
-
-			// Let every player play the game until it is finished
-			for (ArtificialIntelligence artificialPlayer : population.artificialIntelligences) {
-
-				// Runs until the game is finished
-				TicTacToe ticTacToe = new TicTacToe((TicTacToePlayer) artificialPlayer);
-				ticTacToe.run(false);
-
-				if (ticTacToe.gameState == 5) {
-
-					// AI did it
-					winner = (TicTacToePlayer) artificialPlayer;
-				}
-			}
-
-			if (winner != null) {
-				break;
-			}
-
-			// Cultivate a new generation in the population
-			population.evolve();
-
-			System.out.println("Generation: " + (i + 1) + " ## Fitness: " + population.fittestAI.brain.fitness + " ## Species: " + population.species.size());
-		}
-
-		if (winner != null) {
-			TicTacToe ttt = new TicTacToe(winner);
-			ttt.run(true);
-			GenomePrinter.printGenome(winner.brain, "D:/output/TicTacToe/Winner.png");
-		}
+//		int populationSize = 1000;
+//		int inputs = 9;
+//		int outputs = 1;
+//
+//		List<ArtificialIntelligence> ais = new ArrayList<>();
+//		for (int i = 0; i < populationSize; ++i) {
+//			ais.add(new TicTacToePlayer("Player_" + i, inputs, outputs));
+//		}
+//
+//		// Setup Population for first player
+//		Population population = new Population(ais);
+//
+//		TicTacToePlayer winner = null;
+//
+//		int generations = 100;
+//		for (int i = 0; i < generations; ++i) {
+//
+//			// Let every player play the game until it is finished
+//			for (ArtificialIntelligence artificialPlayer : population.artificialIntelligences) {
+//
+//				// Runs until the game is finished
+//				TicTacToe ticTacToe = new TicTacToe((TicTacToePlayer) artificialPlayer);
+//				ticTacToe.run(false);
+//
+//				if (ticTacToe.gameState == 5) {
+//
+//					// AI did it
+//					winner = (TicTacToePlayer) artificialPlayer;
+//				}
+//			}
+//
+//			if (winner != null) {
+//				break;
+//			}
+//
+//			// Cultivate a new generation in the population
+//			population.evolve();
+//
+//			System.out.println("Generation: " + (i + 1) + " ## Fitness: " + population.fittestAI.brain.fitness + " ## Species: " + population.species.size());
+//		}
+//
+//		if (winner != null) {
+//			TicTacToe ttt = new TicTacToe(winner);
+//			ttt.run(true);
+//			GenomePrinter.printGenome(winner.brain, "D:/output/TicTacToe/Winner.png");
+//		}
 	}
 
 	/**
@@ -88,17 +84,17 @@ public class TicTacToe {
 	 */
 	private void run(boolean showGame) {
 
-		while (gameState == 0) {
-
-			artificialIntelligence.think(normalizePlayfield());
-			artificialIntelligence.takeAction(this);
-
-			if (showGame) {
-				printPlayfield();
-			}
-
-			interpretGameState();
-		}
+//		while (gameState == 0) {
+//
+//			artificialIntelligence.think(normalizePlayfield());
+//			artificialIntelligence.takeAction(this);
+//
+//			if (showGame) {
+//				printPlayfield();
+//			}
+//
+//			interpretGameState();
+//		}
 	}
 
 	/**

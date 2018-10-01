@@ -16,12 +16,6 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 	public TicTacToe ticTacToe;
 	public boolean failed;
 
-	@Override
-	public List<List<Double>> getInputs() {
-
-		return null;
-	}
-
 	/**
 	 * @param ticTacToe
 	 */
@@ -96,6 +90,24 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 //		}
 
 		return unadjustedFitness;
+	}
+
+	@Override
+	public void doAiLogic() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void takeAction(List<Double> output) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<Double> getInputs() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

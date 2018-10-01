@@ -3,7 +3,9 @@ package de.humaneat.core.lstm.population;
 import java.util.Collections;
 import java.util.Iterator;
 
+import de.humaneat.core.global.Random;
 import de.humaneat.core.lstm.ArtificialLstmIntelligence;
+import de.humaneat.core.lstm.genome.LstmGenome;
 import de.humaneat.core.lstm.genome.LstmGenomeSpeciation;
 import de.humaneat.core.lstm.species.LstmSpecies;
 import de.humaneat.core.lstm.species.LstmSpeciesFitnessComparator;
@@ -132,9 +134,16 @@ public class LstmPopulationCore {
 			int allowedChildrenCount = allowedChildrenForNextGeneration(species);
 
 			for (int i = 0; i < allowedChildrenCount; ++i) {
-				ArtificialLstmIntelligence ai = population.artificialIntelligences.get(0).getNewInstance(species.getHatchery().makeBaby(population.innovationHistory));
+
+				// Get child from current species
+				LstmGenome babyBrain = species.getHatchery().makeBaby(population.innovationHistory);
+
+				// Create new ai using that child genome as brain
+				ArtificialLstmIntelligence ai = generateNewAi();
+				ai.brain = babyBrain;
 				population.nextGenerationAis.add(ai);
 
+				// Until desired population size is reached
 				if (population.nextGenerationAis.size() >= population.populationSize) {
 					populatingDone = true;
 					break;
@@ -147,8 +156,16 @@ public class LstmPopulationCore {
 		}
 
 		while (population.nextGenerationAis.size() < population.populationSize) {
-			ArtificialLstmIntelligence ai = population.artificialIntelligences.get(0)
-					.getNewInstance(population.species.get(0).getHatchery().makeBaby(population.innovationHistory));
+
+			// Create new baby using a random species
+			LstmSpecies randomSpecies = Random.random(population.species);
+			LstmGenome babyBrain = randomSpecies.getHatchery().makeBaby(population.innovationHistory);
+
+			// Generate a new AI using that genome
+			ArtificialLstmIntelligence ai = generateNewAi();
+			ai.brain = babyBrain;
+
+			// Populate for next generation
 			population.nextGenerationAis.add(ai);
 		}
 
@@ -156,6 +173,19 @@ public class LstmPopulationCore {
 			ai.brain.getLinker().generateNetwork();
 		}
 
+	}
+
+	/**
+	 * Generations a new ai using the type the population is initialized with
+	 */
+	private ArtificialLstmIntelligence generateNewAi() {
+
+		try {
+			return population.aiClazz.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Couldn't create new ArtificialIntelligences for the population");
+		}
 	}
 
 	/**

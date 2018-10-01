@@ -20,6 +20,18 @@ public class PlayFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	private static PlayFrame INSTANCE;
+
+	/**
+	 * 
+	 */
+	public static PlayFrame getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new PlayFrame();
+		}
+		return INSTANCE;
+	}
+
 	public PlayFrame() {
 		canvas = new DrawCanvas(); // Construct the drawing canvas
 		canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
@@ -73,7 +85,13 @@ public class PlayFrame extends JFrame {
 			this.repaint();
 		}
 
-		public void update(PathfindingAI pathfindingAI) {
+		public void drawPlayer(ArtificialIntelligence player) {
+
+			players.add((PathfindingAI) player);
+			this.repaint();
+		}
+
+		public void update() {
 			this.repaint();
 		}
 	}

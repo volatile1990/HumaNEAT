@@ -13,22 +13,34 @@ public class XorAI extends ArtificialIntelligence {
 
 	private double XOR_INPUT[][] = { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
 
+	private int currentInput;
+
+	/**
+	 * 
+	 */
+	@Override
+	public void doAiLogic() {
+
+		// Do for all 4 XOR cases
+		currentInput = 0;
+		for (int j = 0; j < 4; ++j) {
+			think();
+		}
+	}
+
 	/**
 	 * @return a list of all input datasets
 	 */
 	@Override
-	public List<List<Double>> getInputs() {
+	public List<Double> getInputs() {
 
-		List<List<Double>> allInputs = new ArrayList<>();
+		List<Double> input = new ArrayList<>();
+		input.add(XOR_INPUT[currentInput][0]);
+		input.add(XOR_INPUT[currentInput][1]);
 
-		for (int j = 0; j < 4; ++j) {
-			List<Double> input = new ArrayList<>();
-			input.add(XOR_INPUT[j][0]);
-			input.add(XOR_INPUT[j][1]);
-			allInputs.add(input);
-		}
+		++currentInput;
 
-		return allInputs;
+		return input;
 	}
 
 	/**

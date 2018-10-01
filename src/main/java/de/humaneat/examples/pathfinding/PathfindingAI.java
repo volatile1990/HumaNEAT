@@ -34,19 +34,42 @@ public class PathfindingAI extends ArtificialIntelligence {
 
 		// Playfield
 		playfield = new int[50][50];
+
+		// Draw player on java ui
+		PlayFrame.getInstance().canvas.drawPlayer(this);
+	}
+
+	/**
+	 * Move 100 times using current brain
+	 */
+	@Override
+	public void doAiLogic() {
+
+		for (int i = 0; i < 100; ++i) {
+			think();
+
+			// Update players position on UI
+			PlayFrame.getInstance().canvas.update();
+		}
+
 	}
 
 	/**
 	 * @return
 	 */
 	@Override
-	public List<List<Double>> getInputs() {
+	public List<Double> getInputs() {
 
-		List<List<Double>>
-		
-		return null;
+		List<Double> input = new ArrayList<>();
+		input.add((double) currentX);
+		input.add((double) currentY);
+
+		return input;
 	}
 
+	/**
+	 * @param output
+	 */
 	@Override
 	public void takeAction(List<Double> output) {
 		move();

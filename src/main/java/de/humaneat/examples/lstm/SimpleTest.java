@@ -28,7 +28,7 @@ public class SimpleTest {
 			ais.add(new SimpleLstmAi(9, 1));
 		}
 
-		LstmPopulation population = new LstmPopulation(ais);
+		LstmPopulation population = new LstmPopulation(SimpleLstmAi.class);
 
 		for (int i = 0; i < generations; ++i) {
 

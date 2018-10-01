@@ -1,37 +1,33 @@
-package de.humaneat.core.neat.training;
+package de.humaneat.core.lstm.training;
 
 import de.humaneat.core.global.components.node.NodeGeneType;
-import de.humaneat.core.neat.ArtificialIntelligence;
+import de.humaneat.core.lstm.ArtificialLstmIntelligence;
+import de.humaneat.core.lstm.population.LstmPopulation;
 import de.humaneat.core.neat.Property;
-import de.humaneat.core.neat.population.Population;
-import de.humaneat.graphics.GenomeViewer;
 
 /**
  * @author muellermak
  *
  */
-public class PopulationTrainer {
+public class LstmPopulationTrainer {
 
-	private Population population;
+	private LstmPopulation population;
 	private int generations;
 
-	private boolean displayEvolution;
-
-	public ArtificialIntelligence trainedAi;
+	public ArtificialLstmIntelligence trainedAi;
 
 	/**
 	 * @param population
 	 */
-	public PopulationTrainer(Population population, boolean visualizeEvolution) {
+	public LstmPopulationTrainer(LstmPopulation population) {
 		this.population = population;
 		generations = (int) Property.GENERATIONS.getValue();
-		displayEvolution = visualizeEvolution;
 	}
 
 	/**
 	 * 
 	 */
-	public ArtificialIntelligence train() {
+	public ArtificialLstmIntelligence train() {
 		return trainToFitness(Double.MAX_VALUE);
 	}
 
@@ -39,19 +35,11 @@ public class PopulationTrainer {
 	 * @param fitness
 	 * @return
 	 */
-	public ArtificialIntelligence trainToFitness(double fitness) {
-
-		// Launch 3D application
-		GenomeViewer genomeViewer = null;
-		if (displayEvolution) {
-			genomeViewer = new GenomeViewer(population.artificialIntelligences.get(0).brain);
-			genomeViewer.start();
-			waitForGenomeViewer(genomeViewer);
-		}
+	public ArtificialLstmIntelligence trainToFitness(double fitness) {
 
 		for (int i = 0; i < generations; ++i) {
 
-			for (ArtificialIntelligence ai : population.artificialIntelligences) {
+			for (ArtificialLstmIntelligence ai : population.artificialIntelligences) {
 
 				ai.doAiLogic();
 
@@ -61,15 +49,9 @@ public class PopulationTrainer {
 					print(trainedAi);
 					return trainedAi;
 				}
-
 			}
 
 			System.out.println("Generation: " + population.currentGeneration + " ## Best fitness: " + population.fittestAI.brain.unadjustedFitness);
-
-			// Update 3D model
-			if (displayEvolution) {
-				genomeViewer.genome = population.fittestAI.brain;
-			}
 
 			// Evolve a new generation
 			population.evolve();
@@ -82,20 +64,10 @@ public class PopulationTrainer {
 		return trainedAi;
 	}
 
-	private void waitForGenomeViewer(GenomeViewer genomeViewer) {
-		while (!genomeViewer.initialized) {
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	/**
 	 * @param ai
 	 */
-	private void print(ArtificialIntelligence ai) {
+	private void print(ArtificialLstmIntelligence ai) {
 
 		System.out.println();
 		System.out.println("################# FINISHED #################");
@@ -108,7 +80,7 @@ public class PopulationTrainer {
 	/**
 	 * @param fitness
 	 */
-	private boolean checkFitness(ArtificialIntelligence ai, double fitness) {
+	private boolean checkFitness(ArtificialLstmIntelligence ai, double fitness) {
 
 		if (ai.brain.unadjustedFitness >= fitness) {
 			return true;

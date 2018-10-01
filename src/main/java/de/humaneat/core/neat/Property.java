@@ -27,7 +27,7 @@ public enum Property {
 	/**
 	 * Amount of outputs
 	 */
-	OUTPUT_COUNT(1),
+	OUTPUT_COUNT(4),
 
 	/**
 	 * Compatibility distance adjusting

@@ -53,13 +53,15 @@ public abstract class ArtificialLstmIntelligence implements DefaultArtificialInt
 	 * Takes them and feeds it through the genome to get a decision
 	 */
 	@Override
-	public void think(List<Double> inputs) {
+	public void think() {
+
+		List<Double> inputs = getInputs();
 
 		if (inputs.size() != anzInputs) {
 			throw new RuntimeException("Invalid number of inputs");
 		}
 
-		// Get inputs and save them
+		// Get inputs and save them for fitness evaluation
 		double[] input = new double[anzInputs];
 		for (int i = 0; i < inputs.size(); ++i) {
 			input[i] = inputs.get(i);
@@ -69,6 +71,14 @@ public abstract class ArtificialLstmIntelligence implements DefaultArtificialInt
 		// Feed through the neural net and save decision
 		double[] output = brain.getFeeder().feedForward(input);
 		outputs.add(output);
+
+		// Convert primitve array to list
+		List<Double> out = new ArrayList<>();
+		for (int i = 0; i < output.length; ++i) {
+			out.add(output[i]);
+		}
+
+		takeAction(out);
 
 		++anzAccumulatedDatas;
 	}
@@ -91,8 +101,4 @@ public abstract class ArtificialLstmIntelligence implements DefaultArtificialInt
 		anzAccumulatedDatas = 0;
 	}
 
-	/**
-	 * @return a copy of itself
-	 */
-	public abstract ArtificialLstmIntelligence getNewInstance(LstmGenome genome);
 }
