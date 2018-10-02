@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.humaneat.core.global.DefaultArtificialIntelligence;
 import de.humaneat.core.lstm.genome.LstmGenome;
+import de.humaneat.core.neat.Property;
 
 /**
  * @author muellermak
@@ -26,26 +27,17 @@ public abstract class ArtificialLstmIntelligence implements DefaultArtificialInt
 	 * @param anzInputs
 	 * @param anzOutputs
 	 */
-	public ArtificialLstmIntelligence(int anzInputs, int anzOutputs) {
+	public ArtificialLstmIntelligence() {
 
 		anzAccumulatedDatas = 0;
 
-		this.anzInputs = anzInputs;
-		this.anzOutputs = anzOutputs;
+		anzInputs = (int) Property.INPUT_COUNT.getValue();
+		anzOutputs = (int) Property.OUTPUT_COUNT.getValue();
 
 		inputs = new ArrayList<>();
 		outputs = new ArrayList<>();
 
 		brain = new LstmGenome(anzInputs, anzOutputs);
-	}
-
-	/**
-	 * @param brain
-	 */
-	public ArtificialLstmIntelligence(LstmGenome brain) {
-
-		this(brain.anzInputs, brain.anzOutputs);
-		this.brain = brain;
 	}
 
 	/**

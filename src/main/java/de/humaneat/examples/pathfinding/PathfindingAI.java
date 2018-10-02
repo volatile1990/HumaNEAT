@@ -36,7 +36,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 		playfield = new int[50][50];
 
 		// Draw player on java ui
-		PlayFrame.getInstance().canvas.drawPlayer(this);
+//		PlayFrame.getInstance().canvas.drawPlayer(this);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class PathfindingAI extends ArtificialIntelligence {
 			think();
 
 			// Update players position on UI
-			PlayFrame.getInstance().canvas.update();
+//			PlayFrame.getInstance().canvas.update();
 		}
 
 	}

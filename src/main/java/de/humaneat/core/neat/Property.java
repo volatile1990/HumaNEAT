@@ -17,7 +17,7 @@ public enum Property {
 	/**
 	 * Default size of a population
 	 */
-	POPULATION_SIZE(1000),
+	POPULATION_SIZE(30),
 
 	/**
 	 * Amount of inputs

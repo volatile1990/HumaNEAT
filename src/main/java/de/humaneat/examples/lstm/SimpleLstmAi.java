@@ -3,24 +3,10 @@ package de.humaneat.examples.lstm;
 import java.util.List;
 
 import de.humaneat.core.lstm.ArtificialLstmIntelligence;
-import de.humaneat.core.lstm.genome.LstmGenome;
 
 public class SimpleLstmAi extends ArtificialLstmIntelligence {
 
-	/**
-	 * @param anzInputs
-	 * @param anzOutputs
-	 */
-	public SimpleLstmAi(int anzInputs, int anzOutputs) {
-		super(anzInputs, anzOutputs);
-	}
-
-	/**
-	 * @param genome
-	 */
-	public SimpleLstmAi(LstmGenome genome) {
-		super(genome);
-	}
+	int[] input = { 3, 6, 9, 12, 15, 18, 21, 24, 27 };
 
 	/**
 	 * @return
@@ -31,24 +17,27 @@ public class SimpleLstmAi extends ArtificialLstmIntelligence {
 		return 0;
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public void doAiLogic() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * @return
+	 */
 	@Override
 	public List<Double> getInputs() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public void think() {
-		// TODO Auto-generated method stub
-
-	}
-
+	/**
+	 * @param output
+	 */
 	@Override
 	public void takeAction(List<Double> output) {
 		// TODO Auto-generated method stub
