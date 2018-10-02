@@ -37,6 +37,7 @@ public class LstmGenome extends DefaultGenome {
 	private LstmGenomeLinker linker;
 	private LstmGenomeValidator validator;
 	private LstmGenomeFeeder feeder;
+	private LstmGenomePredictor predictor;
 	private LstmGenomeMutator mutator;
 	private LstmGenomeHatchery hatchery;
 
@@ -58,6 +59,7 @@ public class LstmGenome extends DefaultGenome {
 		linker = new LstmGenomeLinker(this);
 		validator = new LstmGenomeValidator(this);
 		feeder = new LstmGenomeFeeder(this);
+		predictor = new LstmGenomePredictor(this);
 		mutator = new LstmGenomeMutator(this);
 		hatchery = new LstmGenomeHatchery(this);
 	}
@@ -204,6 +206,13 @@ public class LstmGenome extends DefaultGenome {
 	 */
 	public LstmGenomeFeeder getFeeder() {
 		return feeder;
+	}
+
+	/**
+	 * @return the predictor
+	 */
+	public LstmGenomePredictor getPredictor() {
+		return predictor;
 	}
 
 	/**

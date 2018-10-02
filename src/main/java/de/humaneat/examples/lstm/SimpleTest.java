@@ -1,6 +1,7 @@
 package de.humaneat.examples.lstm;
 
 import de.humaneat.core.lstm.population.LstmPopulation;
+import de.humaneat.core.lstm.training.LstmPopulationTrainer;
 
 /**
  * @author muellermak
@@ -13,10 +14,11 @@ public class SimpleTest {
 	 */
 	public static void main(String[] args) {
 
-		int[] input = { 3, 6, 9, 12, 15, 18, 21, 24, 27 };
-		int expectedPrediction = 30;
-
 		LstmPopulation population = new LstmPopulation(SimpleLstmAi.class);
+
+		LstmPopulationTrainer trainer = new LstmPopulationTrainer(population);
+
+		trainer.trainToFitness(100);
 
 	}
 }

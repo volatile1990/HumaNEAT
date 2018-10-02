@@ -1,5 +1,6 @@
 package de.humaneat.core.lstm.genes.node;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.humaneat.core.global.Random;
@@ -63,6 +64,9 @@ public class LstmNodeGene extends Node {
 
 		// Initialize with random weights
 		weight = new LstmWeight(getRandomWeights(), getRandomWeights());
+
+		outputConnections = new ArrayList<>();
+		this.type = type;
 	}
 
 	/**

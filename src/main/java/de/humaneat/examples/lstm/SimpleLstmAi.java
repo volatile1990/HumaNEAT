@@ -1,20 +1,28 @@
 package de.humaneat.examples.lstm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.humaneat.core.lstm.ArtificialLstmIntelligence;
 
 public class SimpleLstmAi extends ArtificialLstmIntelligence {
 
-	int[] input = { 3, 6, 9, 12, 15, 18, 21, 24, 27 };
+	private int[] input = { 3, 6, 9, 12, 15, 18, 21, 24, 27 };
+
+	private int currentInput = 0;
 
 	/**
 	 * @return
 	 */
 	@Override
 	public double calculateFitness() {
-		// TODO Auto-generated method stub
-		return 0;
+
+		double unadjustedFitness = 1;
+		if (brain.getPredictor().getNext()[0] == 30) {
+			unadjustedFitness += 100;
+		}
+
+		return unadjustedFitness;
 	}
 
 	/**
@@ -22,7 +30,13 @@ public class SimpleLstmAi extends ArtificialLstmIntelligence {
 	 */
 	@Override
 	public void doAiLogic() {
-		// TODO Auto-generated method stub
+
+		currentInput = 0;
+		for (int i = 0; i < input.length; ++i) {
+			think();
+
+			++currentInput;
+		}
 
 	}
 
@@ -31,8 +45,11 @@ public class SimpleLstmAi extends ArtificialLstmIntelligence {
 	 */
 	@Override
 	public List<Double> getInputs() {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<Double> in = new ArrayList<>();
+		in.add((double) input[currentInput]);
+
+		return in;
 	}
 
 	/**
@@ -40,8 +57,6 @@ public class SimpleLstmAi extends ArtificialLstmIntelligence {
 	 */
 	@Override
 	public void takeAction(List<Double> output) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

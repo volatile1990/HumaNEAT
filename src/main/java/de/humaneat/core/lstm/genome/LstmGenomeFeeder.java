@@ -40,16 +40,20 @@ public class LstmGenomeFeeder implements DefaultGenomeFeeder {
 		List<LstmNodeGene> outputNodes = genome.getNodesByType(NodeGeneType.OUTPUT);
 
 		// Sets up & engages inputs
-		processInputs(inputValues, inputNodes);
+		boolean useInput = false;
+		if (inputValues != null) {
+			processInputs(inputValues, inputNodes);
+			useInput = true;
+		}
 
 		// Engage bias
 		genome.biasNode.accept(new NodeEngagerVisitor());
 
 		// Engage hidden nodes
-		processHiddenNodes(hiddenNodes);
+		processHiddenNodes(hiddenNodes, useInput);
 
 		// Engage output nodes
-		processOutputNodes(outputNodes);
+		processOutputNodes(outputNodes, useInput);
 
 		// Reset connection activation
 		for (LstmConnectionGene connection : genome.connections.values()) {
@@ -59,6 +63,11 @@ public class LstmGenomeFeeder implements DefaultGenomeFeeder {
 		// Resets the input sum of all nodes
 		for (LstmNodeGene node : genome.nodes.values()) {
 			node.inputSum = 0;
+		}
+
+		// Reset all connection payloads
+		for (LstmConnectionGene gene : genome.connections.values()) {
+			gene.payload = 0;
 		}
 
 		return populateOutputs(outputNodes);
@@ -92,8 +101,9 @@ public class LstmGenomeFeeder implements DefaultGenomeFeeder {
 	 * Repeat until all hidden nodes are engaged
 	 *
 	 * @param hiddenNodes
+	 * @param useInput
 	 */
-	private void processHiddenNodes(List<LstmNodeGene> hiddenNodes) {
+	private void processHiddenNodes(List<LstmNodeGene> hiddenNodes, boolean useInput) {
 
 		while (hiddenNodes.size() > 0) {
 
@@ -105,6 +115,11 @@ public class LstmGenomeFeeder implements DefaultGenomeFeeder {
 				// Collect all connections which have the current node as output
 				List<LstmConnectionGene> nodeConnections = new ArrayList<>();
 				for (LstmConnectionGene connection : genome.connections.values()) {
+
+					// Don't add connections from input nodes if input is not used
+					if (connection.from.type == NodeGeneType.INPUT && !useInput) {
+						continue;
+					}
 
 					if (connection.to == node && connection.enabled) {
 						nodeConnections.add(connection);
@@ -135,18 +150,17 @@ public class LstmGenomeFeeder implements DefaultGenomeFeeder {
 
 	/**
 	 * @param outputNodes
+	 * @param useInput
 	 */
-	private void processOutputNodes(List<LstmNodeGene> outputNodes) {
+	private void processOutputNodes(List<LstmNodeGene> outputNodes, boolean useInput) {
 
 		// Engage output nodes
 		for (LstmNodeGene node : outputNodes) {
 
 			// Collect all connections which have the current node as output
-			List<LstmConnectionGene> nodeConnections = new ArrayList<>();
 			double inputSum = 0;
 			for (LstmConnectionGene connection : genome.connections.values()) {
 				if (connection.to == node) {
-					nodeConnections.add(connection);
 					inputSum += connection.payload;
 				}
 			}

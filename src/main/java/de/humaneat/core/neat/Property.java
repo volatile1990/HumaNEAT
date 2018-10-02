@@ -17,17 +17,17 @@ public enum Property {
 	/**
 	 * Default size of a population
 	 */
-	POPULATION_SIZE(30),
+	POPULATION_SIZE(1000),
 
 	/**
 	 * Amount of inputs
 	 */
-	INPUT_COUNT(2),
+	INPUT_COUNT(1),
 
 	/**
 	 * Amount of outputs
 	 */
-	OUTPUT_COUNT(4),
+	OUTPUT_COUNT(1),
 
 	/**
 	 * Compatibility distance adjusting
