@@ -56,9 +56,9 @@ public class PathGame {
 
 				}
 
-					PlayFrame.getInstance().canvas.update();
+				PlayFrame.getInstance().canvas.update();
 
-				Thread.sleep(50);
+				Thread.sleep(80);
 
 				if (winner != null) {
 					break;

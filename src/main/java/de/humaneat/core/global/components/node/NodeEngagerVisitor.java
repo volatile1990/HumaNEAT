@@ -1,6 +1,5 @@
 package de.humaneat.core.global.components.node;
 
-import de.humaneat.core.global.activation.ActivationFunctions;
 import de.humaneat.core.lstm.genes.connection.LstmConnectionGene;
 import de.humaneat.core.lstm.genes.node.LstmNodeGene;
 import de.humaneat.core.lstm.genes.node.Weights;
@@ -74,28 +73,31 @@ public class NodeEngagerVisitor implements NodeVisitor {
 	}
 
 	/**
-	 * Activates all lstm node gates
+	 * Activates all lstm node gates; For predictions the inputSum is zero and won't add any data to the equations
 	 */
 	public void activate(LstmNodeGene node) {
 
 		Weights inputWeights = node.weight.inputWeights;
 		Weights recurrentWeights = node.weight.recurrentWeights;
 
+		double inputSum = node.inputSum;
+		double lastOutputValue = node.outputValue;
+
 		// Engage forget gate
-		node.forgetGateOut[0] = node.forgetGateActivation.activate(recurrentWeights.forgetGateWeight * node.recurrentCellOutput);
-		node.forgetGateOut[1] = node.forgetGateActivation.activate(inputWeights.forgetGateWeight * node.inputSum);
+		double concatForgetGateInput = recurrentWeights.forgetGateWeight * lastOutputValue + inputWeights.forgetGateWeight * inputSum;
+		node.forgetGateOut = node.forgetGateActivation.activate(concatForgetGateInput);
 
 		// Engage input gate
-		node.inputGateOut[0] = node.inputGateActivation.activate(recurrentWeights.inputGateWeight * node.recurrentCellOutput);
-		node.inputGateOut[1] = node.inputGateActivation.activate(inputWeights.inputGateWeight * node.inputSum);
+		double concatInputGateInput = recurrentWeights.inputGateWeight * lastOutputValue + inputWeights.inputGateWeight * inputSum;
+		node.inputGateOut = node.inputGateActivation.activate(concatInputGateInput);
 
 		// Engage select gate
-		node.selectGateOut[0] = node.selectGateActivation.activate(recurrentWeights.selectGateWeight * node.recurrentCellOutput);
-		node.selectGateOut[1] = node.selectGateActivation.activate(inputWeights.selectGateWeight * node.inputSum);
+		double concatSelectGateInput = recurrentWeights.selectGateWeight * lastOutputValue + inputWeights.selectGateWeight * inputSum;
+		node.selectGateOut = node.selectGateActivation.activate(concatSelectGateInput);
 
 		// Engage output gate
-		node.outputGateOut[0] = node.outputGateActivation.activate(recurrentWeights.outputGateWeight * node.recurrentCellOutput);
-		node.outputGateOut[1] = node.outputGateActivation.activate(inputWeights.outputGateWeight * node.inputSum);
+		double concatOutputGateInput = recurrentWeights.outputGateWeight * lastOutputValue + inputWeights.outputGateWeight * inputSum;
+		node.outputGateOut = node.outputGateActivation.activate(concatOutputGateInput);
 	}
 
 	/**
@@ -107,17 +109,13 @@ public class NodeEngagerVisitor implements NodeVisitor {
 	private void updateCellState(LstmNodeGene node) {
 
 		// Multiply with select gate output vector
-		node.cellState[0] *= node.forgetGateOut[0];
-		node.cellState[1] *= node.forgetGateOut[1];
+		node.cellState *= node.forgetGateOut;
 
 		// Multiply input and select gate vectors
-		double[] selectInputMultResult = new double[2];
-		selectInputMultResult[0] = node.inputGateOut[0] * node.selectGateOut[0];
-		selectInputMultResult[1] = node.inputGateOut[1] * node.selectGateOut[1];
+		double selectInputMultResult = node.inputGateOut * node.selectGateOut;
 
 		// Add input * select to the cell state vector
-		node.cellState[0] += selectInputMultResult[0];
-		node.cellState[1] += selectInputMultResult[1];
+		node.cellState += selectInputMultResult;
 	}
 
 	/**
@@ -127,8 +125,8 @@ public class NodeEngagerVisitor implements NodeVisitor {
 	 */
 	public void fire(LstmNodeGene node) {
 
-		node.recurrentCellOutput = node.cellStateActivation.activate(node.cellState[0]) * node.outputGateOut[0];
-		node.outputValue = node.cellStateActivation.activate(node.cellState[1]) * node.outputGateOut[1];
+		// Output: activate cellstate and mulitply with the already activated outputGate outValue
+		node.outputValue = node.cellStateActivation.activate(node.cellState) * node.outputGateOut;
 
 		// Set the output as payload on all outgoing connections
 		for (LstmConnectionGene connection : node.outputConnections) {
@@ -137,11 +135,8 @@ public class NodeEngagerVisitor implements NodeVisitor {
 				continue;
 			}
 
-			// Set reccurent cell output
-			node.recurrentCellOutput = ActivationFunctions.tanh(node.cellState[0]) * node.outputGateOut[0];
-
-			// Store weighted outputValue to the sum of the inputs of the connected nodes on every outgoing connection
-			connection.payload = ActivationFunctions.tanh(node.cellState[1]) * node.outputGateOut[1];
+			// Store outputValue on every outgoing connection
+			connection.payload = node.outputValue;
 			connection.activated = true;
 		}
 	}

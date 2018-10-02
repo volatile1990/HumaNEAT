@@ -18,11 +18,8 @@ import de.humaneat.core.neat.Property;
 public class LstmNodeGene extends Node {
 
 	// Cell state
-	public double[] cellState;
+	public double cellState;
 	public static final double INITIAL_CELL_STATE = 0;
-
-	// Cell output used for every loop
-	public double recurrentCellOutput;
 
 	// Used activation functions
 	public Activation forgetGateActivation;
@@ -34,10 +31,10 @@ public class LstmNodeGene extends Node {
 	/**
 	 * Output vectors of the gates
 	 */
-	public double[] forgetGateOut = new double[2];
-	public double[] inputGateOut = new double[2];
-	public double[] selectGateOut = new double[2];
-	public double[] outputGateOut = new double[2];
+	public double forgetGateOut;
+	public double inputGateOut;
+	public double selectGateOut;
+	public double outputGateOut;
 
 	/**
 	 * Output connections
@@ -55,11 +52,7 @@ public class LstmNodeGene extends Node {
 	 */
 	public LstmNodeGene(NodeGeneType type, int number) {
 
-		cellState = new double[2];
-		cellState[0] = LstmNodeGene.INITIAL_CELL_STATE;
-		cellState[1] = LstmNodeGene.INITIAL_CELL_STATE;
-
-		recurrentCellOutput = 0;
+		cellState = LstmNodeGene.INITIAL_CELL_STATE;
 
 		// Default activation functions
 		forgetGateActivation = ActivationFunctions::sigmoid;
