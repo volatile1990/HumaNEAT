@@ -22,7 +22,7 @@ public enum Property {
 	/**
 	 * Amount of inputs
 	 */
-	INPUT_COUNT(1),
+	INPUT_COUNT(2),
 
 	/**
 	 * Amount of outputs

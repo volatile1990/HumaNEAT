@@ -18,7 +18,7 @@ public class XOR {
 		Population population = new Population(XorAI.class);
 
 		// Assign population to a population trainer
-		PopulationTrainer trainer = new PopulationTrainer(population, false);
+		PopulationTrainer trainer = new PopulationTrainer(population, true);
 
 		// Train until desired fitness is reached
 		trainer.trainToFitness(16);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.humaneat.core.global.DefaultArtificialIntelligence;
+import de.humaneat.core.global.normalization.Normalizer;
 import de.humaneat.core.neat.genome.Genome;
 
 /**
@@ -20,6 +21,7 @@ public abstract class ArtificialIntelligence implements DefaultArtificialIntelli
 
 	public int anzAccumulatedDatas;
 
+	public Normalizer normalizer;
 	public Genome brain;
 
 	/**

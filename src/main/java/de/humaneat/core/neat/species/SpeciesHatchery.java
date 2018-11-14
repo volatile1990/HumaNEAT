@@ -76,8 +76,6 @@ public class SpeciesHatchery {
 			baby.getMutator().mutate(innovationHistory);
 		}
 
-		// Tschernobyl taking over
-
 		return baby;
 	}
 
