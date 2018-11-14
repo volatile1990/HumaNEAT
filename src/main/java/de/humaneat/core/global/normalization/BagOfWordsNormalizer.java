@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class BagOfWordsNormalizer implements Normalizer {
 
-	private Map<String, Integer> wordbag;
+	public Map<String, Integer> wordbag;
 
 	/**
 	 * 
