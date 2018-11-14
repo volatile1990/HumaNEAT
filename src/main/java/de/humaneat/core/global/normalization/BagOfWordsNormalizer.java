@@ -14,15 +14,16 @@ public class BagOfWordsNormalizer implements Normalizer {
 	/**
 	 * 
 	 */
-	public BagOfWordsNormalizer() {
+	public BagOfWordsNormalizer(String content) {
 		wordbag = new HashMap<>();
+		buildWordbag();
 	}
 
 	/**
 	 * Builds a bag of words out of the whole data
 	 * 
 	 */
-	public void buildWordbag(String content) {
+	private void buildWordbag() {
 
 	}
 
@@ -35,5 +36,13 @@ public class BagOfWordsNormalizer implements Normalizer {
 	@Override
 	public double[] normalize(String line) {
 		return null;
+	}
+
+	/**
+	 * @return
+	 */
+	@Override
+	public int getInputCount() {
+		return wordbag.size();
 	}
 }

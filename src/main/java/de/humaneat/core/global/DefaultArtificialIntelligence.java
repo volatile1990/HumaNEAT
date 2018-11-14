@@ -35,4 +35,9 @@ public interface DefaultArtificialIntelligence {
 	 */
 	public double calculateFitness();
 
+	/**
+	 * 
+	 */
+	public void initializeNormalizer();
+
 }

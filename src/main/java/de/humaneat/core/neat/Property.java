@@ -119,6 +119,13 @@ public enum Property {
 	}
 
 	/**
+	 * @param value
+	 */
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	/**
 	 * @return the activation function
 	 */
 	public Activation getActivationFunction() {

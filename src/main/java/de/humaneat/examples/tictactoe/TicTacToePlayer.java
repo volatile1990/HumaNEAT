@@ -110,4 +110,9 @@ public class TicTacToePlayer extends ArtificialIntelligence {
 		return null;
 	}
 
+	@Override
+	public void initializeNormalizer() {
+		// No normalizer used here
+	}
+
 }

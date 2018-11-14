@@ -59,4 +59,9 @@ public class SimpleLstmAi extends ArtificialLstmIntelligence {
 	public void takeAction(List<Double> output) {
 	}
 
+	@Override
+	public void initializeNormalizer() {
+		// No normalizer used here
+	}
+
 }

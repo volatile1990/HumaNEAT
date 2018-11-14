@@ -15,8 +15,7 @@ public class BagOfWordsNormalizerTest {
 
 		String content = "Das ist ein das Test\nWululou bla Test ist hier am Start\nLOOL das ist ein Test\nTesting and stuff";
 
-		BagOfWordsNormalizer normalizer = new BagOfWordsNormalizer();
-		normalizer.buildWordbag(content);
+		BagOfWordsNormalizer normalizer = new BagOfWordsNormalizer(content);
 		if (normalizer.wordbag.size() != 13) {
 			System.out.println("Wordbag size: " + normalizer.wordbag.size() + " ## Expected size: 13");
 		}
@@ -27,23 +26,30 @@ public class BagOfWordsNormalizerTest {
 		String line4 = "Testing and stuff";
 
 		double[] line1Normalized = normalizer.normalize(line1);
-		if (line1Normalized[0] != 3 || line1Normalized[1] != 3 || line1Normalized[2] != 2 || line1Normalized[3] != 3 || line1Normalized[4] != 3) {
-			System.out.println("Line one normalization incorrect");
+		for (int i = 0; i < line1Normalized.length; ++i) {
+			if (line1Normalized[i] < 0 || line1Normalized[i] > 1) {
+				System.out.println("Line one normalization incorrect");
+			}
 		}
 
 		double[] line2Normalized = normalizer.normalize(line2);
-		if (line2Normalized[0] != 1 || line2Normalized[1] != 1 || line2Normalized[2] != 3 || line2Normalized[3] != 3 || line2Normalized[4] != 1) {
-			System.out.println("Line two normalization incorrect");
+		for (int i = 0; i < line2Normalized.length; ++i) {
+			if (line2Normalized[i] < 0 || line2Normalized[i] > 1) {
+				System.out.println("Line two normalization incorrect");
+			}
 		}
-
 		double[] line3Normalized = normalizer.normalize(line3);
-		if (line3Normalized[0] != 1 || line3Normalized[1] != 3 || line3Normalized[2] != 3) {
-			System.out.println("Line four normalization incorrect");
+		for (int i = 0; i < line1Normalized.length; ++i) {
+			if (line3Normalized[i] < 0 || line3Normalized[i] > 1) {
+				System.out.println("Line three normalization incorrect");
+			}
 		}
 
 		double[] line4Normalized = normalizer.normalize(line4);
-		if (line4Normalized[0] != 1 || line4Normalized[1] != 1 || line4Normalized[2] != 1) {
-			System.out.println("Line four normalization incorrect");
+		for (int i = 0; i < line4Normalized.length; ++i) {
+			if (line4Normalized[i] < 0 || line4Normalized[i] > 1) {
+				System.out.println("Line four normalization incorrect");
+			}
 		}
 	}
 }

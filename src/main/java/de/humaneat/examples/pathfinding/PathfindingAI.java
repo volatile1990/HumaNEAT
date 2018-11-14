@@ -160,4 +160,12 @@ public class PathfindingAI extends ArtificialIntelligence {
 		return currentPosition;
 	}
 
+	/**
+	 * 
+	 */
+	@Override
+	public void initializeNormalizer() {
+		// No normalizer used here
+	}
+
 }

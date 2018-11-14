@@ -67,4 +67,9 @@ public class XorAI extends ArtificialIntelligence {
 		// Nothing to do for xor evaluation
 	}
 
+	@Override
+	public void initializeNormalizer() {
+		// No normalizer used here
+	}
+
 }

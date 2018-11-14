@@ -32,7 +32,10 @@ public abstract class ArtificialIntelligence implements DefaultArtificialIntelli
 
 		anzAccumulatedDatas = 0;
 
-		anzInputs = (int) Property.INPUT_COUNT.getValue();
+		initializeNormalizer();
+
+		// Use input count defined by normalizer if given
+		anzInputs = normalizer != null ? normalizer.getInputCount() : (int) Property.INPUT_COUNT.getValue();
 		anzOutputs = (int) Property.OUTPUT_COUNT.getValue();
 
 		inputs = new ArrayList<>();

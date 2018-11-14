@@ -14,4 +14,8 @@ public interface Normalizer {
 	 */
 	public double[] normalize(String content);
 
+	/**
+	 * @return the amount of inputs
+	 */
+	public int getInputCount();
 }
